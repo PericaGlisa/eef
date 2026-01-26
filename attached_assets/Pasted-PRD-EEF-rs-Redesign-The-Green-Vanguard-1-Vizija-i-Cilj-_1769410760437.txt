@@ -1,0 +1,253 @@
+PRD: EEF.rs Redesign – "The Green Vanguard"
+1. Vizija i Cilj
+Core Concept: "Finansijska tvrđava u svetu zelene energije." Cilj nije samo informisati klijenta o kreditima ili energetskoj efikasnosti, već ga uvesti u iskustvo gde je EEF jedini logičan partner za tranziciju. Sajt mora da odiše sigurnošću, tehnološkom superiornošću i ekološkom svešću.
+
+2. Vizuelni Identitet i Paleta Boja
+Koristimo zadate boje, ali na način koji koristi psihologiju boja na "enterprise" nivou.
+
+Primary: Deep Navy (#171A54)
+
+Uloga: Ovo je tvoje "platno". Umesto bele, većina sajta će biti u ovoj boji ili njenim blagim gradijentima. Tamna tema (Dark Mode) je default. Ovo štedi energiju ekrana (simbolika) i daje premium, "banking" osećaj.
+
+Accent: Bio-Luminescent Green (#56AA4A)
+
+Uloga: Akcija, podaci, život. Koristi se za CTA dugmad, grafike koje "svetle" na tamnoj podlozi, i vizualizaciju podataka. Ovo nije ravna boja, već boja koja ima glow efekat (CSS box-shadows i neon efekti).
+
+Secondary/Support:
+
+Off-White / Platinum: Za tipografiju (nikad čisto bela na tamnoj podlozi, to zamara oči).
+
+Glassmorphism: Polu-providni paneli sa "blur" efektom preko tamne pozadine za kartice i navigaciju.
+
+3. UX/UI Strategija (The $10M Feel)
+A. "Scrollytelling" (Pričanje priče skrolovanjem)
+Zaboravi statične stranice. Korisnik ne čita, on doživljava.
+
+Hero Sekcija: Nema stock fotografija solarnih panela. Umesto toga, WebGL 3D interaktivna animacija. Zamisli čestice energije (zelene) koje se spajaju u apstraktne oblike zgrada ili novca. To se renderuje u realnom vremenu dok korisnik pomera miš.
+
+Tranzicije: Dok skroluješ, elementi ne "ulaze" samo na ekran. Oni se grade. Linije grafika rastu, brojevi se vrte dok ne dođu do konačne cifre (npr. "Ušteđeno 50 GWh").
+
+B. Tipografija kao Arhitektura
+Koristimo "Swiss Style" tipografiju (npr. Suisse Int'l ili Aeonik). Velika, masna slova za naslove koja daju osećaj stabilnosti.
+
+Prored (Kerning) mora biti savršen. Tekst je "vazdušast", sa puno negativnog prostora (whitespace). Luksuz je prostor.
+
+C. Mikro-interakcije
+Svako dugme ima "magnetic" efekat (blago prati kursor).
+
+Hover preko slika ili kartica izaziva suptilan zoom ili promenu osvetljenja.
+
+Kursor može biti custom dizajniran (mali zeleni krug koji se širi kada pređe preko linka).
+
+4. Ključne Funkcionalnosti i Unapređenja
+I. The "Impact Dashboard" (Umesto "O nama")
+Umesto dosadnog teksta ko ste, odmah na početnoj strani imamo Live Data Dashboard.
+
+Brojač: "Ukupno finansiranih projekata u realnom vremenu".
+
+Vizualizacija: Mapa Srbije/Balkana sa pulsirajućim zelenim tačkama (#56AA4A) gde su EEF projekti aktivni.
+
+CO2 Redukcija: Brojke koje se okreću kao na berzi.
+
+II. AI-Powered "Energy ROI" Kalkulator
+Ovo je "killer feature".
+
+Ne obična forma. Korisnik unese tip objekta i trenutni račun za struju.
+
+Sajt (koristeći backend podatke i AI procenu) odmah generiše dinamički 3D model uštede.
+
+Grafikoni se iscrtavaju pred očima korisnika (koristeći zelenu boju na tamno plavoj podlozi).
+
+Rezultat: "Vaš potencijalni profit za 10 godina: €150,000".
+
+III. Dokumentarni Case Studies
+Izbacujemo PDF-ove.
+
+Svaka studija slučaja (npr. fabrika koja je uvela solarne panele) je mini-sajt za sebe.
+
+Visokokvalitetni video (cinematic style) koji se vrti u pozadini bez zvuka, sa intervjuima inženjera i direktora.
+
+Dron snimci završenih projekata.
+
+5. Tehnički Stack (Bez kompromisa)
+Da bi sajt vredeo $10M, on mora da leti.
+
+Frontend: React ili Vue.js sa Next.js framework-om (za SEO i brzinu).
+
+Animation: GSAP (GreenSock) za kompleksne animacije i Three.js za 3D elemente.
+
+CMS: Headless CMS (npr. Sanity ili Contentful) – omogućava da se sadržaj servira bilo gde (web, mobile, smart watch).
+
+Hosting: Vercel Enterprise ili AWS sa globalnim CDN-om. Učitavanje mora biti ispod 0.5 sekundi bilo gde u svetu.
+
+6. Šta bih ja (kao 1% dizajner) dodao a da niste tražili?
+Ovo su detalji koji razdvajaju "odličan sajt" od "svetske klase":
+
+Personalizovani "Concierge" Flow:
+
+Sajt ne pita "Šta tražite?". On pita "Ko ste vi?".
+
+Opcije: Investitor, Vlasnik Fabrike, Javni Sektor.
+
+Na osnovu klika, ceo sajt menja sadržaj. Ako sam investitor, vidim ROI i rizik. Ako sam inženjer, vidim tehničke specifikacije. Ovo je vrhunac UX-a.
+
+Audio Branding (Sonic UI):
+
+Zvuči pretenciozno, ali $10M sajtovi to imaju. Suptilan, dubok zvuk (bass thud) kada se otvori meni ili završi kalkulacija. To podiže osećaj materijalnosti digitalnog proizvoda.
+
+ESG Reporting Generator:
+
+Omogućite klijentima da direktno na sajtu generišu preliminarni ESG (Environmental, Social, and Governance) izveštaj za svoju firmu na osnovu EEF parametara. To vas pretvara iz "banke" u "konsultanta".
+
+Immersive "Dark Mode" prelaz:
+
+Dugme za promenu teme (dan/noć) ne menja samo boje. Ono menja atmosferu. Zvuk se menja, animacije postaju sporije (noć) ili brže (dan).
+
+Typography: *
+
+Koristite fontove koji su variable (mogu da menjaju debljinu fluidno). Kada skrolujem brže, slova se blago iskose (italic) da simuliraju brzinu.
+
+Predlog strukture početne strane (Wireframe koncept)
+Header: Minimalan. Logo levo (Svetlo zelena), Hamburger meni desno (skriven, otvara se preko celog ekrana).
+
+Hero: Tamno plava (#171A54) dubina. U centru lebdi apstraktna 3D kocka koja se raspada i sastavlja (simbol energetske transformacije). Naslov: "Energija je Valuta Budućnosti."
+
+Value Prop: Tri stuba (Finansiranje, Inženjering, Konsalting). Hoverom se stub širi i preuzima ekran.
+
+Social Proof: "Partneri koji nam veruju". Logotipi su monohromatski (sivi), kad pređeš mišem postaju #56AA4A (zeleni) i svetle.
+
+Footer: Ogroman. Sadrži mapu sajta, brzi kontakt i newsletter prijavu koja izgleda kao linija koda.
+
+PRD DODATAK: Content Experience & Layout Strategy
+1. HOMEPAGE (Naslovna): "The Gateway"
+Cilj: Odmah uspostaviti autoritet. Korisnik ne treba da čita, već da skenira veličinu kompanije.
+
+A. The "Immersion" Header (Global Navigation)
+Stanje: Sticky, Glassmorphism (zamućena pozadina preko videa).
+
+Levo: Logo EEF (Svetlo zelena #56AA4A).
+
+Desno: Minimalistički meni. Umesto da nabacamo sve linkove, koristimo Mega Menu koji se otvara na hover.
+
+Visible items: Proizvodi (Eko Rashlada), Usluge, Kompanija, Web Shop.
+
+Action: Dugme "Zatražite ponudu" (Outline style, glowing green border).
+
+Kontakt bar (Top strip): Vrlo tanak, tamniji od navy (#0e1035). Tu idu telefoni i "office@eef.rs". Font: Monospace, sitan ali čitak (tech vibe).
+
+B. Hero Section: "Engineering Excellence"
+Visual: Umesto statične slike, cinemagraph (video sa sitnim pokretima) unutrašnjosti jedne high-tech hladnjače, ali toniran u #171A54. Preko toga lebde 3D čestice hladnog vazduha.
+
+Copy (Tekst):
+
+H1 (Veliki naslov): "Eko Elektrofrigo - Inženjering i projektovanje." (Font: 80px+, Bold, Bela).
+
+Sub-headline: "26 godina iskustva. 8 vrhunskih inženjera. Bezbroj referenci." (Ovaj tekst se ispisuje kao da ga kuca mašina - typewriter effect).
+
+CTA (Call to Action): Dva dugmeta.
+
+"Naši Projekti" (Solid Green #56AA4A).
+
+"Usluge" (Transparent sa belim okvirom).
+
+C. The "Eko Rashlada" Showcase (Interactive Grid)
+Umesto dosadne liste, pravimo "Interactive 3D Carousel".
+
+Tekstovi: "Rashladne komore", "Tuneli za brzo smrzavanje", "ULO komore", "Čileri"...
+
+Interakcija: Kada korisnik pređe mišem preko reči "Tuneli za brzo smrzavanje", pozadina sekcije se menja i prikazuje wireframe model tog tunela u zelenoj boji.
+
+Detalj: Svaka stavka ima malu ikonicu koja pulsira.
+
+D. News & Insights (Najnovije informacije)
+Dizajnirano kao Financial Ticker ili News Feed.
+
+Naslov sekcije: "Industrijski Puls" (umesto samo "Najnovije informacije").
+
+Kartice vesti su tamne, sa zelenim datumima.
+
+E. The "Authority" Footer
+Background: Deep Navy (#171A54).
+
+Kolona 1: Kratak opis ("Porodično preduzeće osnovano 1996...").
+
+Kolona 2 (Quick Links): Meni (O nama, Usluge, itd.).
+
+Kolona 3 (ISO Download): Velika ikona dokumenta koja na hover postaje zelena. "Preuzmite ISO dokumentaciju".
+
+Kolona 4 (Newsletter): Input polje je samo jedna bela linija. Kad se klikne, linija pozeleni.
+
+Bottom: Copyright + Social Icons (minimalistički).
+
+2. O NAMA STRANICA: "The Legacy & The Future"
+Cilj: Ispričati priču o porodičnom biznisu koji je postao tehnološki gigant. Emocija + Preciznost.
+
+A. Intro: "Why EEF?" (Scroll-based storytelling)
+Ovaj deo teksta ("Savremena rešenja", "Inženjering", "Ključ u ruke") ne sme biti blok teksta.
+
+Layout: "Sticky" leva strana ekrana gde se menja veliki naslov (npr. INŽENJERING), dok desna strana skroluje kroz opis ("Uz 26 godina iskustva...").
+
+Visual: Za svaku sekciju (Proizvodnja, Trening, Kvalitet), u pozadini se pojavljuje suptilan video snimak iz vaše radionice ili sa terena, prekriven tamnoplavim filterom.
+
+B. The Timeline (Istorijat Kompanije)
+Ovo je centerpiece stranice.
+
+Koncept: Vertikalna linija koja ide kroz sredinu ekrana (boja #56AA4A).
+
+Interakcija: Kako skroluješ, godina (npr. 1996) se zumira i "pali".
+
+1996: Slika prvog ugovora sa Danfoss-om (old school photo effect).
+
+2006: 3D render klanice Matijević.
+
+2020: Video dronom iznad "Celanova" hladnjače (10.000 tona).
+
+Dok korisnik skroluje kroz godine, brojač sa strane sabira "Ukupno instalisanih kapaciteta" koji raste sa svakom godinom.
+
+C. Partneri & Distribucija (Logos)
+Tekst: "Glavni distributer opreme (Bitzer, Danfoss...)"
+
+Prikaz: Logotipi su u sivoj boji. Na hover postaju svoji originalni brendovi ali sa zelenim sjajem (#56AA4A outer glow). Ovo sugeriše da EEF daje energiju tim brendovima.
+
+3. KONTAKT STRANICA: "The Command Center"
+Cilj: Eliminacija frikcije. Korisnik mora odmah da zna kome da se obrati.
+
+A. Intelligent Routing Form
+Umesto da samo ispišemo email adrese, pravimo interaktivni selektor.
+
+Pitanje na ekranu: "Kako možemo da vam pomognemo?"
+
+Opcije (dugmad):
+
+[ ] Treba mi ponuda (Prodaja)
+
+[ ] Tehničko pitanje (Inženjering)
+
+[ ] Problem sa opremom (Servis)
+
+[ ] Opšte informacije (Office)
+
+Rezultat: Kada korisnik klikne "Tehničko pitanje", ispod se dinamički pojavljuje tehnika@eef.rs i forma koja ide direktno tom odeljenju.
+
+B. The "Live" Map
+Ne koristimo standardni Google Maps embed.
+
+Koristimo Mapbox custom skin. Mapa je tamno plava (#171A54), ulice su tamno sive, a lokacija firme (Svetolika Nikačevića 11) je svetleći zeleni radar (#56AA4A) koji pulsira.
+
+C. Kontakt Kartice
+Adresa i telefoni su prikazani u velikim, čitljivim karticama sa staklenim efektom (Glassmorphism).
+
+Klikom na broj telefona (na mobilnom), odmah se poziva.
+
+4. Dodatne "1% Design" Sugestije za Sadržaj
+"Live Status" Indikator u Hederu:
+
+Pored broja servisa, dodajemo malu zelenu tačku i tekst: "Servisni timovi: Aktivni (24/7)". Ovo uliva neverovatno poverenje.
+
+Download Zona (ISO Dokumentacija):
+
+Umesto linka, napraviti vizuelni prikaz sertifikata sa zlatnim/zelenim pečatom. To diže percepciju kvaliteta.
+
+Humanizacija Inženjera:
+
+U delu "O nama", umesto samo teksta "tim od 8 inženjera", staviti profesionalnu, artističku crno-belu fotografiju tima u odelima ili sa šlemovima, gde se na hover pojavljuju njihova imena i specijalizacije. Ljudi kupuju od ljudi.
