@@ -20,16 +20,17 @@ function StatCard({ label, value, icon: Icon, subtext, delay }: any) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay }}
-      className="bg-white/5 border border-white/10 p-6 backdrop-blur-sm relative group overflow-hidden"
+      className="bg-white/5 border border-white/10 p-6 backdrop-blur-md relative group overflow-hidden hover:bg-white/10 transition-colors duration-500 rounded-xl"
     >
-      <div className="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-100 group-hover:text-primary transition-all duration-500">
+      <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+      <div className="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-100 group-hover:text-primary transition-all duration-500 group-hover:scale-110">
         <Icon className="w-8 h-8" />
       </div>
-      <div className="text-white/40 text-xs font-mono uppercase tracking-widest mb-2">{label}</div>
-      <div className="text-3xl md:text-4xl font-heading font-bold text-white mb-1 group-hover:text-primary transition-colors">
+      <div className="text-white/40 text-xs font-mono uppercase tracking-widest mb-2 relative z-10">{label}</div>
+      <div className="text-3xl md:text-4xl font-heading font-bold text-white mb-1 group-hover:text-primary transition-colors relative z-10">
         {value}
       </div>
-      <div className="text-white/30 text-xs">{subtext}</div>
+      <div className="text-white/30 text-xs relative z-10">{subtext}</div>
     </motion.div>
   );
 }
@@ -50,7 +51,7 @@ export function ImpactDashboard() {
         <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-8">
           <div>
             <h2 className="text-4xl md:text-5xl font-heading font-bold text-white mb-4">
-              Live Impact <span className="text-primary">Dashboard</span>
+              Monitoring Uticaja <span className="text-primary">Uživo</span>
             </h2>
             <p className="text-white/60 max-w-xl">
               Pratimo performanse naših sistema u realnom vremenu. Vaša efikasnost je naša misija.
@@ -58,7 +59,7 @@ export function ImpactDashboard() {
           </div>
           <div className="flex items-center gap-2 text-primary font-mono text-sm animate-pulse">
             <span className="w-2 h-2 bg-primary rounded-full" />
-            LIVE DATA CONNECTION
+            VEZA SA PODACIMA UŽIVO
           </div>
         </div>
 
@@ -116,7 +117,7 @@ export function ImpactDashboard() {
                     contentStyle={{ backgroundColor: '#171A54', border: '1px solid #ffffff20' }}
                     itemStyle={{ color: '#fff' }}
                   />
-                  <Area type="monotone" dataKey="value" stroke="#56AA4A" strokeWidth={2} fillOpacity={1} fill="url(#colorValue)" />
+                  <Area type="monotone" dataKey="value" name="Potrošnja" stroke="#56AA4A" strokeWidth={2} fillOpacity={1} fill="url(#colorValue)" />
                 </AreaChart>
               </ResponsiveContainer>
             </div>

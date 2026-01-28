@@ -8,6 +8,7 @@ const personas = [
     id: "investor",
     icon: User,
     label: "Investitor",
+    targetAudience: "Investitore",
     desc: "Želim maksimalan povrat investicije i minimalan rizik.",
     content: {
       highlight: "ROI Fokus",
@@ -19,6 +20,7 @@ const personas = [
     id: "factory",
     icon: Factory,
     label: "Vlasnik Fabrike",
+    targetAudience: "Vlasnike Fabrika",
     desc: "Treba mi pouzdan sistem koji smanjuje troškove proizvodnje.",
     content: {
       highlight: "Operativna Efikasnost",
@@ -30,6 +32,7 @@ const personas = [
     id: "public",
     icon: Building2,
     label: "Javni Sektor",
+    targetAudience: "Javni Sektor",
     desc: "Tražim rešenja za javne objekte i usklađenost sa regulativama.",
     content: {
       highlight: "Regulativa & Standardi",
@@ -110,7 +113,7 @@ export function Concierge() {
                 </div>
                 <h3 className="text-3xl md:text-4xl font-heading font-bold text-white">
                   Rešenja skrojena za <br />
-                  <span className="text-white/50">{activePersona.label}e</span>
+                  <span className="text-white/50">{activePersona.targetAudience}</span>
                 </h3>
                 <ul className="space-y-4 pt-4">
                   {activePersona.content.stats.map((stat, i) => (

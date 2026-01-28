@@ -30,7 +30,7 @@ export function ROICalculator() {
             <div>
               <div className="flex items-center gap-3 text-primary mb-4">
                 <Calculator className="w-6 h-6" />
-                <span className="font-mono text-sm uppercase tracking-widest">AI Energy Profit Calc</span>
+                <span className="font-mono text-sm uppercase tracking-widest">AI Kalkulator Profita</span>
               </div>
               <h2 className="text-4xl md:text-5xl font-heading font-bold text-white mb-6">
                 Pretvorite trošak u <br /><span className="text-primary">Kapital.</span>

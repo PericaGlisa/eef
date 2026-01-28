@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#56AA4A;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3E8E34;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <circle cx="256" cy="256" r="256" fill="url(#grad)"/>
+  <g fill="none" stroke="white" stroke-width="28" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Main 6 axes (0, 60, 120, 180, 240, 300 degrees) -->
+    <!-- Vertical -->
+    <path d="M256 80 V432" />
+    
+    <!-- 60 degrees (approx slope 1.732) -->
+    <!-- Center (256, 256). L = 176 (radius-padding). 
+         x = 256 + 176*cos(30) = 256 + 152.4 = 408.4
+         y = 256 - 176*sin(30) = 256 - 88 = 168 
+         Wait, angles are from x-axis usually.
+         Vertical is 90 deg. 
+         Branches at 30, 90, 150, 210, 270, 330 degrees for a standard snowflake orientation (point up).
+         Let's stick to 0 (vertical), 60, 120 from vertical.
+         So angles: 90 (up), 30 (right-up), 330 (-30, right-down), 270 (down), 210 (left-down), 150 (left-up).
+    -->
+    
+    <!-- Diagonal 1 (30 deg / 210 deg) -->
+    <!-- x: 256 +/- 176*cos(30) = 256 +/- 152.4 -> 408.4, 103.6
+         y: 256 +/- 176*sin(30) = 256 +/- 88 -> 168, 344 (remember y is down)
+         Up-Right to Down-Left
+    -->
+    <path d="M408 168 L104 344" />
+    
+    <!-- Diagonal 2 (150 deg / 330 deg) -->
+    <!-- x: 256 +/- 176*cos(150) = 256 -/+ 152.4 -> 103.6, 408.4
+         y: 256 +/- 176*sin(150) = 256 +/- 88 -> 168, 344
+         Up-Left to Down-Right
+    -->
+    <path d="M104 168 L408 344" />
+    
+    <!-- Decoratives (V-shapes on branches) -->
+    <!-- Top Branch (Vertical) -->
+    <path d="M256 130 L226 160" />
+    <path d="M256 130 L286 160" />
+    
+    <!-- Bottom Branch -->
+    <path d="M256 382 L226 352" />
+    <path d="M256 382 L286 352" />
+    
+    <!-- Top-Right (30 deg) -->
+    <!-- Point on branch approx (380, 184). No, let's pick a point closer to center.
+         r=126?
+         x = 256 + 126*cos(30) = 365
+         y = 256 - 126*sin(30) = 193
+         
+         Let's try simpler logic. Just draw V's relative to rotated axes? No, SVG transforms are messy inline without groups.
+         Manual coordinates for V's.
+         
+         Branch tip is at r=176. Decorative V at r=120?
+         
+         Top-Right (30 deg):
+         Center of V: (256+120*0.866, 256-120*0.5) = (360, 196)
+         Arms go out/back. 
+         Let's just simplify the snowflake to a clean hex shape.
+    -->
+    
+    <!-- Re-doing decoratives for symmetry -->
+    <!-- Top -->
+    <path d="M256 120 L226 150" />
+    <path d="M256 120 L286 150" />
+
+    <!-- Bottom -->
+    <path d="M256 392 L226 362" />
+    <path d="M256 392 L286 362" />
+    
+    <!-- Top-Right (30 deg from horizontal? No, 30 from vertical is 60 deg from horiz. 
+         My axes were: Vertical, and +/- 60 deg from vertical.
+         
+         Axis 2: 30 deg above horizontal (Right-Up).
+         Tip: (408, 168). 
+         V-point: (360, 196).
+         Perpendicular direction is -60 deg (Down-Right) and +120 (Up-Left).
+         
+         Let's rely on a simpler visual check or standard hex snowflake paths.
+    -->
+    
+    <!-- Using a group transform approach for perfect symmetry is safer -->
+  </g>
+  
+  <g fill="none" stroke="white" stroke-width="28" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Arm 1 (0 deg - Up) -->
+      <path d="M256 256 L256 80" />
+      <path d="M256 130 L226 160" />
+      <path d="M256 130 L286 160" />
+      
+      <!-- Arm 2 (60 deg) -->
+      <g transform="rotate(60 256 256)">
+        <path d="M256 256 L256 80" />
+        <path d="M256 130 L226 160" />
+        <path d="M256 130 L286 160" />
+      </g>
+      
+      <!-- Arm 3 (120 deg) -->
+      <g transform="rotate(120 256 256)">
+        <path d="M256 256 L256 80" />
+        <path d="M256 130 L226 160" />
+        <path d="M256 130 L286 160" />
+      </g>
+      
+      <!-- Arm 4 (180 deg) -->
+      <g transform="rotate(180 256 256)">
+        <path d="M256 256 L256 80" />
+        <path d="M256 130 L226 160" />
+        <path d="M256 130 L286 160" />
+      </g>
+      
+      <!-- Arm 5 (240 deg) -->
+      <g transform="rotate(240 256 256)">
+        <path d="M256 256 L256 80" />
+        <path d="M256 130 L226 160" />
+        <path d="M256 130 L286 160" />
+      </g>
+      
+      <!-- Arm 6 (300 deg) -->
+      <g transform="rotate(300 256 256)">
+        <path d="M256 256 L256 80" />
+        <path d="M256 130 L226 160" />
+        <path d="M256 130 L286 160" />
+      </g>
+  </g>
+</svg>

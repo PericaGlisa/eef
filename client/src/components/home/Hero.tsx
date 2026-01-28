@@ -1,150 +1,149 @@
-import { useRef, useMemo } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { Stars } from "@react-three/drei";
-import { motion } from "framer-motion";
+import { useRef, useMemo, useState, useEffect } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Play } from "lucide-react";
-import * as THREE from "three";
-
-// 3D Particle Component
-function Particles({ count = 100 }) {
-  const mesh = useRef<THREE.InstancedMesh>(null);
-  
-  const dummy = useMemo(() => new THREE.Object3D(), []);
-  const particles = useMemo(() => {
-    const temp = [];
-    for (let i = 0; i < count; i++) {
-      const t = Math.random() * 100;
-      const factor = 20 + Math.random() * 100;
-      const speed = 0.01 + Math.random() / 200;
-      const xFactor = -50 + Math.random() * 100;
-      const yFactor = -50 + Math.random() * 100;
-      const zFactor = -50 + Math.random() * 100;
-      temp.push({ t, factor, speed, xFactor, yFactor, zFactor, mx: 0, my: 0 });
-    }
-    return temp;
-  }, [count]);
-
-  useFrame((state) => {
-    if (!mesh.current) return;
-    
-    particles.forEach((particle, i) => {
-      let { t, factor, speed, xFactor, yFactor, zFactor } = particle;
-      t = particle.t += speed / 2;
-      const a = Math.cos(t) + Math.sin(t * 1) / 10;
-      const b = Math.sin(t) + Math.cos(t * 2) / 10;
-      const s = Math.cos(t);
-      
-      dummy.position.set(
-        (particle.mx / 10) * a + xFactor + Math.cos((t / 10) * factor) + (Math.sin(t * 1) * factor) / 10,
-        (particle.my / 10) * b + yFactor + Math.sin((t / 10) * factor) + (Math.cos(t * 2) * factor) / 10,
-        (particle.my / 10) * b + zFactor + Math.cos((t / 10) * factor) + (Math.sin(t * 3) * factor) / 10
-      );
-      dummy.scale.set(s, s, s);
-      dummy.rotation.set(s * 5, s * 5, s * 5);
-      dummy.updateMatrix();
-      if (mesh.current) {
-         mesh.current.setMatrixAt(i, dummy.matrix);
-      }
-    });
-    if (mesh.current) {
-        mesh.current.instanceMatrix.needsUpdate = true;
-    }
-  });
-
-  return (
-    <instancedMesh ref={mesh} args={[undefined, undefined, count]}>
-      <dodecahedronGeometry args={[0.2, 0]} />
-      <meshPhongMaterial color="#56AA4A" emissive="#56AA4A" emissiveIntensity={0.5} toneMapped={false} />
-    </instancedMesh>
-  );
-}
+import { Magnetic } from "@/components/ui/magnetic";
+import { RevealText } from "@/components/ui/reveal-text";
+import { ArrowRight, ChevronDown } from "lucide-react";
 
 export function Hero() {
-  return (
-    <div className="relative h-screen w-full overflow-hidden bg-background">
-      {/* Background Image Layer with Overlay */}
-      <div 
-        className="absolute inset-0 z-0 bg-cover bg-center opacity-30 mix-blend-overlay"
-        style={{ backgroundImage: "url('/assets/hero-bg.png')" }}
-      />
-      <div className="absolute inset-0 z-10 bg-gradient-to-t from-background via-background/80 to-transparent" />
-      <div className="absolute inset-0 z-10 bg-gradient-to-r from-background via-transparent to-transparent" />
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"]
+  });
 
-      {/* 3D Canvas Layer */}
-      <div className="absolute inset-0 z-20 opacity-60 pointer-events-none">
-        <Canvas camera={{ position: [0, 0, 15], fov: 75 }}>
-          <ambientLight intensity={0.5} />
-          <pointLight position={[10, 10, 10]} intensity={1} color="#56AA4A" />
-          <Particles count={150} />
-          <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
-        </Canvas>
-      </div>
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+
+  return (
+    <div ref={ref} className="relative h-[100dvh] w-full overflow-hidden bg-background">
+      {/* Background Image Layer with Overlay */}
+      <motion.div 
+        style={{ y, opacity }}
+        className="absolute inset-0 z-0"
+      >
+        <motion.div 
+          initial={{ scale: 1.1 }}
+          animate={{ 
+            scale: 1.2,
+            x: ["0%", "-2%", "0%", "2%", "0%"],
+            y: ["0%", "-2%", "0%", "2%", "0%"]
+          }}
+          transition={{ 
+            duration: 25, 
+            repeat: Infinity, 
+            repeatType: "mirror", 
+            ease: "easeInOut" 
+          }}
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: "url('/assets/hero-bg.png')" }}
+        />
+         <div className="absolute inset-0 bg-[#0e1035]/80 mix-blend-multiply" />
+         <div className="absolute inset-0 bg-gradient-to-t from-[#0e1035] via-transparent to-transparent opacity-90" />
+      </motion.div>
 
       {/* Content Layer */}
-      <div className="relative z-30 container mx-auto px-6 h-full flex flex-col justify-center">
+      <div className="relative z-30 container mx-auto px-6 h-full flex flex-col justify-center pt-24 md:pt-0">
         <div className="max-w-4xl space-y-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="flex items-center gap-3 text-primary font-mono text-sm uppercase tracking-widest"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md text-primary font-mono text-xs uppercase tracking-widest mb-6 hover:bg-white/10 transition-colors cursor-default"
           >
-            <span className="w-12 h-[1px] bg-primary"></span>
-            Eko Elektrofrigo
+            <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+            Inženjerska Izvrsnost
           </motion.div>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-6xl md:text-8xl font-heading font-bold text-white leading-[0.9]"
-          >
-            Inženjering <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-white/50">
-              Budućnosti
-            </span>
-          </motion.h1>
+          <div className="space-y-2 relative">
+            <div className="absolute -inset-10 bg-primary/20 blur-[100px] rounded-full opacity-50 pointer-events-none" />
+            <RevealText 
+              text="Eko Elektrofrigo -" 
+              className="text-4xl sm:text-5xl md:text-7xl lg:text-[90px] font-bold text-white leading-[1.1] font-heading tracking-tight" 
+              delay={0.2} 
+            />
+            <RevealText 
+              text="Inženjering i projektovanje." 
+              className="text-4xl sm:text-5xl md:text-7xl lg:text-[90px] font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-white/50 leading-[1.1] font-heading tracking-tight" 
+              delay={0.4} 
+            />
+          </div>
 
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.5 }}
-            className="font-mono text-white/70 text-lg md:text-xl max-w-2xl border-l-2 border-primary/30 pl-6"
+            transition={{ duration: 1, delay: 0.8 }}
+            className="text-lg sm:text-xl md:text-2xl text-white/80 font-mono h-[32px]"
           >
-            <p>26 godina iskustva. 8 vrhunskih inženjera. Bezbroj referenci.</p>
+            <TypewriterText text="30 godina iskustva. 8 vrhunskih inženjera. Bezbroj referenci." />
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            className="flex flex-col sm:flex-row gap-4 pt-8"
+            transition={{ duration: 0.8, delay: 1 }}
+            className="flex flex-col sm:flex-row gap-4 pt-4"
           >
-            <Button size="lg" className="bg-primary hover:bg-primary/90 text-white font-bold tracking-wider px-8 h-14 rounded-none skew-x-[-10deg]">
-              <span className="skew-x-[10deg] flex items-center gap-2">
-                NAŠI PROJEKTI <ArrowRight className="w-4 h-4" />
-              </span>
-            </Button>
-            <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 font-bold tracking-wider px-8 h-14 rounded-none skew-x-[-10deg]">
-              <span className="skew-x-[10deg] flex items-center gap-2">
-                <Play className="w-4 h-4 fill-current" /> POGLEDAJTE VIDEO
-              </span>
-            </Button>
+            <Magnetic>
+              <Button 
+                size="lg" 
+                className="relative bg-primary hover:bg-primary/90 text-white px-8 py-6 text-lg overflow-hidden group border border-white/10"
+                onClick={() => import("@/lib/audio").then(m => m.audio.playClick())}
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+                Naši Projekti <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </Magnetic>
+            <Magnetic>
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="border-white/20 bg-white/5 backdrop-blur-sm text-white hover:bg-white hover:text-[#171A54] px-8 py-6 text-lg transition-all duration-300"
+                onClick={() => import("@/lib/audio").then(m => m.audio.playClick())}
+              >
+                Usluge
+              </Button>
+            </Magnetic>
           </motion.div>
         </div>
       </div>
 
       {/* Scroll Indicator */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2, duration: 1 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2 text-white/50"
       >
-        <span className="text-[10px] uppercase tracking-[0.3em] text-white/30">Scroll</span>
-        <div className="w-[1px] h-16 bg-gradient-to-b from-primary to-transparent" />
+        <span className="text-xs uppercase tracking-widest font-mono">Istraži</span>
+        <motion.div
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <ChevronDown className="w-6 h-6" />
+        </motion.div>
       </motion.div>
     </div>
+  );
+}
+
+function TypewriterText({ text }: { text: string }) {
+  const [displayedText, setDisplayedText] = useState("");
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    if (currentIndex < text.length) {
+      const timeout = setTimeout(() => {
+        setDisplayedText(prev => prev + text[currentIndex]);
+        setCurrentIndex(prev => prev + 1);
+      }, 50); // Typing speed
+      return () => clearTimeout(timeout);
+    }
+  }, [currentIndex, text]);
+
+  return (
+    <span className="border-r-2 border-primary animate-pulse pr-1">
+      {displayedText}
+    </span>
   );
 }
