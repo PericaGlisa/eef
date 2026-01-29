@@ -79,7 +79,7 @@ export function Navbar() {
   return (
     <>
       {/* Top Strip */}
-      <div className="bg-[#0e1035] text-white/70 text-xs py-2 px-6 font-mono border-b border-white/5 flex flex-col sm:flex-row justify-between items-center z-50 relative gap-2 sm:gap-0">
+      <div className="bg-[#0e1035] text-white/70 text-[10px] sm:text-xs py-2 px-6 font-mono border-b border-white/5 flex flex-col sm:flex-row justify-between items-center z-50 relative gap-2 sm:gap-0">
         <div className="flex gap-4 flex-wrap justify-center sm:justify-start">
           <a href="tel:+381113757287" className="flex items-center gap-2 hover:text-primary transition-colors whitespace-nowrap"><Phone className="w-3 h-3 text-primary" /> +381 11 375 72 87</a>
           <a href="mailto:office@eef.rs" className="flex items-center gap-2 hover:text-primary transition-colors whitespace-nowrap"><Mail className="w-3 h-3 text-primary" /> office@eef.rs</a>

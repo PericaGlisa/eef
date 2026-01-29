@@ -98,7 +98,7 @@ export default function Partners() {
           return (
             <section 
               key={partner.id} 
-              className={`py-24 relative overflow-hidden ${isLight ? 'bg-[#F5F7FA]' : 'bg-[#0e1035]'}`}
+              className={`py-16 md:py-24 relative overflow-hidden ${isLight ? 'bg-[#F5F7FA]' : 'bg-[#0e1035]'}`}
             >
               {/* Soft transition gradient */}
               <div 

@@ -61,7 +61,7 @@ export default function Services() {
       <Navbar />
       
       {/* Hero */}
-      <section className="pt-40 pb-20 relative overflow-hidden bg-[#0e1035]">
+      <section className="pt-32 md:pt-40 pb-16 md:pb-20 relative overflow-hidden bg-[#0e1035]">
         <div className="absolute inset-0 bg-[url('/assets/noise.svg')] opacity-20 pointer-events-none" />
         <div className="container mx-auto px-6 relative z-10">
           <motion.div
@@ -80,7 +80,7 @@ export default function Services() {
       </section>
 
       {/* Section 1: Core Engineering (Dark) */}
-      <section className="py-24 bg-[#0e1035] relative overflow-hidden">
+      <section className="py-16 md:py-24 bg-[#0e1035] relative overflow-hidden">
         {/* Background Details */}
         <div className="absolute right-0 top-0 w-1/3 h-1/3 bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
         

@@ -87,7 +87,7 @@ export default function Contact() {
                       className="space-y-6"
                     >
                       {/* Common Fields */}
-                      <div className="grid grid-cols-2 gap-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                           <div className="space-y-2">
                             <label className="text-sm font-bold text-[#171A54]/70">Ime i Prezime</label>
                             <Input className="bg-gray-50 border-[#171A54]/10 h-12 text-[#171A54] focus:border-primary/50 focus:bg-white transition-colors" placeholder="Vaše ime" />

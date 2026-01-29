@@ -137,7 +137,7 @@ export default function About() {
       <Navbar />
       
       {/* Hero */}
-      <section className="pt-40 pb-20 relative overflow-hidden">
+      <section className="pt-32 md:pt-40 pb-16 md:pb-20 relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('/assets/noise.svg')] opacity-20 pointer-events-none" />
         <div className="container mx-auto px-6 relative z-10">
           <motion.div
@@ -158,7 +158,7 @@ export default function About() {
       </section>
 
       {/* About Company Section */}
-      <section className="py-24 bg-background relative z-20 overflow-hidden">
+      <section className="py-16 md:py-24 bg-background relative z-20 overflow-hidden">
         {/* Decorative background elements */}
         <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-[#171A54]/10 to-transparent pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary/5 blur-[100px] rounded-full pointer-events-none" />

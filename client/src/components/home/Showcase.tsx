@@ -59,7 +59,7 @@ export function Showcase() {
   const [activeProduct, setActiveProduct] = useState<number | null>(null);
 
   return (
-    <section className="py-24 bg-background relative transition-colors duration-700 overflow-hidden">
+    <section className="py-16 md:py-24 bg-background relative transition-colors duration-700 overflow-hidden">
        {/* Background Wireframe Effect based on active product */}
        <div 
          className={`absolute inset-0 bg-cover bg-center opacity-0 transition-opacity duration-700 pointer-events-none ${activeProduct ? 'opacity-10' : ''}`}

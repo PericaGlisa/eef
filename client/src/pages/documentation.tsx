@@ -66,7 +66,7 @@ export default function Documentation() {
       </section>
 
       {/* Docs List */}
-      <section className="py-24 bg-[#F5F7FA] relative overflow-hidden">
+      <section className="py-16 md:py-24 bg-[#F5F7FA] relative overflow-hidden">
         {/* Soft transition gradients */}
         <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[#0e1035]/5 to-transparent pointer-events-none z-10" />
         

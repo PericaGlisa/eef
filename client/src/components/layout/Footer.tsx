@@ -5,7 +5,7 @@ import { FileText, ArrowRight, Instagram, Linkedin, Facebook } from "lucide-reac
 
 export function Footer() {
   return (
-    <footer className="bg-[#0e1035] text-white pt-24 pb-12 border-t border-white/5 relative overflow-hidden">
+    <footer className="bg-[#0e1035] text-white pt-16 pb-8 md:pt-24 md:pb-12 border-t border-white/5 relative overflow-hidden">
       {/* Background Decor */}
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-30" />
       

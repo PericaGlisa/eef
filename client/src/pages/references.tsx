@@ -41,7 +41,7 @@ export default function References() {
       <Navbar />
       
       {/* Hero */}
-      <section className="pt-40 pb-20 relative overflow-hidden">
+      <section className="pt-32 md:pt-40 pb-16 md:pb-20 relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('/assets/noise.svg')] opacity-20 pointer-events-none" />
         <div className="container mx-auto px-6 relative z-10">
           <motion.div
@@ -61,7 +61,7 @@ export default function References() {
       </section>
 
       {/* Domestic References - Map */}
-      <section className="py-20 bg-[#F5F7FA] relative overflow-hidden border-y border-[#171A54]/5">
+      <section className="py-16 md:py-20 bg-[#F5F7FA] relative overflow-hidden border-y border-[#171A54]/5">
         {/* Soft transition gradient from Hero (Dark) to Domestic (Light) */}
         <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[#0e1035]/10 to-transparent pointer-events-none z-10" />
 
@@ -88,7 +88,7 @@ export default function References() {
       </section>
 
       {/* Foreign References */}
-      <section className="py-24 bg-[#0e1035] relative">
+      <section className="py-16 md:py-24 bg-[#0e1035] relative">
         {/* Soft transition gradient from Domestic (Light) to Foreign (Dark) */}
         <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[#F5F7FA]/10 to-transparent pointer-events-none z-10" />
 

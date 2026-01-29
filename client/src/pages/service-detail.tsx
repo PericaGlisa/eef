@@ -56,7 +56,7 @@ export default function ServiceDetail() {
         </div>
       </section>
 
-      <main className="py-20 bg-[#F5F7FA]">
+      <main className="py-16 md:py-20 bg-[#F5F7FA]">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {/* Main Content */}
