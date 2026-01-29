@@ -414,8 +414,8 @@ export const locations: Location[] = [
   {
     "id": "nova-pazova",
     "city": "Nova Pazova",
-    "x": 33.88211829436043,
-    "y": 33.980345489443486,
+    "x": 33.0,
+    "y": 33.0,
     "projects": [
       {
         "title": "MOTOPLAST",
@@ -576,8 +576,8 @@ export const locations: Location[] = [
   {
     "id": "dobanovci",
     "city": "Dobanovci",
-    "x": 34.15661623108673,
-    "y": 36.50125527831099,
+    "x": 33.5,
+    "y": 37.0,
     "projects": [
       {
         "title": "A&P d.o.o.",
@@ -657,8 +657,8 @@ export const locations: Location[] = [
   {
     "id": "surcin",
     "city": "Surčin",
-    "x": 35.5519807427786,
-    "y": 37.2309923224568,
+    "x": 36.0,
+    "y": 38.5,
     "projects": [
       {
         "title": "KOTEKS d.o.o.",
@@ -675,8 +675,8 @@ export const locations: Location[] = [
   {
     "id": "batajnica",
     "city": "Batajnica",
-    "x": 35.43760660247596,
-    "y": 34.710082533589286,
+    "x": 36.5,
+    "y": 34.5,
     "projects": [
       {
         "title": "MODULOR",
@@ -895,8 +895,8 @@ export const locations: Location[] = [
   {
     "id": "rupeljevo",
     "city": "Rupeljevo",
-    "x": 28.689532324621815,
-    "y": 59.36634932821495,
+    "x": 27.5,
+    "y": 60.0,
     "projects": [
       {
         "title": "MALINA PRODUKT",
@@ -914,7 +914,7 @@ export const locations: Location[] = [
     "id": "pozega",
     "city": "Požega",
     "x": 29.87902338376896,
-    "y": 58.15012092130516,
+    "y": 57.0,
     "projects": [
       {
         "title": "FRIGO PAUN",
@@ -941,7 +941,7 @@ export const locations: Location[] = [
   {
     "id": "lucani",
     "city": "Lučani",
-    "x": 32.12075653370018,
+    "x": 33.5,
     "y": 57.840535508637394,
     "projects": [
       {

@@ -4,8 +4,8 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { 
   Menu, Phone, Mail, 
   Snowflake, Wind, Box, Server, Droplets, Zap, Thermometer,
-  PenTool, Wrench, Briefcase,
-  BookOpen, ShieldCheck, ChevronRight
+  DraftingCompass, Factory, Wrench, BarChart3, Lightbulb, ShieldCheck,
+  BookOpen, ChevronRight
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
@@ -39,33 +39,39 @@ export function Navbar() {
     {
       name: "Eko Rashlada",
       href: "/eco-cooling",
+      description: "Istražite naša eko rashladna rešenja dizajnirana za maksimalnu efikasnost, održivost i pouzdanost.",
       items: [
-        { name: "Rashladne komore", href: "/eco-cooling", icon: Snowflake, desc: "Plusne i minusne komore" },
-        { name: "Tuneli za smrzavanje", href: "/eco-cooling", icon: Wind, desc: "Brzo smrzavanje" },
-        { name: "ULO Komore", href: "/eco-cooling", icon: Box, desc: "Kontrolisana atmosfera" },
-        { name: "Rashladni agregati", href: "/eco-cooling", icon: Server, desc: "Ekološki freoni i CO2" },
-        { name: "Čileri", href: "/eco-cooling", icon: Droplets, desc: "Indirektno hlađenje" },
-        { name: "Elektro ormani & CNSU", href: "/eco-cooling", icon: Zap, desc: "Nadzor i upravljanje" },
-        { name: "Termoizolacija", href: "/eco-cooling", icon: Thermometer, desc: "Paneli i vrata" }
+        { name: "Rashladne komore", href: "/eco-cooling/rashladne-komore", icon: Snowflake, desc: "Plusne i minusne komore" },
+        { name: "Tuneli za smrzavanje", href: "/eco-cooling/tuneli-za-smrzavanje", icon: Wind, desc: "Brzo smrzavanje" },
+        { name: "ULO Komore", href: "/eco-cooling/ulo-komore", icon: Box, desc: "Kontrolisana atmosfera" },
+        { name: "Rashladni agregati", href: "/eco-cooling/rashladni-agregati", icon: Server, desc: "Ekološki freoni i CO2" },
+        { name: "Čileri", href: "/eco-cooling/cileri", icon: Droplets, desc: "Indirektno hlađenje" },
+        { name: "Elektro ormani & CNSU", href: "/eco-cooling/elektro-ormani", icon: Zap, desc: "Nadzor i upravljanje" },
+        { name: "Termoizolacija", href: "/eco-cooling/termoizolacija", icon: Thermometer, desc: "Paneli i vrata" }
       ]
     },
     {
       name: "Usluge",
       href: "/services",
+      description: "Sveobuhvatna inženjerska podrška: od idejnog rešenja i projektovanja, preko stručne montaže, do pouzdanog servisa i održavanja 24/7.",
       items: [
-        { name: "Projektovanje", href: "/services", icon: PenTool, desc: "Idejna rešenja" },
-        { name: "Izvođenje", href: "/services", icon: Wrench, desc: "Montaža opreme" },
-        { name: "Servis", href: "/services", icon: Briefcase, desc: "Održavanje 24/7" }
+        { name: "Inženjering", href: "/services/engineering", icon: DraftingCompass, desc: "Projektovanje i 3D modeli" },
+        { name: "Izvođenje", href: "/services/execution", icon: Factory, desc: "Montaža ključ u ruke" },
+        { name: "Servis", href: "/services/maintenance", icon: Wrench, desc: "Održavanje 24/7" },
+        { name: "Energetska Revizija", href: "/services/energy-audit", icon: BarChart3, desc: "ROI i uštede" },
+        { name: "Konsalting", href: "/services/consulting", icon: Lightbulb, desc: "Stručno savetovanje" },
+        { name: "Sigurnost", href: "/services/safety", icon: ShieldCheck, desc: "Kvalitet i standardi" }
       ]
     },
     { name: "Kompanija", href: "/about" },
+    { name: "Partneri", href: "/partners" },
     { name: "Reference", href: "/references" },
     {
       name: "Dokumentacija",
       href: "/documentation",
+      description: "Pristupite našim zvaničnim sertifikatima i potvrdama kvaliteta.",
       items: [
-        { name: "Uputstva", href: "/documentation", icon: BookOpen, desc: "Korisnička uputstva" },
-        { name: "Atesti i sertifikati", href: "/documentation", icon: ShieldCheck, desc: "Dokumentacija kvaliteta" }
+        { name: "Atesti i Sertifikati", href: "/documentation", icon: ShieldCheck, desc: "Sertifikati standarda i partnerstva" }
       ]
     },
   ];
@@ -96,67 +102,86 @@ export function Navbar() {
             <img 
               src="/assets/logo.png" 
               alt="EEF Logo" 
-              className="h-10 md:h-12 lg:h-14 w-auto brightness-0 invert group-hover:brightness-100 group-hover:invert-0 transition-all duration-500" 
+              className="h-12 md:h-14 lg:h-16 w-auto brightness-0 invert group-hover:brightness-100 group-hover:invert-0 transition-all duration-500" 
             />
           </Link>
 
           {/* Desktop Navigation (Mega Menu) */}
           <div className="hidden lg:flex items-center gap-1">
-            {navLinks.map((link) => (
-              link.items ? (
-                <NavigationMenu key={link.name} className="flex-none">
-                  <NavigationMenuList>
-                    <NavigationMenuItem>
-                      <NavigationMenuTrigger className="bg-transparent text-white hover:text-primary hover:bg-white/5 data-[state=open]:bg-white/5 uppercase tracking-wider font-medium text-[11px] h-9 px-3">
-                        {link.name}
-                      </NavigationMenuTrigger>
-                      <NavigationMenuContent>
-                        <div className={cn(
-                          "p-3 bg-[#0e1035] border border-white/10 rounded-xl shadow-2xl backdrop-blur-xl",
-                          link.name === "Eko Rashlada" ? "w-[500px]" : "w-[320px]"
-                        )}>
-                           <ul className={cn(
-                            "grid gap-2",
-                            link.name === "Eko Rashlada" ? "grid-cols-2" : "grid-cols-1"
+            <NavigationMenu className="max-w-none">
+              <NavigationMenuList>
+                {navLinks.map((link) => (
+                  <NavigationMenuItem key={link.name}>
+                    {link.items ? (
+                      <>
+                        <NavigationMenuTrigger className="bg-transparent text-white hover:text-primary hover:bg-white/5 data-[state=open]:bg-white/5 uppercase tracking-wider font-medium text-[11px] h-9 px-3">
+                          {link.name}
+                        </NavigationMenuTrigger>
+                        <NavigationMenuContent>
+                          <div className={cn(
+                            "p-6 bg-[#0e1035] border border-white/10 rounded-xl shadow-2xl backdrop-blur-xl",
+                            (link.name === "Eko Rashlada" || link.name === "Usluge") ? "w-[750px]" : "w-[600px]"
                           )}>
-                            {link.items.map((item) => (
-                              <li key={item.name} className={link.name === "Eko Rashlada" && item.name === "Termoizolacija" ? "col-span-2" : ""}>
-                                <NavigationMenuLink asChild>
-                                  <Link
-                                    href={item.href}
-                                    className="flex items-start gap-3 select-none rounded-lg p-2.5 leading-none no-underline outline-none transition-colors hover:bg-white/5 group"
-                                  >
-                                    <div className="flex-shrink-0 mt-0.5 p-1.5 rounded-md bg-white/5 group-hover:bg-primary/20 transition-colors">
-                                      <item.icon className="w-4 h-4 text-primary" />
-                                    </div>
-                                    <div className="flex flex-col gap-1">
-                                      <div className="text-sm font-medium leading-none text-white group-hover:text-primary transition-colors">
-                                        {item.name}
-                                      </div>
-                                      <p className="line-clamp-2 text-[10px] leading-snug text-white/50 group-hover:text-white/70">
-                                        {item.desc}
+                            <div className="grid grid-cols-[200px_1fr] gap-6">
+                                <div className="space-y-4 border-r border-white/5 pr-4 flex flex-col justify-between">
+                                    <div>
+                                      <h4 className="text-lg font-medium text-white mb-2">{link.name}</h4>
+                                      <p className="text-sm text-white/50 leading-relaxed">
+                                          {/* @ts-ignore */}
+                                          {link.description}
                                       </p>
                                     </div>
-                                  </Link>
-                                </NavigationMenuLink>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </NavigationMenuContent>
-                    </NavigationMenuItem>
-                  </NavigationMenuList>
-                </NavigationMenu>
-              ) : (
-                <Link 
-                  key={link.name}
-                  href={link.href} 
-                  className={cn(navigationMenuTriggerStyle(), "bg-transparent text-white hover:text-primary hover:bg-white/5 uppercase tracking-wider font-medium text-[11px] h-9 px-3")}
-                >
-                  {link.name}
-                </Link>
-              )
-            ))}
+                                    <Button variant="outline" size="sm" className="w-full justify-between text-xs border-white/10 hover:border-primary/50 hover:bg-white/5 text-white" asChild>
+                                        <Link href={link.href}>
+                                            Pogledaj sve <ChevronRight className="w-3 h-3 ml-2" />
+                                        </Link>
+                                    </Button>
+                                </div>
+                                <ul className={cn(
+                                  "grid gap-3",
+                                  (link.name === "Eko Rashlada" || link.name === "Usluge") ? "grid-cols-2" : "grid-cols-1"
+                                )}>
+                                  {link.items.map((item) => (
+                                    <li key={item.name} className={link.name === "Eko Rashlada" && item.name === "Termoizolacija" ? "col-span-2" : ""}>
+                                      <NavigationMenuLink asChild>
+                                        <Link
+                                          href={item.href}
+                                          className="flex items-start gap-3 select-none rounded-lg p-3 leading-none no-underline outline-none transition-all hover:bg-white/5 group border border-transparent hover:border-white/5 h-full"
+                                        >
+                                          <div className="flex-shrink-0 mt-0.5 p-2 rounded-md bg-white/5 group-hover:bg-primary/20 transition-colors">
+                                            <item.icon className="w-5 h-5 text-primary" />
+                                          </div>
+                                          <div className="flex flex-col gap-1.5">
+                                            <div className="text-sm font-medium leading-none text-white group-hover:text-primary transition-colors">
+                                              {item.name}
+                                            </div>
+                                            <p className="line-clamp-2 text-xs leading-snug text-white/50 group-hover:text-white/70">
+                                              {item.desc}
+                                            </p>
+                                          </div>
+                                        </Link>
+                                      </NavigationMenuLink>
+                                    </li>
+                                  ))}
+                                </ul>
+                            </div>
+                          </div>
+                        </NavigationMenuContent>
+                      </>
+                    ) : (
+                      <NavigationMenuLink asChild>
+                        <Link 
+                          href={link.href} 
+                          className={cn(navigationMenuTriggerStyle(), "bg-transparent text-white hover:text-primary hover:bg-white/5 uppercase tracking-wider font-medium text-[11px] h-9 px-3 cursor-pointer w-full")}
+                        >
+                          {link.name}
+                        </Link>
+                      </NavigationMenuLink>
+                    )}
+                  </NavigationMenuItem>
+                ))}
+              </NavigationMenuList>
+            </NavigationMenu>
           </div>
 
           {/* Action Button & Mobile Menu */}

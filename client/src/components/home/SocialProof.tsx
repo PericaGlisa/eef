@@ -6,8 +6,8 @@ export function SocialProof() {
   ];
 
   return (
-    <section className="pt-6 pb-32 border-b border-white/5 bg-[#0e1035] overflow-hidden relative z-20">
-      <div className="flex" style={{ maskImage: "linear-gradient(to right, transparent, black 20%, black 80%, transparent)", WebkitMaskImage: "linear-gradient(to right, transparent, black 20%, black 80%, transparent)" }}>
+    <section className="py-10 border-b border-white/5 bg-[#0e1035] overflow-hidden relative z-20">
+      <div className="flex items-center h-full" style={{ maskImage: "linear-gradient(to right, transparent, black 20%, black 80%, transparent)", WebkitMaskImage: "linear-gradient(to right, transparent, black 20%, black 80%, transparent)" }}>
         <motion.div 
           initial={{ x: 0 }}
           animate={{ x: "-100%" }}

@@ -17,8 +17,16 @@ export function SerbiaMap({ activeLocation: externalActive, onSelect }: SerbiaMa
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<HTMLDivElement>(null);
   const [popupPos, setPopupPos] = useState({ x: 0, y: 0 });
+  const [hoveredLocationId, setHoveredLocationId] = useState<string | null>(null);
   
   const activeLocation = externalActive !== undefined ? externalActive : internalActive;
+
+  // Sort locations so the hovered or active one is last (highest z-index in SVG)
+  const sortedLocations = [...locations].sort((a, b) => {
+    if (a.id === hoveredLocationId || a.id === activeLocation?.id) return 1;
+    if (b.id === hoveredLocationId || b.id === activeLocation?.id) return -1;
+    return 0;
+  });
 
   const setActiveLocation = (loc: Location | null) => {
     setInternalActive(loc);
@@ -106,14 +114,14 @@ export function SerbiaMap({ activeLocation: externalActive, onSelect }: SerbiaMa
           className="w-full h-full pointer-events-none"
           preserveAspectRatio="xMidYMid meet"
         >
-          <g transform="translate(103.0 855.0) scale(0.08492 -0.08492)" className="pointer-events-auto">
+          <g transform="translate(103.0 840.0) scale(0.08492 -0.08492)" className="pointer-events-auto">
             <MapPaths />
           </g>
-          {locations.map((loc) => (
+          {sortedLocations.map((loc) => (
             <foreignObject
               key={loc.id}
               x={(loc.x / 100) * 727 - 32}
-              y={(loc.y / 100) * 1042 - 32}
+              y={(loc.y / 100) * 1042 - 32 - 40}
               width={64}
               height={64}
               className="overflow-visible pointer-events-auto"
@@ -124,6 +132,8 @@ export function SerbiaMap({ activeLocation: externalActive, onSelect }: SerbiaMa
                   e.stopPropagation();
                   if (!isDragging) setActiveLocation(loc);
                 }}
+                onMouseEnter={() => setHoveredLocationId(loc.id)}
+                onMouseLeave={() => setHoveredLocationId(null)}
                 onPointerDown={(e) => e.stopPropagation()}
                 xmlns="http://www.w3.org/1999/xhtml"
               >
@@ -145,12 +155,14 @@ export function SerbiaMap({ activeLocation: externalActive, onSelect }: SerbiaMa
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="hidden md:block absolute z-50 w-80 max-w-[300px] max-h-[350px] flex flex-col"
+              className="hidden md:block absolute z-50 w-80 max-w-[300px] flex flex-col"
               style={getPopupStyle()}
             >
-              <div className="flex flex-col max-h-full min-h-0">
-                <PopupContent location={activeLocation} onClose={() => setActiveLocation(null)} />
-              </div>
+              <PopupContent 
+                location={activeLocation} 
+                onClose={() => setActiveLocation(null)} 
+                className="max-h-[350px]"
+              />
             </motion.div>
 
             <motion.div
@@ -160,11 +172,15 @@ export function SerbiaMap({ activeLocation: externalActive, onSelect }: SerbiaMa
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
               className="md:hidden absolute bottom-0 left-0 right-0 z-50 p-4 max-h-[60vh] flex flex-col overflow-hidden"
             >
-              <div className="flex flex-col max-h-full min-h-0 overflow-y-auto custom-scrollbar overscroll-contain">
-                <PopupContent location={activeLocation} onClose={() => setActiveLocation(null)} />
+              <div className="flex flex-col h-full max-h-full min-h-0">
+                <PopupContent 
+                  location={activeLocation} 
+                  onClose={() => setActiveLocation(null)} 
+                  className="h-full"
+                />
               </div>
             </motion.div>
-            <div className="md:hidden absolute inset-0 bg-black/20 z-40" onClick={() => setActiveLocation(null)} />
+            <div className="absolute inset-0 z-40" onClick={() => setActiveLocation(null)} />
           </>
         )}
       </AnimatePresence>
@@ -172,9 +188,9 @@ export function SerbiaMap({ activeLocation: externalActive, onSelect }: SerbiaMa
   );
 }
 
-function PopupContent({ location, onClose }: { location: Location; onClose: () => void }) {
+function PopupContent({ location, onClose, className = "" }: { location: Location; onClose: () => void; className?: string }) {
   return (
-    <div className="bg-[#0e1035]/95 backdrop-blur-xl border border-white/10 p-4 rounded-xl shadow-2xl flex flex-col max-h-full min-h-0 overflow-hidden">
+    <div className={`bg-[#0e1035]/95 backdrop-blur-xl border border-white/10 p-4 rounded-xl shadow-2xl flex flex-col min-h-0 overflow-hidden ${className}`}>
       <div className="flex justify-between items-start mb-3 shrink-0">
         <h3 className="font-bold text-lg text-white">{location.city}</h3>
         <button 
@@ -185,7 +201,7 @@ function PopupContent({ location, onClose }: { location: Location; onClose: () =
         </button>
       </div>
       <div
-        className="flex-1 space-y-3 overflow-y-auto custom-scrollbar pr-1 min-h-0 overscroll-contain"
+        className="flex-1 space-y-3 overflow-y-auto custom-scrollbar pr-2 min-h-0"
         style={{ touchAction: 'pan-y', overscrollBehavior: 'contain' }}
         onWheel={(e) => e.stopPropagation()} 
         onTouchStart={(e) => e.stopPropagation()}

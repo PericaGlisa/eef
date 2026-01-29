@@ -158,23 +158,32 @@ export default function About() {
       </section>
 
       {/* About Company Section */}
-      <section className="py-20 bg-background relative z-20">
-        <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+      <section className="py-24 bg-background relative z-20 overflow-hidden">
+        {/* Decorative background elements */}
+        <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-[#171A54]/10 to-transparent pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary/5 blur-[100px] rounded-full pointer-events-none" />
+
+        <div className="container mx-auto px-6 relative">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
+              className="relative"
             >
-              <h2 className="text-4xl font-heading font-bold text-white mb-8">
-                O Kompaniji <span className="text-primary">Eko Elektrofrigo</span>
+              <div className="absolute -left-8 top-0 w-1 h-24 bg-gradient-to-b from-primary to-transparent opacity-50 hidden lg:block" />
+              
+              <h2 className="text-4xl md:text-5xl font-heading font-bold text-white mb-10 leading-tight">
+                O Kompaniji <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/60">Eko Elektrofrigo</span>
               </h2>
-              <div className="space-y-6 text-white/70 text-lg leading-relaxed">
-                <p>
+              
+              <div className="space-y-8 text-lg leading-relaxed text-white/70">
+                <p className="first-letter:text-5xl first-letter:font-heading first-letter:text-primary first-letter:float-left first-letter:mr-3 first-letter:mt-[-10px]">
                   Kompanija Eko Elektrofrigo d.o.o. je porodično preduzeće osnovano 1996. godine, koje od prvih dana svog poslovanja teži inovativnim rešenjima iz oblasti rashladne tehnike. U sektoru industrijskog hlađenja u Republici Srbiji i regionu, Eko Elektrofrigo je danas jedan od lidera.
                 </p>
-                <p>
-                  Odlikujemo se veoma kompleksnom i jedinstvenom ponudom rashladnih proizvoda, gde se, kao glavni adut, ističe sposobnost za projektovanjem i izvođenjem nestandardizovanih rešenja, potpuno prilagođenih zahtevima investitora.
+                <p className="border-l-2 border-white/10 pl-6 italic text-white/60">
+                  "Odlikujemo se veoma kompleksnom i jedinstvenom ponudom rashladnih proizvoda, gde se, kao glavni adut, ističe sposobnost za projektovanjem i izvođenjem nestandardizovanih rešenja."
                 </p>
                 <p>
                   Kompanija danas pokriva oblast industrijske rashladne opreme, komercijalnih rashladnih uređaja, industrijske opreme za preradu mesa, povrća i voća, sa kompletnom linijom profesionalnih usluga od konsaltinga, projektovanja, prodaje opreme, do montaže i na kraju održavanja.
@@ -186,37 +195,62 @@ export default function About() {
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="bg-[#0e1035] p-8 rounded-2xl border border-white/10"
+              className="relative"
             >
-              <h3 className="text-2xl font-bold text-white mb-6">Naša Misija</h3>
-              <ul className="space-y-4">
-                {[
-                  "Kompletan asortiman opreme uz tehničku podršku",
-                  "Izbor najoptimalnijih tehničkih rešenja",
-                  "Oprema međunarodno priznatih proizvođača",
-                  "Stručna i profesionalna montaža",
-                  "Redovno održavanje i servis",
-                  "Siguran i pouzdan rad"
-                ].map((item, i) => (
-                  <li key={i} className="flex items-center gap-3 text-white/80">
-                    <div className="w-2 h-2 bg-primary rounded-full" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
+              {/* Decorative border frame */}
+              <div className="absolute -inset-1 bg-gradient-to-r from-primary/30 to-[#171A54]/30 rounded-3xl blur-sm opacity-50" />
+              
+              <div className="bg-[#0e1035] p-10 rounded-2xl border border-white/10 relative overflow-hidden group hover:border-primary/30 transition-colors duration-500">
+                {/* Background Pattern */}
+                <div className="absolute inset-0 bg-[url('/assets/noise.svg')] opacity-20 mix-blend-overlay" />
+                <div className="absolute top-0 right-0 p-8 opacity-10">
+                   <ShieldCheck className="w-32 h-32 text-primary rotate-12" />
+                </div>
+
+                <div className="relative z-10">
+                  <h3 className="text-3xl font-heading font-bold text-white mb-8 flex items-center gap-3">
+                    <span className="w-2 h-8 bg-primary rounded-full shadow-[0_0_15px_rgba(86,170,74,0.5)]" />
+                    Naša Misija
+                  </h3>
+                  
+                  <ul className="space-y-5">
+                    {[
+                      "Kompletan asortiman opreme uz tehničku podršku",
+                      "Izbor najoptimalnijih tehničkih rešenja",
+                      "Oprema međunarodno priznatih proizvođača",
+                      "Stručna i profesionalna montaža",
+                      "Redovno održavanje i servis",
+                      "Siguran i pouzdan rad"
+                    ].map((item, i) => (
+                      <li key={i} className="flex items-start gap-4 text-white/80 group/item">
+                        <div className="mt-1 min-w-[20px]">
+                           <div className="w-5 h-5 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center group-hover/item:bg-primary group-hover/item:text-white transition-all duration-300">
+                             <div className="w-1.5 h-1.5 bg-primary rounded-full group-hover/item:bg-white transition-colors" />
+                           </div>
+                        </div>
+                        <span className="group-hover/item:text-white transition-colors duration-300">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
             </motion.div>
           </div>
         </div>
       </section>
 
       {/* Why Us Section */}
-      <section className="py-20 bg-[#0e1035]/50 border-y border-white/5">
-        <div className="container mx-auto px-6">
+      <section className="py-24 bg-[#F5F7FA] relative overflow-hidden">
+        {/* Soft transition gradients */}
+        <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[#0e1035]/20 to-transparent pointer-events-none z-10" />
+        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-[#0e1035]/20 to-transparent pointer-events-none z-10" />
+
+        <div className="container mx-auto px-6 relative z-10">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-heading font-bold text-white mb-4">
+            <h2 className="text-4xl font-heading font-bold text-[#171A54] mb-4">
               Zašto <span className="text-primary">Eko Elektrofrigo?</span>
             </h2>
-            <p className="text-white/60 max-w-2xl mx-auto">
+            <p className="text-[#171A54]/70 max-w-2xl mx-auto">
               Decenije iskustva i posvećenosti kvalitetu nas čine vašim idealnim partnerom.
             </p>
           </div>
@@ -229,13 +263,13 @@ export default function About() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
                 viewport={{ once: true }}
-                className="p-6 bg-background/50 border border-white/5 rounded-xl hover:border-primary/50 transition-colors group"
+                className="p-6 bg-white border border-[#171A54]/10 rounded-xl hover:border-primary/50 transition-colors group shadow-sm hover:shadow-lg"
               >
-                <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+                <div className="w-12 h-12 bg-[#171A54]/5 rounded-lg flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
                   <val.icon className="w-6 h-6 text-primary" />
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2">{val.title}</h3>
-                <p className="text-sm text-white/60 leading-relaxed">
+                <h3 className="text-lg font-bold text-[#171A54] mb-2">{val.title}</h3>
+                <p className="text-sm text-[#171A54]/70 leading-relaxed">
                   {val.desc}
                 </p>
               </motion.div>
@@ -297,13 +331,17 @@ export default function About() {
       </section>
 
       {/* Team Section */}
-      <section className="py-24 bg-[#0e1035] border-t border-white/5">
-        <div className="container mx-auto px-6">
+      <section className="py-24 bg-[#F5F7FA] relative overflow-hidden">
+        {/* Soft transition gradients */}
+        <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[#0e1035]/20 to-transparent pointer-events-none z-10" />
+        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-[#0e1035]/20 to-transparent pointer-events-none z-10" />
+
+        <div className="container mx-auto px-6 relative z-10">
            <div className="mb-16">
-              <h2 className="text-4xl md:text-5xl font-heading font-bold text-white mb-6">
+              <h2 className="text-4xl md:text-5xl font-heading font-bold text-[#171A54] mb-6">
                 Upoznajte <span className="text-primary">Inženjere</span>
               </h2>
-              <p className="text-white/60 max-w-2xl">
+              <p className="text-[#171A54]/70 max-w-2xl">
                 Tim stručnjaka koji stoji iza svakog uspešnog projekta. Ljudi koji pretvaraju izazove u rešenja.
               </p>
            </div>
@@ -316,25 +354,41 @@ export default function About() {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.1 }}
                   viewport={{ once: true }}
-                  className="group relative"
+                  className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-[#171A54]/5"
                 >
-                  <div className="aspect-[3/4] overflow-hidden mb-6 relative bg-white/5 border border-white/10">
+                  {/* Image Container */}
+                  <div className="aspect-[4/5] overflow-hidden relative">
+                    <div className="absolute inset-0 bg-[#171A54]/5 z-10 group-hover:bg-transparent transition-colors duration-500" />
                     <img 
                       src={member.img} 
                       alt={member.name}
-                      className="w-full h-full object-cover transition-all duration-500 group-hover:filter group-hover:grayscale group-hover:contrast-125"
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 filter grayscale group-hover:grayscale-0"
                     />
-                    {/* Technical Drawing Overlay Effect */}
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-[linear-gradient(45deg,transparent_25%,rgba(86,170,74,0.1)_25%,rgba(86,170,74,0.1)_50%,transparent_50%,transparent_75%,rgba(86,170,74,0.1)_75%,rgba(86,170,74,0.1)_100%)] bg-[length:10px_10px]" />
-                    <div className="absolute inset-0 border-2 border-primary/0 group-hover:border-primary/50 transition-all duration-500 m-4" />
                     
-                    <div className="absolute bottom-0 left-0 w-full p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-background/90 backdrop-blur-sm border-t border-primary/20 flex justify-center gap-4">
-                      <a href="#" className="text-white hover:text-primary"><Linkedin className="w-5 h-5" /></a>
-                      <a href="#" className="text-white hover:text-primary"><Mail className="w-5 h-5" /></a>
+                    {/* Overlay Gradient */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#171A54] via-[#171A54]/40 to-transparent opacity-0 group-hover:opacity-90 transition-opacity duration-500 z-20" />
+                    
+                    {/* Socials - Slide Up */}
+                    <div className="absolute bottom-0 left-0 w-full p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-500 flex justify-center gap-4 z-30">
+                      <a href="#" className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white hover:bg-primary hover:text-white transition-colors border border-white/20">
+                        <Linkedin className="w-5 h-5" />
+                      </a>
+                      <a href="mailto:office@eef.rs" className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white hover:bg-primary hover:text-white transition-colors border border-white/20">
+                        <Mail className="w-5 h-5" />
+                      </a>
                     </div>
                   </div>
-                  <h3 className="text-xl font-bold text-white">{member.name}</h3>
-                  <p className="text-primary font-mono text-sm">{member.role}</p>
+
+                  {/* Content */}
+                  <div className="p-6 text-center relative z-10 bg-white group-hover:bg-white transition-colors duration-500 border-t border-[#171A54]/5">
+                     <div className="w-12 h-1 bg-primary/20 group-hover:bg-primary mx-auto mb-4 rounded-full transition-colors duration-300" />
+                     <h3 className="text-xl font-heading font-bold text-[#171A54] mb-1">
+                       {member.name}
+                     </h3>
+                     <p className="text-[#171A54]/60 font-medium text-xs uppercase tracking-widest">
+                       {member.role}
+                     </p>
+                  </div>
                 </motion.div>
               ))}
            </div>

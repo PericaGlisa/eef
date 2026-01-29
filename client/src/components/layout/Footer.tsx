@@ -28,13 +28,15 @@ export function Footer() {
 
           {/* Column 2: Quick Links */}
           <div className="space-y-6">
-            <h4 className="text-sm font-bold uppercase tracking-widest text-white/40">Kompanija</h4>
+            <h4 className="text-sm font-bold uppercase tracking-widest text-white/40">Brzi Linkovi</h4>
             <ul className="space-y-4">
               {[
-                { name: 'O nama', href: '/about' },
+                { name: 'Eko Rashlada', href: '/eco-cooling' },
                 { name: 'Usluge', href: '/services' },
-                { name: 'Reference', href: '/references' },
+                { name: 'Kompanija', href: '/about' },
                 { name: 'Partneri', href: '/partners' },
+                { name: 'Reference', href: '/references' },
+                { name: 'Dokumentacija', href: '/documentation' },
                 { name: 'Kontakt', href: '/contact' }
               ].map((item) => (
                 <li key={item.name}>

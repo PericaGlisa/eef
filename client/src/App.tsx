@@ -1,4 +1,5 @@
-import { Switch, Route } from "wouter";
+import { Switch, Route, useLocation } from "wouter";
+import { useEffect } from "react";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -8,12 +9,16 @@ import Home from "@/pages/home";
 import About from "@/pages/about";
 import Contact from "@/pages/contact";
 import Services from "@/pages/services";
+import ServiceDetail from "@/pages/service-detail";
 import EcoCooling from "@/pages/eco-cooling";
+import SolutionDetail from "@/pages/solution-detail";
 import Partners from "@/pages/partners";
 import Documentation from "@/pages/documentation";
 import References from "@/pages/references";
+import NewsPost from "@/pages/news-post";
 import { useSmoothScroll } from "@/hooks/use-smooth-scroll";
 import { Preloader } from "@/components/layout/Preloader";
+import { ChatWidget } from "@/components/ChatWidget";
 
 function NoiseOverlay() {
   return (
@@ -35,10 +40,13 @@ function Router() {
       <Route path="/about" component={About} />
       <Route path="/contact" component={Contact} />
       <Route path="/services" component={Services} />
+      <Route path="/services/:slug" component={ServiceDetail} />
       <Route path="/eco-cooling" component={EcoCooling} />
+      <Route path="/eco-cooling/:slug" component={SolutionDetail} />
       <Route path="/partners" component={Partners} />
       <Route path="/documentation" component={Documentation} />
       <Route path="/references" component={References} />
+      <Route path="/news/:id" component={NewsPost} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -50,6 +58,7 @@ function App() {
       <TooltipProvider>
         <Preloader />
         <NoiseOverlay />
+        <ChatWidget />
         <Toaster />
         <Router />
       </TooltipProvider>
