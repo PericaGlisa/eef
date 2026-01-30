@@ -13,7 +13,20 @@ export function WebshopCTA() {
           <div className="absolute bottom-0 left-0 w-[200px] h-[200px] bg-blue-500/10 blur-[60px] rounded-full pointer-events-none transform -translate-x-1/3 translate-y-1/3" />
           
           {/* Decorative large icon */}
-          <ShoppingCart className="absolute right-[-20px] bottom-[-20px] w-64 h-64 text-white/[0.03] rotate-[-15deg] pointer-events-none" />
+          <motion.div 
+            animate={{ 
+              rotate: [-15, -10, -15],
+              y: [0, -10, 0]
+            }}
+            transition={{ 
+              duration: 6,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+            className="absolute right-[-20px] bottom-[-20px] pointer-events-none"
+          >
+            <ShoppingCart className="w-64 h-64 text-white/[0.03]" />
+          </motion.div>
 
           <div className="flex flex-col md:flex-row items-center justify-between p-8 md:p-10 gap-8 relative z-10">
             {/* Content Side */}
@@ -77,9 +90,27 @@ export function WebshopCTA() {
               className="flex-shrink-0"
             >
               <a href="https://ekoelektrofrigo.rs" target="_blank" rel="noopener noreferrer">
-                <Button className="bg-primary hover:bg-primary/90 text-white px-8 py-6 rounded-2xl text-base font-bold shadow-[0_0_20px_rgba(86,170,74,0.2)] hover:shadow-[0_0_30px_rgba(86,170,74,0.4)] transition-all transform hover:-translate-y-1 group">
-                  Posetite Web Shop
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                <Button className="relative bg-primary hover:bg-primary/90 text-white px-8 py-6 rounded-2xl text-base font-bold shadow-[0_0_20px_rgba(86,170,74,0.4)] hover:shadow-[0_0_30px_rgba(86,170,74,0.6)] transition-all transform hover:-translate-y-1 group overflow-hidden">
+                  {/* Shimmer Effect */}
+                  <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_2s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent z-10" />
+                  
+                  {/* Auto Shimmer (Every 3s) */}
+                  <motion.div 
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-[-20deg]"
+                    initial={{ x: "-150%" }}
+                    animate={{ x: "150%" }}
+                    transition={{ 
+                      repeat: Infinity, 
+                      repeatDelay: 3, 
+                      duration: 1.5, 
+                      ease: "easeInOut" 
+                    }} 
+                  />
+
+                  <span className="relative z-20 flex items-center">
+                    Posetite Web Shop
+                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  </span>
                 </Button>
               </a>
             </motion.div>

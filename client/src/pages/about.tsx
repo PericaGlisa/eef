@@ -149,8 +149,8 @@ export default function About() {
           <div className="absolute inset-0 bg-gradient-to-b from-[#0e1035]/90 via-[#0e1035]/40 to-[#0e1035] z-10" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0e1035]/90 via-transparent to-transparent z-10" />
           <motion.img 
-            src="/assets/hero-bg.png" 
-            alt="Hero Background" 
+            src="/assets/hero-bg.jpg" 
+            alt="Hero Background"  
             className="w-full h-full object-cover"
             initial={{ scale: 1.2 }}
             animate={{ scale: 1 }}
