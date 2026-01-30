@@ -36,6 +36,35 @@ const heroSlides = [
 
 export function Hero() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check for mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Preload images
+  useEffect(() => {
+    const promises = heroSlides.map((src) => {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = src;
+        img.onload = resolve;
+        img.onerror = reject;
+      });
+    });
+
+    Promise.all(promises)
+      .then(() => setIsLoaded(true))
+      .catch(() => setIsLoaded(true));
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -81,8 +110,8 @@ export function Hero() {
             animate={{ 
               opacity: 1, 
               scale: 1.2,
-              x: ["0%", "-2%", "0%", "2%", "0%"],
-              y: ["0%", "-2%", "0%", "2%", "0%"]
+              x: isMobile ? "0%" : ["0%", "-2%", "0%", "2%", "0%"],
+              y: isMobile ? "0%" : ["0%", "-2%", "0%", "2%", "0%"]
             }}
             exit={{ opacity: 0 }}
             transition={{ 
@@ -124,7 +153,7 @@ export function Hero() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.8, delay: isMobile ? 0.5 : 0 }}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md text-primary font-mono text-xs uppercase tracking-widest mb-6 hover:bg-white/10 transition-colors cursor-default shadow-[0_0_20px_rgba(0,183,255,0.1)]"
           >
             <span className="w-2 h-2 rounded-full bg-primary animate-pulse shadow-[0_0_10px_rgba(0,183,255,0.8)]"></span>
@@ -136,19 +165,19 @@ export function Hero() {
             <RevealText 
               text="Eko Elektrofrigo -" 
               className="text-4xl sm:text-5xl md:text-7xl lg:text-[90px] font-bold text-white leading-[1.1] font-heading tracking-tight drop-shadow-2xl" 
-              delay={0.2} 
+              delay={isMobile ? 0.8 : 0.2} 
             />
             <RevealText 
               text="Inženjering i projektovanje." 
               className="text-4xl sm:text-5xl md:text-7xl lg:text-[90px] font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-white/50 leading-[1.1] font-heading tracking-tight" 
-              delay={0.4} 
+              delay={isMobile ? 1.0 : 0.4} 
             />
           </div>
 
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.8 }}
+            transition={{ duration: 1, delay: isMobile ? 1.4 : 0.8 }}
             className="text-lg sm:text-xl md:text-2xl text-white/80 font-mono h-[32px] flex items-center gap-3"
           >
              <div className="w-1 h-8 bg-primary animate-pulse" />
@@ -158,7 +187,7 @@ export function Hero() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1 }}
+            transition={{ duration: 0.8, delay: isMobile ? 1.6 : 1 }}
             className="flex flex-col sm:flex-row gap-4 pt-8"
           >
             <Magnetic>
