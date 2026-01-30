@@ -5,6 +5,7 @@ import { NewsTicker } from "@/components/home/NewsTicker";
 import { Showcase } from "@/components/home/Showcase";
 import { SocialProof } from "@/components/home/SocialProof";
 import { BentoServices } from "@/components/home/BentoServices";
+import { WebshopCTA } from "@/components/home/WebshopCTA";
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
         <SocialProof />
         <BentoServices />
         <Showcase />
+        <WebshopCTA />
       </main>
       <Footer />
     </div>

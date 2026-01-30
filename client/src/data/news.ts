@@ -21,6 +21,7 @@ export const newsItems: NewsItem[] = [
 Pored organizacije studentskih poseta industrijskim rashladnim postrojenjima, ove godine Eko Elektrofrigo d.o.o. je donirao i rashladnu komoru Mašinskom fakultetu u Beogradu, koja se nalazi u laboratoriji katedre za termotehniku.
     
 Zahvaljujemo se i radujemo ponovnoj saradnji!`,
+    image: "/assets/blog1.png",
     tags: ["#eef", "#refrigeration"]
   },
   {
@@ -36,6 +37,7 @@ Rashladni sistemi su podeljeni u tri celine. Plusni sistem je povezan na jedan c
 Minusni sistem obuhvata dve minusne lager komore, a tunelski sistem klasičan tunel za smrzavanje mesa. Oba sistema imaju zasebne agregate smeštene unutar posebnih mašinskih sala, kao i kondenzatore pozicionirane na fasadi objekta.
     
 Svi kompresori su proizvođača BITZER, a automatika Danfoss. Isparivači i kondenzatori su LU-VE Group, osim tunelskog. Kao dodatna oprema, ugrađen je Danfoss sistem za monitoring System Manager. Sistem je potpuno fleksibilan i omogućava kako lokalno, tako i daljinsko praćenje rada rashladne instalacije, sa grafičkim prikazom svih radnih i mernih tačaka.`,
+    image: "/assets/blog2.png",
     tags: ["#projects", "#industrial"]
   },
   {
@@ -49,6 +51,7 @@ Svi kompresori su proizvođača BITZER, a automatika Danfoss. Isparivači i kond
 Modifikovan sistem, pomoću ''Falling Film Chiller'', obezbeđuje hlađenje vodenih puteva kojima trešnja prolazi kroz deo za sortiranje. Time se sprečava porast temperature ohlađenog ploda trešnje.
     
 Medijum za hlađenje je etilen glikol, koji se obezbeđuje iz postojećeg sistema hlađenja, takođe projektovanog i izvedenog od strane Eko Elektrofrigo d.o.o.`,
+    image: "/assets/blog3.png",
     tags: ["#refrigeration", "#technology"]
   }
 ];

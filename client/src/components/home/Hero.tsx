@@ -1,5 +1,6 @@
 import { useRef, useMemo, useState, useEffect } from "react";
-import { motion, useScroll, useTransform, useSpring, useMotionValue } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, useMotionValue, AnimatePresence } from "framer-motion";
+import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Magnetic } from "@/components/ui/magnetic";
 import { RevealText } from "@/components/ui/reveal-text";
@@ -25,7 +26,24 @@ const FloatingIcon = ({ icon: Icon, initialX, initialY, delay }: any) => (
   </motion.div>
 );
 
+const heroSlides = [
+  "/assets/hero-slide-1.png",
+  "/assets/hero-slide-2.png",
+  "/assets/hero-slide-3.png",
+  "/assets/hero-slide-4.png",
+  "/assets/hero-slide-5.png"
+];
+
 export function Hero() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -54,26 +72,32 @@ export function Hero() {
         style={{ y, opacity }}
         className="absolute inset-0 z-0"
       >
-        <motion.div 
-          initial={{ scale: 1.1 }}
-          animate={{ 
-            scale: 1.2,
-            x: ["0%", "-2%", "0%", "2%", "0%"],
-            y: ["0%", "-2%", "0%", "2%", "0%"]
-          }}
-          transition={{ 
-            duration: 25, 
-            repeat: Infinity, 
-            repeatType: "mirror", 
-            ease: "easeInOut" 
-          }}
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url('/assets/hero-bg.png')" }}
-        />
+        <AnimatePresence mode="popLayout">
+          <motion.div 
+            key={currentSlide}
+            initial={{ opacity: 0, scale: 1.1 }}
+            animate={{ 
+              opacity: 1, 
+              scale: 1.2,
+              x: ["0%", "-2%", "0%", "2%", "0%"],
+              y: ["0%", "-2%", "0%", "2%", "0%"]
+            }}
+            exit={{ opacity: 0 }}
+            transition={{ 
+              opacity: { duration: 1.5 },
+              scale: { duration: 25, ease: "linear" },
+              x: { duration: 25, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" },
+              y: { duration: 25, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }
+            }}
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: `url('${heroSlides[currentSlide]}')` }}
+          />
+        </AnimatePresence>
+        
          {/* Lightened overlays for reliability/clarity */}
-         <div className="absolute inset-0 bg-[#0e1035]/60 mix-blend-multiply" />
-         <div className="absolute inset-0 bg-gradient-to-t from-[#0e1035] via-[#0e1035]/30 to-transparent opacity-80" />
-         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(86,170,74,0.03),transparent_70%)]" /> {/* Subtle brand green tint */}
+        <div className="absolute inset-0 bg-[#0e1035]/40 mix-blend-multiply" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0e1035] via-[#0e1035]/40 to-transparent opacity-80" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(86,170,74,0.03),transparent_70%)]" /> {/* Subtle brand green tint */}
          
          {/* Technical Grid Overlay */}
          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_at_center,black_50%,transparent_80%)]" />
@@ -92,7 +116,7 @@ export function Hero() {
       </div>
 
       {/* Content Layer */}
-      <div className="relative z-30 container mx-auto px-6 h-full flex flex-col justify-center pt-32 md:pt-0">
+      <div className="relative z-30 container mx-auto px-6 h-full flex flex-col justify-center pt-32 pb-20 md:pt-0 md:pb-0">
         <div className="max-w-4xl space-y-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -125,7 +149,7 @@ export function Hero() {
             className="text-lg sm:text-xl md:text-2xl text-white/80 font-mono h-[32px] flex items-center gap-3"
           >
              <div className="w-1 h-8 bg-primary animate-pulse" />
-            <TypewriterText text="30 godina iskustva. 8 vrhunskih inženjera. Bezbroj referenci." />
+            <TypewriterText text="30 godina inženjerske izvrsnosti." />
           </motion.div>
 
           <motion.div
@@ -137,21 +161,25 @@ export function Hero() {
             <Magnetic>
               <Button 
                 size="lg" 
-                className="relative bg-primary hover:bg-primary/90 text-white px-8 py-6 text-lg overflow-hidden group border border-white/10 shadow-[0_0_30px_rgba(0,183,255,0.3)] hover:shadow-[0_0_50px_rgba(0,183,255,0.5)] transition-all duration-500"
+                className="relative bg-primary hover:bg-primary/90 text-white px-6 py-3 text-base md:px-8 md:py-6 md:text-lg overflow-hidden group border border-white/10 shadow-[0_0_30px_rgba(0,183,255,0.3)] hover:shadow-[0_0_50px_rgba(0,183,255,0.5)] transition-all duration-500"
                 onClick={() => import("@/lib/audio").then(m => m.audio.playClick())}
+                asChild
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-                Naši Projekti <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                <Link href="/eco-cooling">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+                  Naši Projekti <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
               </Button>
             </Magnetic>
             <Magnetic>
               <Button 
                 size="lg" 
                 variant="outline" 
-                className="border-white/20 bg-white/5 backdrop-blur-sm text-white hover:bg-white hover:text-[#171A54] px-8 py-6 text-lg transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]"
+                className="border-white/20 bg-white/5 backdrop-blur-sm text-white hover:bg-white hover:text-[#171A54] px-6 py-3 text-base md:px-8 md:py-6 md:text-lg transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]"
                 onClick={() => import("@/lib/audio").then(m => m.audio.playClick())}
+                asChild
               >
-                Usluge
+                <Link href="/services">Usluge</Link>
               </Button>
             </Magnetic>
           </motion.div>
@@ -163,7 +191,7 @@ export function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2, duration: 1 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2 text-white/50"
+        className="absolute bottom-2 md:bottom-8 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2 text-white/50"
       >
         <span className="text-[10px] uppercase tracking-[0.2em] font-mono text-primary/80">Skrolujte dalje</span>
         <motion.div

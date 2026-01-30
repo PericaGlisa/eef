@@ -12,6 +12,7 @@ const servicesData = [
     description: "Od idejnog rešenja do izvođačkog projekta. Naš tim inženjera koristi najsavremenije softverske alate za proračun termodinamike i 3D modelovanje.",
     features: ["3D Modelovanje", "Termodinamika", "AutoCAD", "Revit"],
     icon: DraftingCompass,
+    image: "/assets/service-engineering.png",
     link: "/services/engineering"
   },
   {
@@ -19,6 +20,7 @@ const servicesData = [
     description: "Montaža industrijskih sistema po principu 'ključ u ruke'. Preciznost u svakom varu, sigurnost u svakom spoju.",
     features: ["Sertifikovani Varioci", "Ključ u Ruke", "Montaža cevovoda"],
     icon: Factory,
+    image: "/assets/service-execution.png",
     link: "/services/execution"
   },
   {
@@ -26,6 +28,7 @@ const servicesData = [
     description: "24/7 monitoring i preventivno održavanje. Brz odziv servisnih ekipa širom zemlje.",
     features: ["24/7 Podrška", "Originalni Delovi", "Redovni servisi"],
     icon: Wrench,
+    image: "/assets/service-maintenance.png",
     link: "/services/maintenance"
   },
   {
@@ -33,6 +36,7 @@ const servicesData = [
     description: "Detaljna analiza potrošnje i ROI proračuni za maksimalnu uštedu.",
     features: ["ROI Analiza", "ISO 50001", "Merenje potrošnje"],
     icon: BarChart3,
+    image: "/assets/service-energy.png",
     link: "/services/energy-audit"
   },
   {
@@ -40,6 +44,7 @@ const servicesData = [
     description: "Stručno savetovanje za odabir freona i tranziciju na prirodne rashladne fluide.",
     features: ["CO2 Sistemi", "Amonijak", "Studije izvodljivosti"],
     icon: Lightbulb,
+    image: "/assets/service-consulting.png",
     link: "/services/consulting"
   },
   {
@@ -47,6 +52,7 @@ const servicesData = [
     description: "Implementacija najviših standarda bezbednosti i kvaliteta u rashladnoj tehnici.",
     features: ["HACCP", "Bezbednost", "ISO 9001"],
     icon: ShieldCheck,
+    image: "/assets/service-safety.png",
     link: "/services/safety"
   }
 ];
@@ -109,12 +115,27 @@ export default function Services() {
                     <div className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity bg-[linear-gradient(45deg,transparent_25%,rgba(86,170,74,0.1)_25%,rgba(86,170,74,0.1)_50%,transparent_50%,transparent_75%,rgba(86,170,74,0.1)_75%,rgba(86,170,74,0.1)_100%)] bg-[length:20px_20px]" />
 
                     <div className="relative z-10">
-                      <div className="flex justify-between items-start mb-6">
-                        <div className="w-12 h-1 bg-primary transform origin-left group-hover:scale-x-150 transition-transform duration-500 rounded-full" />
-                        <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-                          <Icon className="w-5 h-5" />
+                      {/* @ts-ignore */}
+                      {service.image ? (
+                        <div className="mb-6 -mx-8 -mt-8 h-48 relative overflow-hidden">
+                          <div className="absolute inset-0 bg-[#0e1035]/20 group-hover:bg-transparent transition-all duration-300 z-10" />
+                          <img 
+                            src={service.image} 
+                            alt={service.title} 
+                            className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                          />
+                          <div className="absolute bottom-4 right-8 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-primary z-20 border border-white/10">
+                            <Icon className="w-5 h-5" />
+                          </div>
                         </div>
-                      </div>
+                      ) : (
+                        <div className="flex justify-between items-start mb-6">
+                          <div className="w-12 h-1 bg-primary transform origin-left group-hover:scale-x-150 transition-transform duration-500 rounded-full" />
+                          <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                            <Icon className="w-5 h-5" />
+                          </div>
+                        </div>
+                      )}
                       
                       <h3 className="text-2xl font-heading font-bold text-white mb-4 group-hover:text-primary transition-colors duration-300 flex items-center justify-between">
                         {service.title}
@@ -167,12 +188,27 @@ export default function Services() {
                 >
                   <Link href={service.link} className="group bg-white border border-slate-200 relative overflow-hidden flex flex-col justify-between p-8 hover:border-primary/50 transition-all duration-500 rounded-2xl hover:shadow-xl h-full cursor-pointer block">
                     <div className="relative z-10">
-                      <div className="flex justify-between items-start mb-6">
-                        <div className="w-12 h-1 bg-primary transform origin-left group-hover:scale-x-150 transition-transform duration-500 rounded-full" />
-                        <div className="w-10 h-10 rounded-full bg-[#171A54]/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-                          <Icon className="w-5 h-5" />
+                      {/* @ts-ignore */}
+                      {service.image ? (
+                        <div className="mb-6 -mx-8 -mt-8 h-48 relative overflow-hidden">
+                          <div className="absolute inset-0 bg-[#171A54]/10 group-hover:bg-transparent transition-all duration-300 z-10" />
+                          <img 
+                            src={service.image} 
+                            alt={service.title} 
+                            className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                          />
+                          <div className="absolute bottom-4 right-8 w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-primary z-20 shadow-lg border border-slate-100">
+                            <Icon className="w-5 h-5" />
+                          </div>
                         </div>
-                      </div>
+                      ) : (
+                        <div className="flex justify-between items-start mb-6">
+                          <div className="w-12 h-1 bg-primary transform origin-left group-hover:scale-x-150 transition-transform duration-500 rounded-full" />
+                          <div className="w-10 h-10 rounded-full bg-[#171A54]/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                            <Icon className="w-5 h-5" />
+                          </div>
+                        </div>
+                      )}
                       
                       <h3 className="text-2xl font-heading font-bold text-[#171A54] mb-4 group-hover:text-primary transition-colors duration-300 flex items-center justify-between">
                         {service.title}
@@ -228,12 +264,27 @@ export default function Services() {
                     <div className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity bg-[linear-gradient(45deg,transparent_25%,rgba(86,170,74,0.1)_25%,rgba(86,170,74,0.1)_50%,transparent_50%,transparent_75%,rgba(86,170,74,0.1)_75%,rgba(86,170,74,0.1)_100%)] bg-[length:20px_20px]" />
 
                     <div className="relative z-10">
-                      <div className="flex justify-between items-start mb-6">
-                        <div className="w-12 h-1 bg-primary transform origin-left group-hover:scale-x-150 transition-transform duration-500 rounded-full" />
-                        <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-                          <Icon className="w-5 h-5" />
+                      {/* @ts-ignore */}
+                      {service.image ? (
+                        <div className="mb-6 -mx-8 -mt-8 h-48 relative overflow-hidden">
+                          <div className="absolute inset-0 bg-[#0e1035]/20 group-hover:bg-transparent transition-all duration-300 z-10" />
+                          <img 
+                            src={service.image} 
+                            alt={service.title} 
+                            className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                          />
+                          <div className="absolute bottom-4 right-8 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-primary z-20 border border-white/10">
+                            <Icon className="w-5 h-5" />
+                          </div>
                         </div>
-                      </div>
+                      ) : (
+                        <div className="flex justify-between items-start mb-6">
+                          <div className="w-12 h-1 bg-primary transform origin-left group-hover:scale-x-150 transition-transform duration-500 rounded-full" />
+                          <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                            <Icon className="w-5 h-5" />
+                          </div>
+                        </div>
+                      )}
                       
                       <h3 className="text-2xl font-heading font-bold text-white mb-4 group-hover:text-primary transition-colors duration-300 flex items-center justify-between">
                         {service.title}

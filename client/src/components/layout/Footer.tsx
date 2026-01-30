@@ -52,17 +52,17 @@ export function Footer() {
           {/* Column 3: ISO Download */}
           <div className="space-y-6">
             <h4 className="text-sm font-bold uppercase tracking-widest text-white/40">Sertifikati</h4>
-            <Link href="/documentation">
+            <Link href="/documentation/certificates">
               <div className="group cursor-pointer p-6 border border-white/10 hover:border-primary/50 bg-white/5 transition-all duration-300 rounded-lg relative overflow-hidden">
                 <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <div className="flex justify-between items-start mb-4 relative z-10">
                    <FileText className="w-8 h-8 text-white/50 group-hover:text-primary transition-colors" />
                    <div className="px-2 py-1 bg-primary/20 rounded text-[10px] text-primary font-mono border border-primary/30">AKTIVAN</div>
                 </div>
-                <h5 className="font-heading font-bold text-lg mb-1 relative z-10">ISO 9001:2015</h5>
-                <p className="text-xs text-white/50 mb-4 relative z-10">Sistem menadžmenta kvalitetom</p>
+                <h5 className="font-heading font-bold text-lg mb-1 relative z-10">ISO 9001 • 14001 • 45001</h5>
+                <p className="text-xs text-white/50 mb-4 relative z-10">Integrisani sistem menadžmenta</p>
                 <div className="flex items-center text-primary text-xs font-mono uppercase tracking-wider relative z-10">
-                  Preuzmi PDF <ArrowRight className="w-3 h-3 ml-2 group-hover:translate-x-1 transition-transform" />
+                  Pogledaj sertifikate <ArrowRight className="w-3 h-3 ml-2 group-hover:translate-x-1 transition-transform" />
                 </div>
                 {/* Decorative ISO Ring */}
                 <div className="absolute -bottom-8 -right-8 w-24 h-24 rounded-full border-4 border-white/5 group-hover:border-primary/20 transition-colors duration-500" />
@@ -144,9 +144,7 @@ export function Footer() {
         <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-white/30">
           <div>© 2026 Eko Elektrofrigo. Sva prava zadržana.</div>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-white transition-colors"><Linkedin className="w-4 h-4" /></a>
-            <a href="#" className="hover:text-white transition-colors"><Instagram className="w-4 h-4" /></a>
-            <a href="#" className="hover:text-white transition-colors"><Facebook className="w-4 h-4" /></a>
+            <a href="https://www.linkedin.com/feed/update/urn:li:activity:6899988285712596994" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors"><Linkedin className="w-4 h-4" /></a>
           </div>
         </div>
       </div>

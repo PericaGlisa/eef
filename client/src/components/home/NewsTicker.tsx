@@ -21,9 +21,11 @@ export function NewsTicker() {
               Industrijski <span className="text-primary">Puls</span>
             </h2>
           </div>
-          <button className="text-[#171A54]/60 hover:text-[#171A54] flex items-center gap-2 transition-colors border-b border-[#171A54]/20 hover:border-[#171A54] pb-1">
-            Arhiva vesti <ArrowUpRight className="w-4 h-4" />
-          </button>
+          <Link href="/blog">
+            <button className="text-[#171A54]/60 hover:text-[#171A54] flex items-center gap-2 transition-colors border-b border-[#171A54]/20 hover:border-[#171A54] pb-1 cursor-pointer">
+              Arhiva vesti <ArrowUpRight className="w-4 h-4" />
+            </button>
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -34,22 +36,33 @@ export function NewsTicker() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="group bg-white border border-slate-200 p-6 hover:shadow-xl hover:border-primary/50 transition-all duration-300 cursor-pointer flex flex-col h-full rounded-xl"
+                className="group bg-white border border-slate-200 hover:shadow-xl hover:border-primary/50 transition-all duration-300 cursor-pointer flex flex-col h-full rounded-xl overflow-hidden"
               >
-                <div className="flex justify-end items-start mb-4">
-                  <span className="text-[#171A54]/50 text-[10px] uppercase tracking-wider border border-[#171A54]/10 bg-[#171A54]/5 px-2 py-1 rounded-full">{item.category}</span>
-                </div>
-                
-                <h3 className="text-lg font-bold text-[#171A54] mb-3 group-hover:text-primary transition-colors line-clamp-3">
-                  {item.title}
-                </h3>
-                
-                <p className="text-[#171A54]/70 text-sm mb-6 flex-grow line-clamp-4">
-                  {item.desc}
-                </p>
-                
-                <div className="flex items-center text-[#171A54]/40 text-xs group-hover:text-primary transition-colors mt-auto">
-                  Pročitaj više <ArrowUpRight className="w-3 h-3 ml-2 group-hover:translate-x-1 transition-transform" />
+                {item.image && (
+                  <div className="h-48 w-full overflow-hidden relative">
+                    <img 
+                      src={item.image} 
+                      alt={item.title} 
+                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                    />
+                  </div>
+                )}
+                <div className="p-6 flex flex-col flex-grow">
+                  <div className="flex justify-end items-start mb-4">
+                    <span className="text-[#171A54]/50 text-[10px] uppercase tracking-wider border border-[#171A54]/10 bg-[#171A54]/5 px-2 py-1 rounded-full">{item.category}</span>
+                  </div>
+                  
+                  <h3 className="text-lg font-bold text-[#171A54] mb-3 group-hover:text-primary transition-colors line-clamp-3">
+                    {item.title}
+                  </h3>
+                  
+                  <p className="text-[#171A54]/70 text-sm mb-6 flex-grow line-clamp-4">
+                    {item.desc}
+                  </p>
+                  
+                  <div className="flex items-center text-[#171A54]/40 text-xs group-hover:text-primary transition-colors mt-auto">
+                    Pročitaj više <ArrowUpRight className="w-3 h-3 ml-2 group-hover:translate-x-1 transition-transform" />
+                  </div>
                 </div>
               </motion.div>
             </Link>

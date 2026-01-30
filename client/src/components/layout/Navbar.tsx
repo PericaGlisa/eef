@@ -28,12 +28,24 @@ import { cn } from "@/lib/utils";
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
 
   const navLinks = [
     {
@@ -71,7 +83,8 @@ export function Navbar() {
       href: "/documentation",
       description: "Pristupite našim zvaničnim sertifikatima i potvrdama kvaliteta.",
       items: [
-        { name: "Atesti i Sertifikati", href: "/documentation", icon: ShieldCheck, desc: "Sertifikati standarda i partnerstva" }
+        { name: "Sertifikati", href: "/documentation/certificates", icon: ShieldCheck, desc: "ISO 9001, 14001, 45001" },
+        { name: "Diplome", href: "/documentation/diplomas", icon: BookOpen, desc: "Partnerska priznanja" }
       ]
     },
   ];
@@ -191,12 +204,13 @@ export function Navbar() {
                 size="sm"
                 className="hidden lg:flex border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 shadow-[0_0_15px_rgba(86,170,74,0.3)] hover:shadow-[0_0_25px_rgba(86,170,74,0.6)] text-xs h-9 px-4"
                 onClick={() => import("@/lib/audio").then(m => m.audio.playClick())}
+                asChild
              >
-               Zatražite ponudu
+               <Link href="/contact">Zatražite ponudu</Link>
              </Button>
 
             {/* Hamburger Menu (Mobile) */}
-            <Sheet>
+            <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
                 <Button 
                   variant="ghost" 
@@ -207,10 +221,14 @@ export function Navbar() {
                   <AlignRight className="w-7 h-7" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="bg-[#0a0c29] border-l border-white/10 w-full md:w-[450px] p-0 overflow-hidden">
+              <SheetContent side="right" className="bg-[#0a0c29] border-l border-white/10 w-full md:w-[450px] p-0 h-full max-h-screen flex flex-col z-[100] overflow-hidden">
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent pointer-events-none" />
                 
-                <div className="h-full flex flex-col px-8 py-12 overflow-y-auto custom-scrollbar relative z-10">
+                <div 
+                  className="flex-1 overflow-y-auto custom-scrollbar px-8 py-12 relative z-10 min-h-0" 
+                  style={{ overscrollBehavior: 'contain', touchAction: 'pan-y' }}
+                  onWheel={(e) => e.stopPropagation()}
+                >
                   <div className="flex flex-col gap-6 mt-8">
                     <Accordion type="single" collapsible className="w-full space-y-4">
                       {navLinks.map((link, i) => (
@@ -220,16 +238,23 @@ export function Navbar() {
                           whileInView={{ opacity: 1, x: 0 }}
                           transition={{ delay: i * 0.1, duration: 0.5 }}
                           viewport={{ once: true }}
-                          className="border-b border-white/5 pb-2"
+                          className="border-b border-white/5"
                         >
                           {link.items ? (
                             <AccordionItem value={link.name} className="border-none">
-                              <AccordionTrigger className="text-2xl font-light text-white hover:text-primary transition-colors hover:no-underline py-4 group">
-                                <div className="flex items-center gap-4">
+                              <div className="flex items-center">
+                                <Link 
+                                  href={link.href}
+                                  className="flex-1 text-2xl font-light text-white hover:text-primary transition-colors py-4 group flex items-center gap-4"
+                                  onClick={() => setIsOpen(false)}
+                                >
                                   <span className="text-xs font-mono text-primary/40 group-hover:text-primary transition-colors">0{i + 1}</span>
                                   {link.name}
-                                </div>
-                              </AccordionTrigger>
+                                </Link>
+                                <AccordionTrigger className="w-14 py-4 justify-end hover:no-underline flex-none text-transparent">
+                                  <span className="sr-only">Toggle</span>
+                                </AccordionTrigger>
+                              </div>
                               <AccordionContent>
                                 <div className="flex flex-col gap-3 pl-10 pb-4">
                                   {link.items.map((item, j) => (
@@ -237,6 +262,7 @@ export function Navbar() {
                                       key={item.name} 
                                       href={item.href}
                                       className="text-white/60 hover:text-white hover:pl-2 transition-all duration-300 py-2 text-base flex items-center gap-3 group/item"
+                                      onClick={() => setIsOpen(false)}
                                     >
                                       <div className="w-1.5 h-1.5 rounded-full bg-white/10 group-hover/item:bg-primary transition-colors" />
                                       {item.name}
@@ -249,7 +275,10 @@ export function Navbar() {
                             <Link 
                               href={link.href} 
                               className="text-2xl font-light text-white hover:text-primary transition-colors block group py-4 flex items-center gap-4 w-full"
-                              onClick={() => import("@/lib/audio").then(m => m.audio.playHover())}
+                              onClick={() => {
+                                import("@/lib/audio").then(m => m.audio.playHover());
+                                setIsOpen(false);
+                              }}
                             >
                               <span className="text-xs font-mono text-primary/40 group-hover:text-primary transition-colors">0{i + 1}</span>
                               {link.name}

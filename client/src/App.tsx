@@ -14,7 +14,10 @@ import EcoCooling from "@/pages/eco-cooling";
 import SolutionDetail from "@/pages/solution-detail";
 import Partners from "@/pages/partners";
 import Documentation from "@/pages/documentation";
+import Certificates from "@/pages/certificates";
+import Diplomas from "@/pages/diplomas";
 import References from "@/pages/references";
+import Blog from "@/pages/blog";
 import NewsPost from "@/pages/news-post";
 import { useSmoothScroll } from "@/hooks/use-smooth-scroll";
 import { Preloader } from "@/components/layout/Preloader";
@@ -45,7 +48,10 @@ function Router() {
       <Route path="/eco-cooling/:slug" component={SolutionDetail} />
       <Route path="/partners" component={Partners} />
       <Route path="/documentation" component={Documentation} />
+      <Route path="/documentation/certificates" component={Certificates} />
+      <Route path="/documentation/diplomas" component={Diplomas} />
       <Route path="/references" component={References} />
+      <Route path="/blog" component={Blog} />
       <Route path="/news/:id" component={NewsPost} />
       <Route component={NotFound} />
     </Switch>

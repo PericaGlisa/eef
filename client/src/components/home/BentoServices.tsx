@@ -7,6 +7,7 @@ const services = [
     title: "Inženjering & Projektovanje",
     description: "Od idejnog rešenja do izvođačkog projekta. Naš tim inženjera koristi najsavremenije softverske alate za proračun termodinamike i 3D modelovanje.",
     icon: DraftingCompass,
+    image: "/assets/service-engineering.png",
     tags: ["3D Modelovanje", "Termodinamika", "AutoCAD", "Revit"],
     features: ["Analiza zahteva", "Izbor opreme", "3D modelovanje", "Optimizacija"],
     link: "/services/engineering"
@@ -15,6 +16,7 @@ const services = [
     title: "Izvođenje Radova",
     description: "Montaža industrijskih sistema po principu 'ključ u ruke'. Preciznost u svakom varu, sigurnost u svakom spoju.",
     icon: Factory,
+    image: "/assets/service-execution.png",
     tags: ["Sertifikovani Varioci", "Ključ u Ruke"],
     features: ["Montaža cevovoda", "Elektro ormani", "Puštanje u rad"],
     link: "/services/execution"
@@ -23,6 +25,7 @@ const services = [
     title: "Servis & Održavanje",
     description: "24/7 monitoring i preventivno održavanje. Brz odziv servisnih ekipa širom zemlje.",
     icon: Wrench,
+    image: "/assets/service-maintenance.png",
     tags: ["24/7 Podrška", "Originalni Delovi"],
     features: ["Redovni servisi", "Interventni izlasci", "Rezervni delovi"],
     link: "/services/maintenance"
@@ -31,6 +34,7 @@ const services = [
     title: "Energetska Revizija",
     description: "Detaljna analiza potrošnje i ROI proračuni za maksimalnu uštedu.",
     icon: BarChart3,
+    image: "/assets/service-energy.png",
     tags: ["ROI Analiza", "ISO 50001"],
     features: ["Merenje potrošnje", "Analiza gubitaka", "Predlog mera"],
     link: "/services/energy-audit"
@@ -39,6 +43,7 @@ const services = [
     title: "Konsalting",
     description: "Stručno savetovanje za odabir freona i tranziciju na prirodne rashladne fluide.",
     icon: Lightbulb,
+    image: "/assets/service-consulting.png",
     tags: ["CO2 Sistemi", "Amonijak"],
     features: ["Studije izvodljivosti", "Tehnička rešenja", "Zakonska regulativa"],
     link: "/services/consulting"
@@ -47,6 +52,7 @@ const services = [
     title: "Sigurnost & Kvalitet",
     description: "Implementacija najviših standarda bezbednosti i kvaliteta u rashladnoj tehnici.",
     icon: ShieldCheck,
+    image: "/assets/service-safety.png",
     tags: ["HACCP", "Bezbednost"],
     badges: ["ISO 9001", "ISO 14001", "HACCP"],
     features: ["Procena rizika", "Obuka zaposlenih", "Kontrola kvaliteta"],
@@ -100,11 +106,26 @@ export function BentoServices() {
               >
                 <Link href={service.link} className="block h-full">
                   <div className="group relative bg-white border border-slate-200 hover:border-primary/50 transition-all duration-300 rounded-2xl p-8 flex flex-col h-full hover:shadow-xl cursor-pointer">
-                    <div className="mb-6">
-                      <div className="w-12 h-12 rounded-full bg-[#171A54]/5 border border-[#171A54]/10 flex items-center justify-center text-primary group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all duration-300">
-                        <Icon className="w-6 h-6" />
+                    {/* @ts-ignore */}
+                    {service.image ? (
+                      <div className="mb-6 -mx-8 -mt-8 h-48 relative overflow-hidden rounded-t-2xl">
+                        <div className="absolute inset-0 bg-[#171A54]/10 group-hover:bg-transparent transition-all duration-300 z-10" />
+                        <img 
+                          src={service.image} 
+                          alt={service.title} 
+                          className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                        />
+                        <div className="absolute bottom-4 left-8 w-12 h-12 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-primary z-20 shadow-lg border border-white/20">
+                          <Icon className="w-6 h-6" />
+                        </div>
                       </div>
-                    </div>
+                    ) : (
+                      <div className="mb-6">
+                        <div className="w-12 h-12 rounded-full bg-[#171A54]/5 border border-[#171A54]/10 flex items-center justify-center text-primary group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all duration-300">
+                          <Icon className="w-6 h-6" />
+                        </div>
+                      </div>
+                    )}
 
                     <h3 className="text-xl font-bold text-[#171A54] mb-4 group-hover:text-primary transition-colors flex items-center justify-between">
                       {service.title}

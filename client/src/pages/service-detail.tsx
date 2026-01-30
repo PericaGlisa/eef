@@ -61,6 +61,23 @@ export default function ServiceDetail() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {/* Main Content */}
             <div className="lg:col-span-2">
+              {/* Featured Image */}
+              {service.image && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 }}
+                  className="mb-10 rounded-3xl overflow-hidden shadow-lg border border-slate-200 h-64 md:h-80 relative group"
+                >
+                  <div className="absolute inset-0 bg-[#0e1035]/20 group-hover:bg-transparent transition-all duration-500 z-10" />
+                  <img 
+                    src={service.image} 
+                    alt={service.title} 
+                    className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                  />
+                </motion.div>
+              )}
+
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}

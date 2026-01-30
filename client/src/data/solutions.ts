@@ -4,6 +4,7 @@ export const solutionsData = [
   {
     id: "rashladne-komore",
     title: "Rashladne Komore",
+    image: "/assets/portfolio-cold-room.png",
     shortDesc: "Industrijske komore svih dimenzija (plusne i minusne) sa preciznom kontrolom temperature i vlažnosti za maksimalnu svežinu.",
     fullContent: `
       <p class="mb-6">Rashladne komore predstavljaju prostorije-skladišta u kojima se veštački generiše određena temperatura, kako bi se u njima skladištila roba duži vremenski period. Naša ponuda obuhvata rashladne komore za skladištenje svih tipova proizvoda, kao što su povrće, voće, mlečni proizvodi, meso.... Bez obzira na proizvode koji se u njima čuvaju, ove prostorije hlađenjem usporavaju hemijske i biološke procese u hrani, čime se kontroliše propadanje i gubitak kvaliteta.</p>
@@ -26,6 +27,7 @@ export const solutionsData = [
   {
     id: "tuneli-za-smrzavanje",
     title: "Tuneli za Smrzavanje",
+    image: "/assets/portfolio-freezing-tunnel.png",
     shortDesc: "Sistemi za brzo smrzavanje (šokiranje) proizvoda koji čuvaju ćelijsku strukturu, ukus i nutritivne vrednosti.",
     fullContent: `
       <p class="mb-6">Tuneli za brzo smrzavanje omogućavaju trenutno zamrzavanje proizvoda i imaju široku primenu u svetu industrijskog hlađenja. Međutim, nije dovoljno samo zamrznuti proizvod. Tehnologija zamrzavanja mora biti takva da zadrži kvalitet, ukus i teksturu proizvoda. Ovde se ističe znanje i iskustvo koje poseduje Eko Elektrofrigo.</p>
@@ -37,6 +39,7 @@ export const solutionsData = [
   {
     id: "ulo-komore",
     title: "Komore sa kontrolisanom atmosferom – ULO",
+    image: "/assets/portfolio-ulo.png",
     shortDesc: "Ultra Low Oxygen tehnologija za dugotrajno čuvanje voća i povrća usporavanjem procesa zrenja.",
     fullContent: `
       <p class="mb-6">Koncept ULO komora se zasniva na održavanju kontrolisane atmosfere u komorama. Skraćenica ULO potiče od “Ultra Low Oxygen”, što u prevodu znači ekstremno nizak nivo kiseonika. Kontrolisana atmosfera omogućava produženo čuvanje voća i povrća. Kako bi se to postiglo, podrazumeva se kvalitetno izvođenje samih komora u smislu gasne nepropusnosti, hermetičnosti i korišćenja namenski dizajniranih elemenata (ULO hladioničkih vrata, prozora za nadzor i servis, uvodnika za cev i kablove...).</p>
@@ -71,6 +74,7 @@ export const solutionsData = [
   {
     id: "rashladni-agregati",
     title: "Rashladni Agregati",
+    image: "/assets/portfolio-aggregates.png",
     shortDesc: "Visokoefikasni rashladni sistemi dizajnirani za uštedu energije, koristeći ekološke freone i CO2 tehnologiju.",
     fullContent: `
       <p class="mb-6">Projektovanje i izrada rashladnih agregata predstavlja specijalnost Eko Elektrofriga. Odlikuju se industrijskim dizajnom koji, pored estetskog izgleda, omogućava lak pristup i servis. U našim agregatima prvenstveno su instalirani klipni, vijčani i skrol kompresori proizvođača Bitzer. Uz njih ugrađujemo i klipne i skrol kompresore kompanije Danfoss. Kompletna automatika na rashladnom agregatu je marke danskog proizvođača Danfoss.</p>
@@ -83,6 +87,7 @@ export const solutionsData = [
   {
     id: "cileri",
     title: "Čileri",
+    image: "/assets/portfolio-chillers.png",
     shortDesc: "Sistemi za indirektno hlađenje fluida (voda/glikol) idealni za procesnu industriju i klimatizaciju velikih objekata.",
     fullContent: `
       <p class="mb-6">Hladnjak tečnosti – čiler je uređaj proizveden za hlađenje vode ili mešavine glikola i vode, koja se koristi u tehnološkom procesu. Kao sastavni deo našeg čilera koristi se i vazdušni kondenzator. Glavni kvalitet Eko Elektrofriga jeste da se u potpunosti prilagođavamo zahtevima investitora i nudimo mogućnost projektovanja i proizvodnje jedinstvenog čilera za date potrebe.</p>
@@ -97,6 +102,7 @@ export const solutionsData = [
   {
     id: "elektro-ormani",
     title: "Elektro Ormani & CNSU",
+    image: "/assets/portfolio-electrical.png",
     shortDesc: "Kompletna automatika i centralni nadzorni sistemi upravljanja za potpunu kontrolu i optimizaciju rada sistema.",
     fullContent: `
       <p class="mb-6">Komandno razvodni elektro ormani proizvođača Eko Elektrofrigo su efikasno i logično struktuirani za napajanje i upravljanje rashladnom opremom. Svaki upravljački orman individualno planira naše specijalizovano elektro odeljenje, a u našoj dobro opremljenoj elektro radionici ih sami povezujemo. Sve glavne komponente su pažljivo i precizno označene, uz obavezno poštovanje svih zakonskih normi.</p>
@@ -122,6 +128,7 @@ export const solutionsData = [
   {
     id: "termoizolacija",
     title: "Termoizolacija",
+    image: "/assets/portfolio-insulation.png",
     shortDesc: "Vrhunska izolaciona rešenja uključujući panele i hladionička vrata koja osiguravaju minimalne toplotne gubitke.",
     fullContent: `
       <p class="mb-6">Kompanija Eko Elektrofrigo u svom asortimanu opreme ima i termoizolacione panele i termoizolaciona vrata renomiranih evropskih proizvođača. U mogućnosti smo da ponudimo isporuku termoizolacione opreme, proizvođača po želji investitora ili po našoj preporuci, sa ili bez ugradnje, u skladu sa zahtevima korisnika.</p>

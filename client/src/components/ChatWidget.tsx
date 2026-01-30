@@ -21,13 +21,13 @@ export function ChatWidget() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 1 }}
-            className="fixed bottom-8 right-8 z-50"
+            className="fixed bottom-4 right-4 sm:bottom-8 sm:right-8 z-50"
         >
             <Button 
-                className="rounded-full w-16 h-16 bg-primary hover:bg-primary/90 shadow-[0_0_20px_rgba(86,170,74,0.4)] flex items-center justify-center relative group"
+                className="rounded-full w-14 h-14 sm:w-16 sm:h-16 bg-primary hover:bg-primary/90 shadow-[0_0_20px_rgba(86,170,74,0.4)] flex items-center justify-center relative group"
                 onClick={() => setIsOpen(true)}
             >
-            <MessageSquare className="w-8 h-8 text-white" />
+            <MessageSquare className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
             <span className="absolute -top-1 -right-1 flex h-3 w-3">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
@@ -38,7 +38,7 @@ export function ChatWidget() {
             </Button>
         </motion.div>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] bg-white border-[#171A54]/10 p-0 overflow-hidden">
+      <DialogContent className="w-[90%] sm:max-w-[425px] rounded-xl bg-white border-[#171A54]/10 p-0 overflow-hidden">
         <DialogHeader className="bg-[#171A54] p-6 text-white relative">
           <DialogTitle className="flex items-center gap-2 text-xl">
             <MessageSquare className="w-6 h-6 text-primary" />

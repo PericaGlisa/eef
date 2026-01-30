@@ -61,12 +61,27 @@ export default function EcoCooling() {
                     <div className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity bg-[linear-gradient(45deg,transparent_25%,rgba(86,170,74,0.1)_25%,rgba(86,170,74,0.1)_50%,transparent_50%,transparent_75%,rgba(86,170,74,0.1)_75%,rgba(86,170,74,0.1)_100%)] bg-[length:20px_20px]" />
 
                     <div className="relative z-10">
-                      <div className="flex justify-between items-start mb-6">
-                        <div className="w-12 h-1 bg-primary transform origin-left group-hover:scale-x-150 transition-transform duration-500 rounded-full" />
-                        <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-                          <Icon className="w-5 h-5" />
+                      {/* @ts-ignore */}
+                      {solution.image ? (
+                        <div className="mb-6 -mx-8 -mt-8 h-48 relative overflow-hidden">
+                           <div className="absolute inset-0 bg-[#0e1035]/20 group-hover:bg-transparent transition-all duration-300 z-10" />
+                           <img 
+                             src={solution.image} 
+                             alt={solution.title} 
+                             className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                           />
+                           <div className="absolute bottom-4 right-8 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-primary z-20 border border-white/10">
+                             <Icon className="w-5 h-5" />
+                           </div>
                         </div>
-                      </div>
+                      ) : (
+                        <div className="flex justify-between items-start mb-6">
+                          <div className="w-12 h-1 bg-primary transform origin-left group-hover:scale-x-150 transition-transform duration-500 rounded-full" />
+                          <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                            <Icon className="w-5 h-5" />
+                          </div>
+                        </div>
+                      )}
                       
                       <h3 className="text-2xl font-heading font-bold text-white mb-4 group-hover:text-primary transition-colors duration-300">{solution.title}</h3>
                       <p className="text-white/60 text-sm mb-8 leading-relaxed">
@@ -115,12 +130,27 @@ export default function EcoCooling() {
                     className="group bg-white border border-slate-200 relative overflow-hidden flex flex-col justify-between p-8 hover:border-primary/50 transition-all duration-500 rounded-2xl hover:shadow-xl cursor-pointer"
                   >
                     <div className="relative z-10">
-                      <div className="flex justify-between items-start mb-6">
-                        <div className="w-12 h-1 bg-primary transform origin-left group-hover:scale-x-150 transition-transform duration-500 rounded-full" />
-                        <div className="w-10 h-10 rounded-full bg-[#171A54]/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-                          <Icon className="w-5 h-5" />
+                      {/* @ts-ignore */}
+                      {solution.image ? (
+                        <div className="mb-6 -mx-8 -mt-8 h-48 relative overflow-hidden">
+                           <div className="absolute inset-0 bg-primary/10 group-hover:bg-transparent transition-all duration-300 z-10" />
+                           <img 
+                             src={solution.image} 
+                             alt={solution.title} 
+                             className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                           />
+                           <div className="absolute bottom-4 right-8 w-10 h-10 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-primary z-20 border border-slate-200">
+                             <Icon className="w-5 h-5" />
+                           </div>
                         </div>
-                      </div>
+                      ) : (
+                        <div className="flex justify-between items-start mb-6">
+                          <div className="w-12 h-1 bg-primary transform origin-left group-hover:scale-x-150 transition-transform duration-500 rounded-full" />
+                          <div className="w-10 h-10 rounded-full bg-[#171A54]/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                            <Icon className="w-5 h-5" />
+                          </div>
+                        </div>
+                      )}
                       
                       <h3 className="text-2xl font-heading font-bold text-[#171A54] mb-4 group-hover:text-primary transition-colors duration-300">{solution.title}</h3>
                       <p className="text-[#171A54]/70 text-sm mb-8 leading-relaxed">
@@ -172,12 +202,27 @@ export default function EcoCooling() {
                     <div className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity bg-[linear-gradient(45deg,transparent_25%,rgba(86,170,74,0.1)_25%,rgba(86,170,74,0.1)_50%,transparent_50%,transparent_75%,rgba(86,170,74,0.1)_75%,rgba(86,170,74,0.1)_100%)] bg-[length:20px_20px]" />
 
                     <div className="relative z-10">
-                      <div className="flex justify-between items-start mb-6">
-                        <div className="w-12 h-1 bg-primary transform origin-left group-hover:scale-x-150 transition-transform duration-500 rounded-full" />
-                        <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-                          <Icon className="w-5 h-5" />
+                      {/* @ts-ignore */}
+                      {solution.image ? (
+                        <div className="mb-6 -mx-8 -mt-8 h-48 relative overflow-hidden">
+                           <div className="absolute inset-0 bg-[#0e1035]/20 group-hover:bg-transparent transition-all duration-300 z-10" />
+                           <img 
+                             src={solution.image} 
+                             alt={solution.title} 
+                             className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                           />
+                           <div className="absolute bottom-4 right-8 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-primary z-20 border border-white/10">
+                             <Icon className="w-5 h-5" />
+                           </div>
                         </div>
-                      </div>
+                      ) : (
+                        <div className="flex justify-between items-start mb-6">
+                          <div className="w-12 h-1 bg-primary transform origin-left group-hover:scale-x-150 transition-transform duration-500 rounded-full" />
+                          <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                            <Icon className="w-5 h-5" />
+                          </div>
+                        </div>
+                      )}
                       
                       <h3 className="text-2xl font-heading font-bold text-white mb-4 group-hover:text-primary transition-colors duration-300">{solution.title}</h3>
                       <p className="text-white/60 text-sm mb-8 leading-relaxed">

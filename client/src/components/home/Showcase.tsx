@@ -9,49 +9,49 @@ const products = [
     title: "Rashladne Komore",
     slug: "rashladne-komore",
     desc: "Industrijski standard hlađenja.",
-    image: "/assets/project-drone.png" 
+    image: "/assets/portfolio-cold-room.png" 
   },
   {
     id: 2,
     title: "Tuneli za brzo smrzavanje",
     slug: "tuneli-za-smrzavanje",
     desc: "-40°C IQF tehnologija.",
-    image: "/assets/hero-bg.png"
+    image: "/assets/portfolio-freezing-tunnel.png"
   },
   {
     id: 3,
     title: "ULO Komore",
     slug: "ulo-komore",
     desc: "Ultra Low Oxygen za voće.",
-    image: "/assets/project-drone.png"
+    image: "/assets/portfolio-ulo.png"
   },
   {
     id: 4,
     title: "Čileri & Toplotne Pumpe",
     slug: "cileri",
     desc: "Maksimalna energetska efikasnost.",
-    image: "/assets/hero-bg.png"
+    image: "/assets/portfolio-chillers.png"
   },
   {
     id: 5,
     title: "Rashladni Agregati",
     slug: "rashladni-agregati",
     desc: "Visokoefikasni sistemi sa ekološkim freonima.",
-    image: "/assets/project-drone.png"
+    image: "/assets/portfolio-aggregates.png"
   },
   {
     id: 6,
     title: "Elektro Ormani & CNSU",
     slug: "elektro-ormani",
     desc: "Centralni sistem nadzora i upravljanja.",
-    image: "/assets/hero-bg.png"
+    image: "/assets/portfolio-electrical.png"
   },
   {
     id: 7,
     title: "Termoizolacija",
     slug: "termoizolacija",
     desc: "Vrhunska izolacija i hladionička vrata.",
-    image: "/assets/project-drone.png"
+    image: "/assets/portfolio-insulation.png"
   }
 ];
 
@@ -85,9 +85,11 @@ export function Showcase() {
               Naša <span className="text-primary">Ekspertiza</span>
             </h2>
           </div>
-          <button className="text-white/60 hover:text-white flex items-center gap-2 transition-colors group">
-            Pogledajte sve proizvode <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </button>
+          <Link href="/services">
+            <button className="text-white/60 hover:text-white flex items-center gap-2 transition-colors group cursor-pointer">
+              Pogledajte sve proizvode <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </button>
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -107,10 +109,10 @@ export function Showcase() {
             >
               {/* Background Image with Overlay */}
               <div 
-                className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110 opacity-60 group-hover:opacity-40"
+                className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-60"
                 style={{ backgroundImage: `url('${product.image}')` }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0e1035] via-[#0e1035]/80 to-transparent opacity-90 group-hover:opacity-80 transition-opacity duration-500" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0e1035] via-[#0e1035]/60 to-transparent opacity-70 group-hover:opacity-50 transition-opacity duration-500" />
               
               {/* Hover Effect: Wireframe/Grid */}
               <div className="absolute inset-0 bg-[url('/assets/noise.svg')] opacity-0 group-hover:opacity-10 transition-opacity duration-500 mix-blend-overlay" />

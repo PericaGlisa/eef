@@ -137,22 +137,58 @@ export default function About() {
       <Navbar />
       
       {/* Hero */}
-      <section className="pt-32 md:pt-40 pb-16 md:pb-20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/assets/noise.svg')] opacity-20 pointer-events-none" />
-        <div className="container mx-auto px-6 relative z-10">
+      <section className="relative min-h-[70vh] flex items-center pt-32 pb-20 overflow-hidden">
+        {/* Background Image with Zoom Effect */}
+        <div className="absolute inset-0 z-0">
+          <motion.div 
+            className="absolute inset-0 bg-black/40 z-10" 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0e1035]/90 via-[#0e1035]/40 to-[#0e1035] z-10" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0e1035]/90 via-transparent to-transparent z-10" />
+          <motion.img 
+            src="/assets/hero-bg.png" 
+            alt="Hero Background" 
+            className="w-full h-full object-cover"
+            initial={{ scale: 1.2 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
+          />
+        </div>
+
+        <div className="absolute inset-0 bg-[url('/assets/noise.svg')] opacity-20 pointer-events-none z-20" />
+        
+        <div className="container mx-auto px-6 relative z-30">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <h1 className="text-5xl md:text-8xl font-heading font-bold text-white mb-8 leading-tight">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary mb-6 backdrop-blur-sm">
+              <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+              <span className="text-sm font-medium tracking-wide uppercase">Lider u regionu</span>
+            </div>
+            
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-heading font-bold text-white mb-8 leading-tight max-w-5xl">
               Od Osnivanja do <br />
-              <span className="text-primary">Industrijskog Lidera</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-300">Industrijskog Lidera</span>
             </h1>
-            <p className="text-xl text-white/60 max-w-2xl font-light">
+            
+            <p className="text-xl md:text-2xl text-white/80 max-w-2xl font-light leading-relaxed mb-10 border-l-4 border-primary pl-6">
               30 godina inovacija, inženjerske preciznosti i posvećenosti energetskoj efikasnosti. 
               Mi nismo samo izvođači radova - mi smo arhitekte održive budućnosti.
             </p>
+
+            <div className="flex flex-wrap gap-6">
+               <div className="flex items-center gap-4 text-white/60">
+                 <div className="text-sm">
+                   <strong className="text-white block text-lg">30 Godina</strong>
+                   Iskustva i tradicije
+                 </div>
+               </div>
+            </div>
           </motion.div>
         </div>
       </section>
