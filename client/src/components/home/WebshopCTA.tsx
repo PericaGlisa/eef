@@ -6,7 +6,7 @@ export function WebshopCTA() {
   return (
     <section className="py-8 md:py-12 bg-[#F5F7FA] relative overflow-hidden">
       <div className="container mx-auto px-4 md:px-6 relative z-10">
-        <div className="bg-[#0e1035] rounded-3xl relative overflow-hidden shadow-xl">
+        <div className="bg-[#0e1035] rounded-3xl relative overflow-hidden shadow-xl max-w-5xl mx-auto">
           {/* Background Elements */}
           <div className="absolute top-0 right-0 w-full h-full bg-[url('/assets/noise.svg')] opacity-10 mix-blend-overlay pointer-events-none" />
           <div className="absolute top-1/2 right-0 w-[300px] h-[300px] bg-primary/20 blur-[80px] rounded-full pointer-events-none transform translate-x-1/3 -translate-y-1/2" />
