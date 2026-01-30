@@ -2,13 +2,13 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { 
-  Menu, Phone, Mail, 
+  AlignRight, Phone, Mail, 
   Snowflake, Wind, Box, Server, Droplets, Zap, Thermometer,
   DraftingCompass, Factory, Wrench, BarChart3, Lightbulb, ShieldCheck,
   BookOpen, ChevronRight
 } from "lucide-react";
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -201,35 +201,44 @@ export function Navbar() {
                 <Button 
                   variant="ghost" 
                   size="icon" 
-                  className="lg:hidden text-white hover:bg-white/10 hover:text-primary transition-colors"
+                  className="lg:hidden text-white hover:bg-white/10 hover:text-primary transition-all duration-300 rounded-full w-12 h-12"
                   onClick={() => import("@/lib/audio").then(m => m.audio.playClick())}
                 >
-                  <Menu className="w-6 h-6" />
+                  <AlignRight className="w-7 h-7" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="bg-[#171A54]/95 backdrop-blur-xl border-l border-white/10 w-full md:w-[600px] p-0 overflow-y-auto">
-                <div className="h-full flex flex-col px-6 py-8">
-                  <div className="flex flex-col gap-2">
-                    <Accordion type="single" collapsible className="w-full">
+              <SheetContent side="right" className="bg-[#0a0c29] border-l border-white/10 w-full md:w-[450px] p-0 overflow-hidden">
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent pointer-events-none" />
+                
+                <div className="h-full flex flex-col px-8 py-12 overflow-y-auto custom-scrollbar relative z-10">
+                  <div className="flex flex-col gap-6 mt-8">
+                    <Accordion type="single" collapsible className="w-full space-y-4">
                       {navLinks.map((link, i) => (
-                        <div key={link.name} className="border-b border-white/5 pb-1">
+                        <motion.div
+                          key={link.name}
+                          initial={{ opacity: 0, x: 20 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          transition={{ delay: i * 0.1, duration: 0.5 }}
+                          viewport={{ once: true }}
+                          className="border-b border-white/5 pb-2"
+                        >
                           {link.items ? (
                             <AccordionItem value={link.name} className="border-none">
-                              <AccordionTrigger className="text-xl font-light text-white hover:text-primary transition-colors hover:no-underline py-3">
-                                <div className="flex items-center gap-3">
-                                  <span className="text-xs font-mono text-primary/50">0{i + 1}</span>
+                              <AccordionTrigger className="text-2xl font-light text-white hover:text-primary transition-colors hover:no-underline py-4 group">
+                                <div className="flex items-center gap-4">
+                                  <span className="text-xs font-mono text-primary/40 group-hover:text-primary transition-colors">0{i + 1}</span>
                                   {link.name}
                                 </div>
                               </AccordionTrigger>
                               <AccordionContent>
-                                <div className="flex flex-col gap-2 pl-8 pb-2">
-                                  {link.items.map((item) => (
+                                <div className="flex flex-col gap-3 pl-10 pb-4">
+                                  {link.items.map((item, j) => (
                                     <Link 
                                       key={item.name} 
                                       href={item.href}
-                                      className="text-white/60 hover:text-primary transition-colors py-2 text-sm flex items-center gap-3 group"
+                                      className="text-white/60 hover:text-white hover:pl-2 transition-all duration-300 py-2 text-base flex items-center gap-3 group/item"
                                     >
-                                      <item.icon className="w-4 h-4 text-primary/50 group-hover:text-primary" />
+                                      <div className="w-1.5 h-1.5 rounded-full bg-white/10 group-hover/item:bg-primary transition-colors" />
                                       {item.name}
                                     </Link>
                                   ))}
@@ -239,25 +248,36 @@ export function Navbar() {
                           ) : (
                             <Link 
                               href={link.href} 
-                              className="text-xl font-light text-white hover:text-primary transition-colors block group py-3 flex items-center gap-3 w-full"
+                              className="text-2xl font-light text-white hover:text-primary transition-colors block group py-4 flex items-center gap-4 w-full"
                               onClick={() => import("@/lib/audio").then(m => m.audio.playHover())}
                             >
-                              <span className="text-xs font-mono text-primary/50">0{i + 1}</span>
+                              <span className="text-xs font-mono text-primary/40 group-hover:text-primary transition-colors">0{i + 1}</span>
                               {link.name}
                             </Link>
                           )}
-                        </div>
+                        </motion.div>
                       ))}
                     </Accordion>
                   </div>
                   
-                  <div className="mt-8 pt-6 border-t border-white/10 grid grid-cols-1 gap-6">
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4, duration: 0.5 }}
+                    viewport={{ once: true }}
+                    className="mt-auto pt-12 border-t border-white/10 grid grid-cols-1 gap-8"
+                  >
                      <div>
-                        <h4 className="text-xs font-bold uppercase tracking-widest text-white/40 mb-3">Kontakt</h4>
-                        <a href="mailto:office@eef.rs" className="text-white/80 hover:text-primary transition-colors block mb-1 text-sm">office@eef.rs</a>
-                        <a href="tel:+381113757287" className="text-white/80 hover:text-primary transition-colors block text-sm">+381 11 375 72 87</a>
+                        <h4 className="text-xs font-bold uppercase tracking-widest text-primary/80 mb-6 flex items-center gap-2">
+                          <span className="w-8 h-[1px] bg-primary/50"></span>
+                          Kontakt
+                        </h4>
+                        <div className="space-y-4">
+                          <a href="mailto:office@eef.rs" className="text-xl text-white hover:text-primary transition-colors block font-light">office@eef.rs</a>
+                          <a href="tel:+381113757287" className="text-xl text-white hover:text-primary transition-colors block font-light">+381 11 375 72 87</a>
+                        </div>
                      </div>
-                  </div>
+                  </motion.div>
                 </div>
               </SheetContent>
             </Sheet>
