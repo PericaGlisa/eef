@@ -73,8 +73,10 @@ export function Hero() {
         className="absolute inset-0 z-0"
       >
         <AnimatePresence mode="popLayout">
-          <motion.div 
+          <motion.img 
             key={currentSlide}
+            src={heroSlides[currentSlide]}
+            alt={`Slide ${currentSlide + 1}`}
             initial={{ opacity: 0, scale: 1.1 }}
             animate={{ 
               opacity: 1, 
@@ -89,8 +91,9 @@ export function Hero() {
               x: { duration: 25, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" },
               y: { duration: 25, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }
             }}
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url('${heroSlides[currentSlide]}')` }}
+            className="absolute inset-0 w-full h-full object-cover will-change-transform"
+            loading="eager"
+            decoding="async"
           />
         </AnimatePresence>
         
@@ -106,8 +109,8 @@ export function Hero() {
          <div className="absolute inset-0 bg-[url('/assets/noise.svg')] opacity-20 mix-blend-overlay" />
       </motion.div>
 
-      {/* Floating Technical Icons */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Floating Technical Icons - Hidden on mobile for better performance */}
+      <div className="hidden md:block absolute inset-0 overflow-hidden pointer-events-none">
           <FloatingIcon icon={Snowflake} initialX="10%" initialY="20%" delay={0} />
           <FloatingIcon icon={Cpu} initialX="85%" initialY="15%" delay={2} />
           <FloatingIcon icon={Wind} initialX="75%" initialY="65%" delay={1} />
