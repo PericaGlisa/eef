@@ -141,7 +141,7 @@ export function Footer() {
            </div>
         </div>
 
-        <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-white/30">
+        <div className="border-t border-white/5 pt-8 flex flex-col-reverse md:flex-row justify-between items-center gap-4 text-xs text-white/30">
           <div>© 2026 Eko Elektrofrigo. Sva prava zadržana.</div>
           <div className="flex gap-6">
             <a href="https://www.linkedin.com/feed/update/urn:li:activity:6899988285712596994" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors"><Linkedin className="w-4 h-4" /></a>
