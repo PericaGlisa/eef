@@ -23,7 +23,7 @@ export default function ServiceDetail() {
       <Navbar />
       
       {/* Hero */}
-      <section className="pt-32 pb-16 relative overflow-hidden bg-[#0e1035]">
+      <section className="pt-32 md:pt-40 pb-16 md:pb-20 relative overflow-hidden bg-[#0e1035]">
         <div className="absolute inset-0 bg-[url('/assets/noise.svg')] opacity-20 pointer-events-none" />
         <div className="absolute right-0 top-0 w-1/3 h-1/3 bg-primary/10 blur-[120px] rounded-full pointer-events-none" />
         
@@ -56,7 +56,7 @@ export default function ServiceDetail() {
         </div>
       </section>
 
-      <main className="py-16 md:py-20 bg-[#F5F7FA]">
+      <main className="py-16 md:py-24 bg-[#F5F7FA]">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {/* Main Content */}

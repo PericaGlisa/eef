@@ -240,7 +240,7 @@ export default function About() {
       </section>
 
       {/* Why Us Section */}
-      <section className="py-24 bg-[#F5F7FA] relative overflow-hidden">
+      <section className="py-16 md:py-24 bg-[#F5F7FA] relative overflow-hidden">
         {/* Soft transition gradients */}
         <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[#0e1035]/20 to-transparent pointer-events-none z-10" />
         <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-[#0e1035]/20 to-transparent pointer-events-none z-10" />

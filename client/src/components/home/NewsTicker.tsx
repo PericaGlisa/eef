@@ -5,7 +5,7 @@ import { newsItems } from "@/data/news";
 
 export function NewsTicker() {
   return (
-    <section className="py-24 bg-[#F5F7FA] border-t border-[#171A54]/5 overflow-hidden relative">
+    <section className="py-16 md:py-24 bg-[#F5F7FA] border-t border-[#171A54]/5 overflow-hidden relative">
       {/* Soft transition gradients */}
       <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[#0e1035]/5 to-transparent pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-[#0e1035]/5 to-transparent pointer-events-none" />

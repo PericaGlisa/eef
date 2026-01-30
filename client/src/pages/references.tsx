@@ -61,7 +61,7 @@ export default function References() {
       </section>
 
       {/* Domestic References - Map */}
-      <section className="py-16 md:py-20 bg-[#F5F7FA] relative overflow-hidden border-y border-[#171A54]/5">
+      <section className="py-20 bg-[#F5F7FA] relative overflow-hidden border-y border-[#171A54]/5">
         {/* Soft transition gradient from Hero (Dark) to Domestic (Light) */}
         <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[#0e1035]/10 to-transparent pointer-events-none z-10" />
 

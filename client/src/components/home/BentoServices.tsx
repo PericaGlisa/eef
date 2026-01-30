@@ -81,7 +81,7 @@ export function BentoServices() {
               Sveobuhvatna <span className="text-primary">Rešenja</span>
             </h2>
           </div>
-          <div className="max-w-md text-[#171A54]/70 text-right md:text-left">
+          <div className="max-w-md text-[#171A54]/70 text-left md:text-right">
             <p>Spoj vrhunskog inženjeringa, napredne tehnologije i posvećenosti održivosti.</p>
           </div>
         </div>

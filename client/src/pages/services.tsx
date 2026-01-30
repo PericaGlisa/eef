@@ -141,16 +141,16 @@ export default function Services() {
       </section>
 
       {/* Section 2: Operational (Light) */}
-      <section className="py-24 bg-[#F5F7FA] relative overflow-hidden">
+      <section className="py-16 md:py-24 bg-[#F5F7FA] relative overflow-hidden">
         {/* Soft Transition Gradient from Dark */}
         <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[#0e1035] to-transparent pointer-events-none z-10 opacity-50" />
         
         <div className="container mx-auto px-6 relative z-10">
-          <div className="mb-12 text-right">
+          <div className="mb-12 text-left md:text-right">
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-[#171A54] mb-4">
               Operativna <span className="text-primary">Podrška</span>
             </h2>
-            <div className="h-1 w-20 bg-primary rounded-full ml-auto" />
+            <div className="h-1 w-20 bg-primary rounded-full mr-auto md:mr-0 md:ml-auto" />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -199,7 +199,7 @@ export default function Services() {
       </section>
 
       {/* Section 3: Advisory & QA (Dark) */}
-      <section className="py-24 bg-[#0e1035] relative overflow-hidden">
+      <section className="py-16 md:py-24 bg-[#0e1035] relative overflow-hidden">
         {/* Soft Transition Gradient from Light */}
         <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[#F5F7FA] to-transparent pointer-events-none z-10 opacity-10" />
         

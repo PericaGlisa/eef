@@ -21,7 +21,7 @@ export default function NewsPost() {
     <div className="bg-[#0a0c29] min-h-screen text-white selection:bg-primary selection:text-white">
       <Navbar />
       
-      <main className="pt-32 pb-24 relative overflow-hidden">
+      <main className="pt-32 md:pt-40 pb-16 md:pb-24 relative overflow-hidden">
         {/* Background Elements */}
         <div className="absolute top-0 left-0 w-full h-[50vh] bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
         <div className="absolute -top-[20%] -right-[10%] w-[50vw] h-[50vw] bg-primary/10 rounded-full blur-[100px] pointer-events-none" />

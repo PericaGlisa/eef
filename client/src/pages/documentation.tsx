@@ -47,7 +47,7 @@ export default function Documentation() {
       <Navbar />
       
       {/* Hero */}
-      <section className="pt-40 pb-20 relative overflow-hidden">
+      <section className="pt-32 md:pt-40 pb-16 md:pb-20 relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('/assets/noise.svg')] opacity-20 pointer-events-none" />
         <div className="container mx-auto px-6 relative z-10">
           <motion.div

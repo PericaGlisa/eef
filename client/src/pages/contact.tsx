@@ -16,7 +16,7 @@ export default function Contact() {
       <Navbar />
 
       {/* Hero Section - Dark */}
-      <section className="pt-40 pb-20 relative overflow-hidden">
+      <section className="pt-32 md:pt-40 pb-16 md:pb-20 relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('/assets/noise.svg')] opacity-20 pointer-events-none" />
         
         <div className="container mx-auto px-6 relative z-10">
@@ -62,7 +62,7 @@ export default function Contact() {
       </section>
 
       {/* Content Section - Light */}
-      <section className="py-24 bg-[#F5F7FA] relative">
+      <section className="py-16 md:py-24 bg-[#F5F7FA] relative">
         {/* Soft transition gradients */}
         <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[#0e1035]/20 to-transparent pointer-events-none z-10" />
 
@@ -87,7 +87,7 @@ export default function Contact() {
                       className="space-y-6"
                     >
                       {/* Common Fields */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                           <div className="space-y-2">
                             <label className="text-sm font-bold text-[#171A54]/70">Ime i Prezime</label>
                             <Input className="bg-gray-50 border-[#171A54]/10 h-12 text-[#171A54] focus:border-primary/50 focus:bg-white transition-colors" placeholder="Vaše ime" />
@@ -122,7 +122,7 @@ export default function Contact() {
                       )}
 
                       {selectedTopic === 'service' && (
-                          <div className="grid grid-cols-2 gap-6">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <div className="space-y-2">
                                 <label className="text-sm font-bold text-[#171A54]/70">ID Opreme (Opciono)</label>
                                 <Input className="bg-gray-50 border-[#171A54]/10 h-12 text-[#171A54] focus:border-primary/50 focus:bg-white" placeholder="npr. CH-2023-01" />
