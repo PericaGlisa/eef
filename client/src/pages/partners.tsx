@@ -52,7 +52,7 @@ const partners = [
     role: "Premium Partner",
     description: "Güven Soğutma je danas jedan od vodećih brendova na međunarodnom tržištu iz oblasti proizvodnje posuda pod visokim pritiskom i rashladne opreme za industrijski sektor hlađenja. Eko Elektrofrigo u svoje rashladne agregate ugrađuje širok spektar GVN opreme, od resivera, rezervoara ulja, separatora ulja, regulatora nivoa ulja, do filtera i prateće armature. Preko 35 godina iskustva u proizvodnji ove opreme i konstantan rast kompanije garantuju njen najviši kvalitet.",
     link: "http://www.gvn.com.tr/",
-    color: "bg-[#E31E24]", // GVN red
+    color: "bg-[#F97316]", // GVN orange
     logo: "/assets/partners/gvn.png"
   },
   { 
@@ -61,7 +61,7 @@ const partners = [
     role: "Lider u Kontrolisanoj Atmosferi",
     description: "Posebnu pažnju Eko Elektrofrigo posvećuje projektovanju hladnjača sa kontrolisanom atmosferom. Kako je kod ovakvih sistema kvalitet same opreme presudan za kontrolu atmosfere, Eko Elektrofrigo se odlučio za saradnju sa liderom u oblasti proizvodnje ovakve opreme, kompaniju Isolcell. Kompanija Isolcell predstavlja pionira u ovoj oblasti i proizvođača najkvalitetnije opreme za sisteme sa kontrolisanom atmosferom preko 60 godina.",
     link: "https://www.isolcell.com/en/",
-    color: "bg-[#8BC53F]", // Isolcell green
+    color: "bg-[#E31E24]", // Isolcell red
     logo: "/assets/partners/isolcell.png"
   }
 ];
@@ -94,7 +94,11 @@ export default function Partners() {
       {/* Partners Sections */}
       <div className="flex flex-col">
         {partners.map((partner, index) => {
-          const isLight = index % 2 === 0;
+          // Force light theme for Alfa Lu-Ve, Isolcell, and Danfoss as requested by user
+          // Otherwise keep alternating pattern
+          const isForceLight = partner.id === 'luve' || partner.id === 'isolcell' || partner.id === 'danfoss';
+          const isLight = isForceLight ? true : index % 2 === 0;
+          
           return (
             <section 
               key={partner.id} 
@@ -193,7 +197,12 @@ function PartnerCard({ partner, index, isLight }: { partner: typeof partners[0],
            {/* Center Initial/Logo Placeholder */}
            <div className="absolute inset-0 flex items-center justify-center p-12">
               <div className="relative w-full h-full flex items-center justify-center">
-                <div className={`absolute inset-0 ${partner.color} blur-[100px] opacity-20`} />
+                {/* Glow effect behind logo - increased opacity for better visibility */}
+                <div className={`absolute inset-0 ${partner.color} blur-[100px] opacity-40`} />
+                {/* White radial gradient for dark backgrounds to pop the logo */}
+                {!isLight && (
+                  <div className="absolute inset-0 bg-radial from-white/20 to-transparent blur-3xl opacity-50" />
+                )}
                 
                 {/* Logo Image */}
                 {!imgError ? (

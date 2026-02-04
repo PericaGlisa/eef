@@ -53,63 +53,63 @@ const history = [
     title: "Osnivanje & Danfoss",
     desc: "Osnivanje Eko Elekofrigo kao trgovačke kompanije i potpisivanje prvog ugovora o distribuciji sa kompanijom Danfoss.",
     stats: "Početak",
-    image: "/assets/project-drone.png"
+    image: "/assets/history/1996.webp"
   },
   {
     year: "1998",
     title: "Bitzer & Prvi Inženjering",
     desc: "Potpisivanje ugovora sa Bitzerom. Prvi samostalni inženjering posao rashladnih instalacija u prvom megamarket objektu u Srbiji.",
     stats: "Megamarket",
-    image: "/assets/hero-bg.png"
+    image: "/assets/history/1998.webp"
   },
   {
     year: "2000",
     title: "Alfa Laval",
     desc: "Eko Elektrofrigo postaje generalni distributer za proizvode kompanije Alfa Laval.",
     stats: "Distribucija",
-    image: "/assets/project-drone.png"
+    image: "/assets/history/2000.webp"
   },
   {
     year: "2002",
     title: "Hladnjače za Maline",
     desc: "Prvo samostalno projektovanje i izvođenje hladnjača za zamrzavanje i skladištenje maline. 5 hladnjača, ukupno 4000 tona.",
     stats: "4000 tona",
-    image: "/assets/hero-bg.png"
+    image: "/assets/history/2002.webp"
   },
   {
     year: "2006",
     title: "IM Matijević & Inovacije",
     desc: "Projektovanje za IM Matijević (100t/dan). Prvi 'ključ u ruke' projekat, prva ULO hladnjača (Slankamen) i najveći tuneli za zamrzavanje (Frucom Arilje).",
     stats: "Ključ u ruke",
-    image: "/assets/project-drone.png"
+    image: "/assets/history/2006.webp"
   },
   {
     year: "2009",
     title: "Pumpni Sistem R404a",
     desc: "U Industriji mesa Matijević kompletiran pumpni sistem freona R404a za šest pločastih vertikalnih zamrzivača.",
     stats: "R404a Sistem",
-    image: "/assets/hero-bg.png"
+    image: "/assets/history/2009.webp"
   },
   {
     year: "2012",
     title: "Energetska Efikasnost",
     desc: "Hladnjača 'Zadrugar' (4000t), energetski najefikasnija u Srbiji sa tri tunela za smrzavanje (3x30t/dan).",
     stats: "Najefikasnija",
-    image: "/assets/project-drone.png"
+    image: "/assets/history/2012.webp"
   },
   {
     year: "2014",
     title: "Izlazak na EU Tržište",
     desc: "Prvi projekti Eko Elektrofriga u inostranstvu: Hrvatska, Slovenija, Poljska...",
     stats: "EU Projekti",
-    image: "/assets/hero-bg.png"
+    image: "/assets/history/2014.webp"
   },
   {
     year: "2020",
     title: "Celanova ULO",
     desc: "Najveći realizovani projekat: ULO hladnjača za jabuku 'Celanova' u Vršcu, kapaciteta 10,000 tona.",
     stats: "10,000 tona",
-    image: "/assets/project-drone.png"
+    image: "/assets/history/2020.webp"
   }
 ];
 
@@ -350,7 +350,7 @@ export default function About() {
               </div>
 
               <div className="flex-1 w-full">
-                 <div className="aspect-video bg-white/5 border border-white/10 overflow-hidden relative group shadow-2xl">
+                 <div className="aspect-video bg-white/5 border border-white/10 rounded-2xl overflow-hidden relative group shadow-2xl">
                     <div className="absolute inset-0 bg-[#171A54]/60 group-hover:bg-transparent transition-colors duration-700 z-10" />
                     {/* Grid Overlay */}
                     <div className="absolute inset-0 bg-[url('/assets/noise.svg')] opacity-10 z-20 mix-blend-overlay" />
