@@ -148,7 +148,7 @@ export function Hero() {
       </div>
 
       {/* Content Layer */}
-      <div className="relative z-30 container mx-auto px-6 h-full flex flex-col justify-center pt-32 pb-20 md:pt-0 md:pb-0">
+      <div className="relative z-30 container mx-auto px-6 h-full flex flex-col justify-center pt-32 pb-20 md:pt-20 md:pb-0 lg:pt-32">
         <div className="max-w-4xl space-y-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
