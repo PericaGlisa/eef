@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, MapPin, Building2, Users, ArrowRight } from 'lucide-react';
 import { SerbiaMap } from './SerbiaMap';
+import { LogoSnowflake } from '../ui/LogoSnowflake';
 import { locations, Location } from './locations';
 
 export function InteractiveMapDashboard() {
@@ -92,19 +93,27 @@ export function InteractiveMapDashboard() {
                 onClick={() => setActiveLocation(loc)}
                 className={`w-full text-left p-4 rounded-xl border transition-all duration-200 group ${
                   activeLocation?.id === loc.id 
-                    ? 'bg-primary/20 border-primary/50 shadow-[0_0_15px_rgba(86,170,74,0.1)]' 
-                    : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-white/10'
+                    ? loc.isPremium 
+                      ? 'bg-yellow-500/20 border-yellow-500/50 shadow-[0_0_15px_rgba(234,179,8,0.2)]'
+                      : 'bg-primary/20 border-primary/50 shadow-[0_0_15px_rgba(86,170,74,0.1)]' 
+                    : loc.isPremium
+                      ? 'bg-yellow-500/5 border-yellow-500/20 hover:bg-yellow-500/10 hover:border-yellow-500/30'
+                      : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-white/10'
                 }`}
               >
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
-                    <MapPin className={`w-4 h-4 ${activeLocation?.id === loc.id ? 'text-primary' : 'text-white/40'}`} />
-                    <span className={`font-bold ${activeLocation?.id === loc.id ? 'text-white' : 'text-white/80'}`}>
+                    {loc.isPremium ? (
+                      <LogoSnowflake className={`w-4 h-4 ${activeLocation?.id === loc.id ? 'text-yellow-500' : 'text-yellow-500/70'}`} />
+                    ) : (
+                      <MapPin className={`w-4 h-4 ${activeLocation?.id === loc.id ? 'text-primary' : 'text-white/40'}`} />
+                    )}
+                    <span className={`font-bold ${activeLocation?.id === loc.id ? 'text-white' : loc.isPremium ? 'text-yellow-50' : 'text-white/80'}`}>
                       {loc.city}
                     </span>
                   </div>
                   {activeLocation?.id === loc.id && (
-                    <motion.div layoutId="active-indicator" className="w-1.5 h-1.5 rounded-full bg-primary" />
+                    <motion.div layoutId="active-indicator" className={`w-1.5 h-1.5 rounded-full ${loc.isPremium ? 'bg-yellow-500' : 'bg-primary'}`} />
                   )}
                 </div>
                 

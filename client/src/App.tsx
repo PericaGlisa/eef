@@ -17,6 +17,7 @@ import Documentation from "@/pages/documentation";
 import Certificates from "@/pages/certificates";
 import Diplomas from "@/pages/diplomas";
 import References from "@/pages/references";
+import ProjectAgrounija from "@/pages/project-agrounija";
 import Blog from "@/pages/blog";
 import NewsPost from "@/pages/news-post";
 import { useSmoothScroll } from "@/hooks/use-smooth-scroll";
@@ -51,6 +52,7 @@ function Router() {
       <Route path="/documentation/certificates" component={Certificates} />
       <Route path="/documentation/diplomas" component={Diplomas} />
       <Route path="/references" component={References} />
+      <Route path="/references/agrounija" component={ProjectAgrounija} />
       <Route path="/blog" component={Blog} />
       <Route path="/news/:id" component={NewsPost} />
       <Route component={NotFound} />

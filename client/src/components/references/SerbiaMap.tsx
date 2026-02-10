@@ -2,7 +2,9 @@ import { useState, useRef, useEffect } from 'react';
 import { MapPaths } from './SerbiaMapPaths';
 import { motion, AnimatePresence } from 'framer-motion';
 import { locations, Location } from './locations';
-import { ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
+import { ZoomIn, ZoomOut, RotateCcw, ArrowRight } from 'lucide-react';
+import { LogoSnowflake } from '../ui/LogoSnowflake';
+import { Link } from 'wouter';
 
 export interface SerbiaMapProps {
   activeLocation?: Location | null;
@@ -137,8 +139,16 @@ export function SerbiaMap({ activeLocation: externalActive, onSelect }: SerbiaMa
                 onPointerDown={(e) => e.stopPropagation()}
                 xmlns="http://www.w3.org/1999/xhtml"
               >
-                <div className={`relative w-4 h-4 md:w-5 md:h-5 rounded-full border-2 transition-all duration-300 z-10 ${activeLocation?.id === loc.id ? 'bg-primary border-white scale-150' : 'bg-background border-primary group-hover:scale-125'}`} />
-                <div className={`absolute w-8 h-8 md:w-10 md:h-10 bg-primary/30 rounded-full animate-ping opacity-0 ${activeLocation?.id === loc.id ? 'opacity-100' : 'group-hover:opacity-50'}`} />
+                <div className={`relative flex items-center justify-center transition-all duration-300 z-10 ${activeLocation?.id === loc.id ? 'scale-150' : 'group-hover:scale-125'}`}>
+                  <div className={`absolute inset-0 bg-primary/60 blur-md rounded-full ${activeLocation?.id === loc.id ? 'opacity-100' : 'opacity-40 group-hover:opacity-100'}`} />
+                  <LogoSnowflake 
+                    className={`
+                      drop-shadow-[0_0_8px_rgba(255,255,255,0.6)] 
+                      ${loc.isPremium ? 'w-8 h-8 md:w-10 md:h-10 text-yellow-500' : 'w-6 h-6 md:w-7 md:h-7 text-primary'}
+                      ${activeLocation?.id === loc.id ? 'text-white' : ''}
+                    `}
+                  />
+                </div>
                 <div className={`absolute top-full mt-3 px-3 py-1.5 bg-background/90 rounded-md text-xs font-mono uppercase tracking-wider text-white whitespace-nowrap border border-white/10 transition-all duration-300 z-20 pointer-events-none ${activeLocation?.id === loc.id ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0'}`}>
                   {loc.city}
                 </div>
@@ -190,9 +200,14 @@ export function SerbiaMap({ activeLocation: externalActive, onSelect }: SerbiaMa
 
 function PopupContent({ location, onClose, className = "" }: { location: Location; onClose: () => void; className?: string }) {
   return (
-    <div className={`bg-[#0e1035]/95 backdrop-blur-xl border border-white/10 p-4 rounded-xl shadow-2xl flex flex-col min-h-0 overflow-hidden ${className}`}>
+    <div className={`bg-[#0e1035]/95 backdrop-blur-xl border ${location.isPremium ? 'border-yellow-500/50 shadow-[0_0_20px_rgba(234,179,8,0.2)]' : 'border-white/10'} p-4 rounded-xl shadow-2xl flex flex-col min-h-0 overflow-hidden ${className}`}>
       <div className="flex justify-between items-start mb-3 shrink-0">
-        <h3 className="font-bold text-lg text-white">{location.city}</h3>
+        <div className="flex items-center gap-2">
+          {location.isPremium && (
+            <LogoSnowflake className="w-5 h-5 text-yellow-500" />
+          )}
+          <h3 className={`font-bold text-lg ${location.isPremium ? 'text-yellow-50' : 'text-white'}`}>{location.city}</h3>
+        </div>
         <button 
           onClick={onClose}
           className="text-white/50 hover:text-white p-1 rounded-full hover:bg-white/10 transition-colors"
@@ -207,15 +222,36 @@ function PopupContent({ location, onClose, className = "" }: { location: Locatio
         onTouchStart={(e) => e.stopPropagation()}
         onTouchMove={(e) => e.stopPropagation()} 
       >
-        {location.projects.map((project, idx) => (
-          <div key={idx} className="bg-white/5 rounded-lg p-3 text-sm border border-white/5 hover:bg-white/10 transition-colors">
-            <div className="font-medium text-primary mb-1">{project.title}</div>
-            <p className="text-white/70 mb-2 leading-relaxed">{project.desc}</p>
-            {project.client && (
-              <div className="text-white/30 text-xs uppercase tracking-wider font-mono border-t border-white/5 pt-2 mt-2">{project.client}</div>
-            )}
-          </div>
-        ))}
+        {location.projects.map((project, idx) => {
+          const Content = () => (
+            <>
+              <div className="flex justify-between items-start gap-2">
+                <div className="font-medium text-primary mb-1">{project.title}</div>
+                {project.link && <ArrowRight className="w-4 h-4 text-primary shrink-0 mt-1" />}
+              </div>
+              <p className="text-white/70 mb-2 leading-relaxed">{project.desc}</p>
+              {project.client && (
+                <div className="text-white/30 text-xs uppercase tracking-wider font-mono border-t border-white/5 pt-2 mt-2">{project.client}</div>
+              )}
+            </>
+          );
+
+          if (project.link) {
+            return (
+              <Link key={idx} href={project.link}>
+                <a className="block bg-white/5 rounded-lg p-3 text-sm border border-white/5 hover:bg-white/10 transition-colors group">
+                  <Content />
+                </a>
+              </Link>
+            );
+          }
+
+          return (
+            <div key={idx} className="bg-white/5 rounded-lg p-3 text-sm border border-white/5 hover:bg-white/10 transition-colors">
+              <Content />
+            </div>
+          );
+        })}
       </div>
     </div>
   );

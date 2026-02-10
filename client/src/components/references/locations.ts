@@ -2,6 +2,7 @@ export interface Project {
   title: string;
   desc: string;
   client?: string;
+  link?: string;
 }
 
 export interface Location {
@@ -9,6 +10,7 @@ export interface Location {
   city: string;
   x: number;
   y: number;
+  isPremium?: boolean;
   projects: Project[];
 }
 
@@ -28,6 +30,7 @@ export const locations: Location[] = [
   },
   {
     "id": "ridjica",
+    "isPremium": true,
     "city": "Riđica",
     "x": 8.491059147180257,
     "y": 12.309366602687161,
@@ -282,6 +285,7 @@ export const locations: Location[] = [
   },
   {
     "id": "dobrodol",
+    "isPremium": true,
     "city": "Dobrodol",
     "x": 27.93466299862449,
     "y": 30.88449136276389,
@@ -328,6 +332,7 @@ export const locations: Location[] = [
   },
   {
     "id": "krcedin",
+    "isPremium": true,
     "city": "Krčedin",
     "x": 32.0521320495186,
     "y": 29.77882917466402,
@@ -335,12 +340,14 @@ export const locations: Location[] = [
       {
         "title": "AGROUNIJA",
         "desc": "ULO hladnjača za jabuku kapaciteta 3500 tona (faza I).",
-        "client": "AGROUNIJA"
+        "client": "AGROUNIJA",
+        "link": "/references/agrounija"
       },
       {
         "title": "AGROUNIJA",
         "desc": "ULO hladnjača za jabuku kapaciteta 4000 tona (faza II).",
-        "client": "AGROUNIJA"
+        "client": "AGROUNIJA",
+        "link": "/references/agrounija"
       }
     ]
   },
@@ -426,6 +433,7 @@ export const locations: Location[] = [
   },
   {
     "id": "vrsac",
+    "isPremium": true,
     "city": "Vršac",
     "x": 58.8156808803302,
     "y": 29.9999616122842,
@@ -785,6 +793,7 @@ export const locations: Location[] = [
   },
   {
     "id": "bajina-basta",
+    "isPremium": true,
     "city": "Bajina Bašta",
     "x": 19.17360385144436,
     "y": 55.43019193857963,
@@ -986,6 +995,7 @@ export const locations: Location[] = [
   },
   {
     "id": "zajecar",
+    "isPremium": true,
     "city": "Zaječar",
     "x": 81.09576341127932,
     "y": 56.95600575815736,
