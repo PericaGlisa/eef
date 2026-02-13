@@ -15,7 +15,7 @@ const servicesData = [
     description: "Od idejnog rešenja do izvođačkog projekta. Naš tim inženjera koristi najsavremenije softverske alate za proračun termodinamike i 3D modelovanje.",
     features: ["3D Modelovanje", "Termodinamika", "AutoCAD", "Revit"],
     icon: DraftingCompass,
-    image: "/assets/service-engineering.png",
+    image: "/assets/service-engineering.webp",
     link: "/services/engineering"
   },
   {
@@ -23,7 +23,7 @@ const servicesData = [
     description: "Montaža industrijskih sistema po principu 'ključ u ruke'. Preciznost u svakom varu, sigurnost u svakom spoju.",
     features: ["Sertifikovani Varioci", "Ključ u Ruke", "Montaža cevovoda"],
     icon: Factory,
-    image: "/assets/service-execution.png",
+    image: "/assets/service-execution.webp",
     link: "/services/execution"
   },
   {
@@ -31,7 +31,7 @@ const servicesData = [
     description: "24/7 monitoring i preventivno održavanje. Brz odziv servisnih ekipa širom zemlje.",
     features: ["24/7 Podrška", "Originalni Delovi", "Redovni servisi"],
     icon: Wrench,
-    image: "/assets/service-maintenance.png",
+    image: "/assets/service-maintenance.webp",
     link: "/services/maintenance"
   },
   {
@@ -39,7 +39,7 @@ const servicesData = [
     description: "Detaljna analiza potrošnje i ROI proračuni za maksimalnu uštedu.",
     features: ["ROI Analiza", "ISO 50001", "Merenje potrošnje"],
     icon: BarChart3,
-    image: "/assets/service-energy.png",
+    image: "/assets/service-energy.webp",
     link: "/services/energy-audit"
   },
   {
@@ -47,7 +47,7 @@ const servicesData = [
     description: "Stručno savetovanje za odabir freona i tranziciju na prirodne rashladne fluide.",
     features: ["CO2 Sistemi", "Amonijak", "Studije izvodljivosti"],
     icon: Lightbulb,
-    image: "/assets/service-consulting.png",
+    image: "/assets/service-consulting.webp",
     link: "/services/consulting"
   },
   {
@@ -55,7 +55,7 @@ const servicesData = [
     description: "Implementacija najviših standarda bezbednosti i kvaliteta u rashladnoj tehnici.",
     features: ["HACCP", "Bezbednost", "ISO 9001"],
     icon: ShieldCheck,
-    image: "/assets/service-safety.png",
+    image: "/assets/service-safety.webp",
     link: "/services/safety"
   }
 ];

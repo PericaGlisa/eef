@@ -9,49 +9,49 @@ const products = [
     title: "Rashladne Komore",
     slug: "rashladne-komore",
     desc: "Industrijski standard hlađenja.",
-    image: "/assets/portfolio-cold-room.png" 
+    image: "/assets/portfolio-cold-room.webp" 
   },
   {
     id: 2,
     title: "Tuneli za brzo smrzavanje",
     slug: "tuneli-za-smrzavanje",
     desc: "-40°C IQF tehnologija.",
-    image: "/assets/portfolio-freezing-tunnel.png"
+    image: "/assets/portfolio-freezing-tunnel.webp"
   },
   {
     id: 3,
     title: "ULO Komore",
     slug: "ulo-komore",
     desc: "Ultra Low Oxygen za voće.",
-    image: "/assets/portfolio-ulo.png"
+    image: "/assets/portfolio-ulo.webp"
   },
   {
     id: 4,
     title: "Čileri & Toplotne Pumpe",
     slug: "cileri",
     desc: "Maksimalna energetska efikasnost.",
-    image: "/assets/portfolio-chillers.png"
+    image: "/assets/portfolio-chillers.webp"
   },
   {
     id: 5,
     title: "Rashladni Agregati",
     slug: "rashladni-agregati",
     desc: "Visokoefikasni sistemi sa ekološkim freonima.",
-    image: "/assets/portfolio-aggregates.png"
+    image: "/assets/portfolio-aggregates.webp"
   },
   {
     id: 6,
     title: "Elektro Ormani & CNSU",
     slug: "elektro-ormani",
     desc: "Centralni sistem nadzora i upravljanja.",
-    image: "/assets/portfolio-electrical.png"
+    image: "/assets/portfolio-electrical.webp"
   },
   {
     id: 7,
     title: "Termoizolacija",
     slug: "termoizolacija",
     desc: "Vrhunska izolacija i hladionička vrata.",
-    image: "/assets/portfolio-insulation.png"
+    image: "/assets/portfolio-insulation.webp"
   }
 ];
 

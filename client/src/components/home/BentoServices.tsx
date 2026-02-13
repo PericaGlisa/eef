@@ -7,7 +7,7 @@ const services = [
     title: "Inženjering & Projektovanje",
     description: "Od idejnog rešenja do izvođačkog projekta. Naš tim inženjera koristi najsavremenije softverske alate za proračun termodinamike i 3D modelovanje.",
     icon: DraftingCompass,
-    image: "/assets/service-engineering.png",
+    image: "/assets/service-engineering.webp",
     tags: ["3D Modelovanje", "Termodinamika", "AutoCAD", "Revit"],
     features: ["Analiza zahteva", "Izbor opreme", "3D modelovanje", "Optimizacija"],
     link: "/services/engineering"
@@ -16,7 +16,7 @@ const services = [
     title: "Izvođenje Radova",
     description: "Montaža industrijskih sistema po principu 'ključ u ruke'. Preciznost u svakom varu, sigurnost u svakom spoju.",
     icon: Factory,
-    image: "/assets/service-execution.png",
+    image: "/assets/service-execution.webp",
     tags: ["Sertifikovani Varioci", "Ključ u Ruke"],
     features: ["Montaža cevovoda", "Elektro ormani", "Puštanje u rad"],
     link: "/services/execution"
@@ -25,7 +25,7 @@ const services = [
     title: "Servis & Održavanje",
     description: "24/7 monitoring i preventivno održavanje. Brz odziv servisnih ekipa širom zemlje.",
     icon: Wrench,
-    image: "/assets/service-maintenance.png",
+    image: "/assets/service-maintenance.webp",
     tags: ["24/7 Podrška", "Originalni Delovi"],
     features: ["Redovni servisi", "Interventni izlasci", "Rezervni delovi"],
     link: "/services/maintenance"
@@ -34,7 +34,7 @@ const services = [
     title: "Energetska Revizija",
     description: "Detaljna analiza potrošnje i ROI proračuni za maksimalnu uštedu.",
     icon: BarChart3,
-    image: "/assets/service-energy.png",
+    image: "/assets/service-energy.webp",
     tags: ["ROI Analiza", "ISO 50001"],
     features: ["Merenje potrošnje", "Analiza gubitaka", "Predlog mera"],
     link: "/services/energy-audit"
@@ -43,7 +43,7 @@ const services = [
     title: "Konsalting",
     description: "Stručno savetovanje za odabir freona i tranziciju na prirodne rashladne fluide.",
     icon: Lightbulb,
-    image: "/assets/service-consulting.png",
+    image: "/assets/service-consulting.webp",
     tags: ["CO2 Sistemi", "Amonijak"],
     features: ["Studije izvodljivosti", "Tehnička rešenja", "Zakonska regulativa"],
     link: "/services/consulting"
@@ -52,7 +52,7 @@ const services = [
     title: "Sigurnost & Kvalitet",
     description: "Implementacija najviših standarda bezbednosti i kvaliteta u rashladnoj tehnici.",
     icon: ShieldCheck,
-    image: "/assets/service-safety.png",
+    image: "/assets/service-safety.webp",
     tags: ["HACCP", "Bezbednost"],
     badges: ["ISO 9001", "ISO 14001", "HACCP"],
     features: ["Procena rizika", "Obuka zaposlenih", "Kontrola kvaliteta"],

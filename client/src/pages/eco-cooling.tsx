@@ -41,7 +41,7 @@ export default function EcoCooling() {
              <div className="absolute inset-0 bg-gradient-to-t from-[#0e1035] via-transparent to-transparent z-10" />
              <div className="absolute inset-0 bg-[url('/assets/grid-pattern.svg')] opacity-10 z-10" />
              <img 
-               src="/assets/portfolio-cold-room.png" 
+               src="/assets/portfolio-cold-room.webp" 
                alt="Industrial Cooling"  
                className="w-full h-full object-cover"
              />

@@ -19,7 +19,7 @@ export const servicesContent: ServiceItem[] = [
     title: "Projektovanje",
     shortDesc: "Inženjerska podrška i projektovanje najsavremenijih rashladnih sistema.",
     icon: DraftingCompass,
-    image: "/assets/service-engineering.png",
+    image: "/assets/service-engineering.webp",
     features: ["26 godina iskustva", "Tim od 8 inženjera", "CO2 i NH3 rešenja", "3D Modelovanje"],
     fullContent: `
       <p>Uz 26 godina iskustva i tim od 8 inženjera, veliki broj ozbiljnih referenci, garantuje se najviši nivo kvaliteta inženjering usluga projektovanja.</p>
@@ -33,7 +33,7 @@ export const servicesContent: ServiceItem[] = [
     title: "Izvođenje",
     shortDesc: "Stručna montaža i puštanje u rad po principu ključ u ruke.",
     icon: Factory,
-    image: "/assets/service-execution.png",
+    image: "/assets/service-execution.webp",
     features: ["Montaža ključ u ruke", "Brza realizacija", "Stručan tim", "Testiranje sistema"],
     fullContent: `
       <p>Eko Elektrofrigo poseduje stručan tim koji će u najkraćem mogućem roku završiti montažu, garantujući najbolji kvalitet.</p>
@@ -47,7 +47,7 @@ export const servicesContent: ServiceItem[] = [
     title: "Servis",
     shortDesc: "Održavanje 24/7 i servisna podrška za maksimalnu pouzdanost.",
     icon: Wrench,
-    image: "/assets/service-maintenance.png",
+    image: "/assets/service-maintenance.webp",
     features: ["Podrška 24/7", "Preventivno održavanje", "Brz odziv", "Originalni delovi"],
     fullContent: `
       <p>Naši servisni tehničari u redovnim intervalima proveravaju Vaš sistem na licu mesta. Registrujemo najvažnije vrednosti merenja, prilagođavamo sve parametre sistema kako bismo maksimizirali efikasnost i poboljšavamo kvalitet Vašeg rashladnog sistema.</p>
@@ -60,7 +60,7 @@ export const servicesContent: ServiceItem[] = [
     title: "Energetska Revizija",
     shortDesc: "Analiza efikasnosti i ROI studije za smanjenje troškova.",
     icon: BarChart3,
-    image: "/assets/service-energy.png",
+    image: "/assets/service-energy.webp",
     features: ["ROI Analiza", "Merenje potrošnje", "Identifikacija gubitaka", "Optimizacija troškova"],
     fullContent: `
       <p>Energetska efikasnost je ključ održivog poslovanja. Naš tim stručnjaka vrši detaljnu analizu vaših postojećih sistema kako bi identifikovao mesta gubitaka i potencijale za uštedu.</p>
@@ -74,7 +74,7 @@ export const servicesContent: ServiceItem[] = [
     title: "Konsalting",
     shortDesc: "Stručno savetovanje za izbor optimalnih rashladnih rešenja.",
     icon: Lightbulb,
-    image: "/assets/service-consulting.png",
+    image: "/assets/service-consulting.webp",
     features: ["Izbor tehnologije", "Zakonska regulativa", "Ekološki standardi", "Studije izvodljivosti"],
     fullContent: `
       <p>Donošenje pravih odluka u ranoj fazi projekta može vam uštedeti značajne resurse u budućnosti. Eko Elektrofrigo pruža usluge stručnog savetovanja pri izboru optimalnih rashladnih rešenja za vaše specifične potrebe.</p>
@@ -87,7 +87,7 @@ export const servicesContent: ServiceItem[] = [
     title: "Sigurnost",
     shortDesc: "Implementacija najviših standarda bezbednosti i kvaliteta.",
     icon: ShieldCheck,
-    image: "/assets/service-safety.png",
+    image: "/assets/service-safety.webp",
     features: ["ISO Standardi", "Bezbednosni protokoli", "Detekcija curenja", "Pravna usklađenost"],
     fullContent: `
       <p>Bezbednost vašeg pogona i zaposlenih je naš apsolutni prioritet. Primenjujemo najstrože međunarodne standarde i sigurnosne protokole u svim fazama rada, od projektovanja do održavanja.</p>

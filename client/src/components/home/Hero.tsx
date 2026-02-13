@@ -27,11 +27,11 @@ const FloatingIcon = ({ icon: Icon, initialX, initialY, delay }: any) => (
 );
 
 const heroSlides = [
-  "/assets/hero-slide-1.jpg",
-  "/assets/hero-slide-2.jpg",
-  "/assets/hero-slide-3.jpg",
-  "/assets/hero-slide-4.jpg",
-  "/assets/hero-slide-5.jpg"
+  "/assets/hero-slide-1.webp",
+  "/assets/hero-slide-2.webp",
+  "/assets/hero-slide-3.webp",
+  "/assets/hero-slide-4.webp",
+  "/assets/hero-slide-5.webp"
 ];
 
 export function Hero() {
