@@ -63,7 +63,7 @@ export default function ProjectAgrounija() {
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-background" />
         </div>
         
-        <div className="relative container mx-auto px-4 h-full flex flex-col justify-end pb-24">
+        <div className="relative container mx-auto px-4 h-full flex flex-col justify-end pb-24 lg:pb-32">
           <Link href="/references">
             <a className="inline-flex items-center text-white/80 hover:text-white mb-8 transition-colors absolute top-32 left-4 md:left-8">
               <ArrowLeft className="w-4 h-4 mr-2" />
@@ -112,7 +112,7 @@ export default function ProjectAgrounija() {
         <div className="container mx-auto px-4">
           
           {/* Stats Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16 lg:mb-32">
             {stats.map((stat, index) => (
               <motion.div
                 key={index}

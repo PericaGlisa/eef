@@ -1,35 +1,45 @@
 import { Link } from "wouter";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { FileText, ArrowRight, Instagram, Linkedin, Facebook } from "lucide-react";
+import { FileText, ArrowRight, Linkedin, MapPin, Phone, Mail } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="bg-[#0e1035] text-white pt-16 md:pt-24 pb-12 md:pb-16 border-t border-white/5 relative overflow-hidden">
-      {/* Background Decor */}
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-30" />
-      
-      <div className="container mx-auto px-6">
-        {/* ROW 1: Brand, Links, Certificates, Newsletter */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-          {/* Column 1: Intro */}
-          <div className="space-y-6">
-            <Link href="/" className="inline-block">
+    <footer className="bg-[#0B0F19] text-white pt-20 pb-12 relative overflow-hidden">
+      {/* Vibrant Background Gradients - "Veseliji" vibe */}
+      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-50" />
+      <div className="absolute -top-[300px] -right-[300px] w-[600px] h-[600px] bg-primary/10 rounded-full blur-[100px] animate-pulse pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-[120px] pointer-events-none" />
+
+      <div className="container mx-auto px-6 relative z-10">
+        {/* ROW 1: Main Content (3 Columns) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-24 mb-20">
+          
+          {/* Column 1: Brand & Identity */}
+          <div className="space-y-8">
+            <Link href="/" className="inline-block group">
               <img 
                 src="/assets/logo.png" 
                 alt="EEF" 
-                className="h-24 w-auto brightness-0 invert hover:brightness-100 hover:invert-0 transition-all duration-500" 
+                className="h-20 md:h-28 w-auto brightness-0 invert group-hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] transition-all duration-500" 
               />
             </Link>
-            <p className="text-white/60 text-sm leading-relaxed max-w-xs">
-              Porodično preduzeće osnovano 1996. godine. Lider u industrijskoj rashladi i energetskoj efikasnosti. Gradimo finansijske tvrđave kroz inženjering.
+            <p className="text-slate-400 text-base leading-relaxed max-w-sm">
+              Porodično preduzeće osnovano 1996. godine. Lider u industrijskoj rashladi i energetskoj efikasnosti. 
+              <span className="block mt-2 text-primary font-medium">Gradimo finansijske tvrđave kroz inženjering.</span>
             </p>
+            <div className="flex gap-4">
+               <a href="https://www.linkedin.com/feed/update/urn:li:activity:6899988285712596994" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-all duration-300 group">
+                  <Linkedin className="w-5 h-5" />
+               </a>
+            </div>
           </div>
 
-          {/* Column 2: Quick Links */}
-          <div className="space-y-6">
-            <h4 className="text-sm font-bold uppercase tracking-widest text-white/40">Brzi Linkovi</h4>
-            <ul className="space-y-4">
+          {/* Column 2: Quick Links (Enhanced) */}
+          <div className="space-y-8">
+            <h4 className="text-lg font-bold text-white flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-primary" />
+              Istraži
+            </h4>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {[
                 { name: 'Eko Rashlada', href: '/eco-cooling' },
                 { name: 'Usluge', href: '/services' },
@@ -40,111 +50,91 @@ export function Footer() {
                 { name: 'Kontakt', href: '/contact' }
               ].map((item) => (
                 <li key={item.name}>
-                  <Link href={item.href} className="text-white/80 hover:text-primary transition-colors text-sm flex items-center gap-2 group">
-                    <span className="w-0 group-hover:w-2 h-[1px] bg-primary transition-all duration-300" />
-                    {item.name}
+                  <Link href={item.href} className="text-slate-400 hover:text-primary transition-colors text-sm flex items-center gap-2 group">
+                    <ArrowRight className="w-3 h-3 text-primary/0 group-hover:text-primary group-hover:translate-x-1 transition-all duration-300" />
+                    <span className="group-hover:translate-x-1 transition-transform duration-300">{item.name}</span>
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Column 3: ISO Download */}
-          <div className="space-y-6">
-            <h4 className="text-sm font-bold uppercase tracking-widest text-white/40">Sertifikati</h4>
+          {/* Column 3: Certificates (Visual Card) */}
+          <div className="space-y-8">
+            <h4 className="text-lg font-bold text-white flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-primary" />
+              Kvalitet
+            </h4>
             <Link href="/documentation/certificates">
-              <div className="group cursor-pointer p-6 border border-white/10 hover:border-primary/50 bg-white/5 transition-all duration-300 rounded-lg relative overflow-hidden">
-                <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="flex justify-between items-start mb-4 relative z-10">
-                   <FileText className="w-8 h-8 text-white/50 group-hover:text-primary transition-colors" />
-                   <div className="px-2 py-1 bg-primary/20 rounded text-[10px] text-primary font-mono border border-primary/30">AKTIVAN</div>
+              <div className="group cursor-pointer p-8 border border-white/10 hover:border-primary/50 bg-gradient-to-br from-white/5 to-transparent hover:from-primary/10 hover:to-primary/5 transition-all duration-500 rounded-2xl relative overflow-hidden shadow-2xl hover:shadow-primary/20">
+                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                   <FileText className="w-24 h-24" />
                 </div>
-                <h5 className="font-heading font-bold text-lg mb-1 relative z-10">ISO 9001 • 14001 • 45001</h5>
-                <p className="text-xs text-white/50 mb-4 relative z-10">Integrisani sistem menadžmenta</p>
-                <div className="flex items-center text-primary text-xs font-mono uppercase tracking-wider relative z-10">
-                  Pogledaj sertifikate <ArrowRight className="w-3 h-3 ml-2 group-hover:translate-x-1 transition-transform" />
+                
+                <div className="relative z-10">
+                   <div className="px-3 py-1 inline-block bg-primary/20 rounded-full text-xs font-bold text-primary border border-primary/30 mb-4">
+                      ISO STANDARDI
+                   </div>
+                   <h5 className="font-heading font-bold text-2xl mb-2 text-white group-hover:text-primary transition-colors">9001 • 14001 • 45001</h5>
+                   <p className="text-sm text-slate-400 mb-6">Integrisani sistem menadžmenta kvaliteta</p>
+                   <div className="flex items-center text-white text-sm font-bold group-hover:gap-4 transition-all duration-300">
+                     Pogledaj sertifikate <ArrowRight className="w-4 h-4 ml-2 text-primary" />
+                   </div>
                 </div>
-                {/* Decorative ISO Ring */}
-                <div className="absolute -bottom-8 -right-8 w-24 h-24 rounded-full border-4 border-white/5 group-hover:border-primary/20 transition-colors duration-500" />
               </div>
             </Link>
           </div>
 
-          {/* Column 4: Newsletter */}
-          <div className="space-y-6">
-            <h4 className="text-sm font-bold uppercase tracking-widest text-white/40">Bilten</h4>
-            <p className="text-white/60 text-sm">
-              Budite u toku sa najnovijim vestima i tehnologijama u rashladnoj industriji.
-            </p>
-            <div className="space-y-3">
-              <Input 
-                type="email" 
-                placeholder="Vaša email adresa" 
-                className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-primary/50 h-12"
-              />
-              <Button className="w-full bg-primary hover:bg-primary/90 text-white font-bold h-12">
-                Prijavi se <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
+        </div>
+
+        {/* ROW 2: Contact Info Cards (Redesigned) */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 border-t border-white/5 pt-12">
+            <div className="flex items-start gap-4 p-4 rounded-xl hover:bg-white/5 transition-colors duration-300">
+                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
+                    <MapPin className="w-6 h-6" />
+                </div>
+                <div>
+                    <h4 className="font-bold text-white text-sm mb-1">Lokacija</h4>
+                    <p className="text-slate-400 text-sm">Svetolika Nikačevića 11</p>
+                    <p className="text-slate-400 text-sm">Beograd, Srbija</p>
+                </div>
             </div>
-          </div>
-        </div>
 
-        {/* ROW 2: Contact Information (Dedicated Strip) */}
-        <div className="border-t border-white/5 pt-12 pb-12 mb-8">
-           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {/* Address */}
-              <div className="flex items-start gap-4">
-                 <div className="p-3 bg-white/5 rounded border border-white/10">
-                    <svg className="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                 </div>
-                 <div>
-                    <h4 className="text-sm font-bold uppercase tracking-widest text-white/40 mb-2">Adresa</h4>
-                    <p className="text-white/80 text-sm">Svetolika Nikačevića 11</p>
-                    <p className="text-white/80 text-sm">Beograd, Srbija</p>
-                 </div>
-              </div>
+            <div className="flex items-start gap-4 p-4 rounded-xl hover:bg-white/5 transition-colors duration-300">
+                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
+                    <Phone className="w-6 h-6" />
+                </div>
+                <div>
+                    <h4 className="font-bold text-white text-sm mb-1">Pozovite nas</h4>
+                    <a href="tel:+381113757287" className="text-slate-400 text-sm block hover:text-primary transition-colors">+381 11 375 72 87</a>
+                    <a href="tel:+381113757288" className="text-slate-400 text-sm block hover:text-primary transition-colors">+381 11 375 72 88</a>
+                </div>
+            </div>
 
-              {/* Phones */}
-              <div className="flex items-start gap-4">
-                 <div className="p-3 bg-white/5 rounded border border-white/10">
-                    <svg className="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                    </svg>
-                 </div>
-                 <div>
-                    <h4 className="text-sm font-bold uppercase tracking-widest text-white/40 mb-2">Telefoni</h4>
-                    <a href="tel:+381113757287" className="text-white/80 text-sm hover:text-primary transition-colors block mb-1">+381 11 375 72 87</a>
-                    <a href="tel:+381113757288" className="text-white/80 text-sm hover:text-primary transition-colors block">+381 11 375 72 88</a>
-                 </div>
-              </div>
-
-              {/* Emails */}
-              <div className="flex items-start gap-4">
-                 <div className="p-3 bg-white/5 rounded border border-white/10">
-                    <svg className="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                 </div>
-                 <div className="w-full">
-                    <h4 className="text-sm font-bold uppercase tracking-widest text-white/40 mb-2">Email Kontakti</h4>
+            <div className="flex items-start gap-4 p-4 rounded-xl hover:bg-white/5 transition-colors duration-300">
+                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
+                    <Mail className="w-6 h-6" />
+                </div>
+                <div className="w-full">
+                    <h4 className="font-bold text-white text-sm mb-1">Email Kontakti</h4>
                     <div className="grid grid-cols-2 gap-x-4 gap-y-1">
-                      <a href="mailto:office@eef.rs" className="text-white/80 text-sm hover:text-primary transition-colors block">office@eef.rs</a>
-                      <a href="mailto:prodaja@eef.rs" className="text-white/80 text-sm hover:text-primary transition-colors block">prodaja@eef.rs</a>
-                      <a href="mailto:tehnika@eef.rs" className="text-white/80 text-sm hover:text-primary transition-colors block">tehnika@eef.rs</a>
-                      <a href="mailto:servis@eef.rs" className="text-white/80 text-sm hover:text-primary transition-colors block">servis@eef.rs</a>
+                      <a href="mailto:office@eef.rs" className="text-slate-400 text-sm hover:text-primary transition-colors block">office@eef.rs</a>
+                      <a href="mailto:prodaja@eef.rs" className="text-slate-400 text-sm hover:text-primary transition-colors block">prodaja@eef.rs</a>
+                      <a href="mailto:tehnika@eef.rs" className="text-slate-400 text-sm hover:text-primary transition-colors block">tehnika@eef.rs</a>
+                      <a href="mailto:servis@eef.rs" className="text-slate-400 text-sm hover:text-primary transition-colors block">servis@eef.rs</a>
                     </div>
-                 </div>
-              </div>
-           </div>
+                </div>
+            </div>
         </div>
 
-        <div className="border-t border-white/5 pt-8 flex flex-col-reverse md:flex-row justify-between items-center gap-4 text-xs text-white/30">
-          <div>© 2026 Eko Elektrofrigo. Sva prava zadržana.</div>
-          <div className="flex gap-6">
-            <a href="https://www.linkedin.com/feed/update/urn:li:activity:6899988285712596994" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors"><Linkedin className="w-4 h-4" /></a>
+        {/* Copyright */}
+        <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-slate-500 text-xs">
+            © {new Date().getFullYear()} Eko Elektrofrigo. Sva prava zadržana.
+          </p>
+          <div className="flex gap-4 text-xs text-slate-500">
+             <Link href="/privacy" className="hover:text-white transition-colors">Politika privatnosti</Link>
+             <Link href="/terms" className="hover:text-white transition-colors">Uslovi korišćenja</Link>
           </div>
         </div>
       </div>

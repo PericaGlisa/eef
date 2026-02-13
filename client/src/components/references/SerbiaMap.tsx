@@ -137,7 +137,6 @@ export function SerbiaMap({ activeLocation: externalActive, onSelect }: SerbiaMa
                 onMouseEnter={() => setHoveredLocationId(loc.id)}
                 onMouseLeave={() => setHoveredLocationId(null)}
                 onPointerDown={(e) => e.stopPropagation()}
-                xmlns="http://www.w3.org/1999/xhtml"
               >
                 <div className={`relative flex items-center justify-center transition-all duration-300 z-10 ${activeLocation?.id === loc.id ? 'scale-150' : 'group-hover:scale-125'}`}>
                   <div className={`absolute inset-0 bg-primary/60 blur-md rounded-full ${activeLocation?.id === loc.id ? 'opacity-100' : 'opacity-40 group-hover:opacity-100'}`} />

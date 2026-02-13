@@ -92,14 +92,33 @@ export function Navbar() {
   return (
     <>
       {/* Top Strip */}
-      <div className="bg-[#0e1035] text-white/70 text-xs py-2 px-6 font-mono border-b border-white/5 flex flex-col sm:flex-row justify-between items-center z-50 relative gap-2 sm:gap-0">
-        <div className="flex gap-4 flex-wrap justify-center sm:justify-start">
-          <a href="tel:+381113757287" className="flex items-center gap-2 hover:text-primary transition-colors whitespace-nowrap"><Phone className="w-3 h-3 text-primary" /> +381 11 375 72 87</a>
-          <a href="mailto:office@eef.rs" className="flex items-center gap-2 hover:text-primary transition-colors whitespace-nowrap"><Mail className="w-3 h-3 text-primary" /> office@eef.rs</a>
+      <div className="bg-gradient-to-r from-primary to-[#4a9c3f] text-white text-[11px] font-medium py-2 px-6 border-b border-white/10 flex flex-col sm:flex-row justify-between items-center z-50 relative shadow-md overflow-hidden">
+        {/* Subtle pattern overlay */}
+        <div className="absolute inset-0 bg-[url('/assets/noise.svg')] opacity-10 mix-blend-overlay pointer-events-none" />
+        
+        <div className="flex gap-6 flex-wrap justify-center sm:justify-start relative z-10">
+          <a href="tel:+381113757287" className="group flex items-center gap-2.5 text-white/90 hover:text-white transition-all duration-300 whitespace-nowrap">
+            <div className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors backdrop-blur-sm">
+              <Phone className="w-3 h-3" />
+            </div>
+            <span className="tracking-wide">+381 11 375 72 87</span>
+          </a>
+          <a href="mailto:office@eef.rs" className="group flex items-center gap-2.5 text-white/90 hover:text-white transition-all duration-300 whitespace-nowrap">
+            <div className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors backdrop-blur-sm">
+              <Mail className="w-3 h-3" />
+            </div>
+            <span className="tracking-wide">office@eef.rs</span>
+          </a>
         </div>
-        <div className="hidden md:flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-primary animate-pulse shadow-[0_0_8px_#56AA4A]" />
-          <span className="text-primary tracking-wider">Servisni timovi: Aktivni (24/7)</span>
+
+        <div className="hidden md:flex items-center gap-2 relative z-10">
+          <div className="bg-black/10 px-3 py-1 rounded-full flex items-center gap-2 border border-white/5 backdrop-blur-sm group hover:bg-black/20 transition-colors">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]"></span>
+            </span>
+            <span className="text-white font-bold tracking-wider text-[10px] uppercase group-hover:tracking-widest transition-all duration-300">Servisni timovi: Aktivni (24/7)</span>
+          </div>
         </div>
       </div>
 
@@ -200,13 +219,18 @@ export function Navbar() {
           {/* Action Button & Mobile Menu */}
           <div className="flex items-center gap-4">
              <Button 
-                variant="outline"
+                variant="default"
                 size="sm"
-                className="hidden lg:flex border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 shadow-[0_0_15px_rgba(86,170,74,0.3)] hover:shadow-[0_0_25px_rgba(86,170,74,0.6)] text-xs h-9 px-4"
+                className="hidden lg:flex bg-primary hover:bg-primary/90 text-white transition-all duration-300 shadow-[0_0_15px_rgba(86,170,74,0.4)] hover:shadow-[0_0_25px_rgba(86,170,74,0.6)] hover:-translate-y-0.5 text-xs font-bold uppercase tracking-wide h-9 px-6 rounded-full border border-white/10"
                 onClick={() => import("@/lib/audio").then(m => m.audio.playClick())}
                 asChild
              >
-               <Link href="/contact">Zatražite ponudu</Link>
+               <Link href="/contact">
+                 <span className="flex items-center gap-2">
+                   Zatražite ponudu
+                   <ChevronRight className="w-3 h-3" />
+                 </span>
+               </Link>
              </Button>
 
             {/* Hamburger Menu (Mobile) */}

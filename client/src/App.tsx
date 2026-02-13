@@ -14,8 +14,6 @@ import EcoCooling from "@/pages/eco-cooling";
 import SolutionDetail from "@/pages/solution-detail";
 import Partners from "@/pages/partners";
 import Documentation from "@/pages/documentation";
-import Certificates from "@/pages/certificates";
-import Diplomas from "@/pages/diplomas";
 import References from "@/pages/references";
 import ProjectAgrounija from "@/pages/project-agrounija";
 import Blog from "@/pages/blog";
@@ -49,8 +47,8 @@ function Router() {
       <Route path="/eco-cooling/:slug" component={SolutionDetail} />
       <Route path="/partners" component={Partners} />
       <Route path="/documentation" component={Documentation} />
-      <Route path="/documentation/certificates" component={Certificates} />
-      <Route path="/documentation/diplomas" component={Diplomas} />
+      <Route path="/documentation/certificates" component={Documentation} />
+      <Route path="/documentation/diplomas" component={Documentation} />
       <Route path="/references" component={References} />
       <Route path="/references/agrounija" component={ProjectAgrounija} />
       <Route path="/blog" component={Blog} />

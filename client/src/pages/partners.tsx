@@ -1,9 +1,10 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { motion } from "framer-motion";
-import { ExternalLink, CheckCircle2 } from "lucide-react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { ExternalLink, CheckCircle2, ArrowRight, MousePointerClick } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { Link } from "wouter";
 
 const partners = [
   { 
@@ -67,29 +68,83 @@ const partners = [
 ];
 
 export default function Partners() {
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"]
+  });
+  
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+
   return (
-    <div className="bg-background min-h-screen">
+    <div className="bg-background min-h-screen" ref={containerRef}>
       <Navbar />
       
       {/* Hero */}
-      <section className="pt-32 md:pt-40 pb-16 md:pb-20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/assets/noise.svg')] opacity-20 pointer-events-none" />
+      <section className="pt-32 md:pt-48 pb-20 md:pb-32 relative overflow-hidden bg-[#0e1035]">
+        {/* Modern Technical Background */}
+        <div className="absolute inset-0 z-0">
+          <motion.div style={{ y, opacity }} className="absolute inset-0 w-full h-full">
+             <div className="absolute inset-0 bg-[#0e1035]/80 z-10 mix-blend-multiply" />
+             <div className="absolute inset-0 bg-gradient-to-t from-[#0e1035] via-transparent to-transparent z-10" />
+             <div className="absolute inset-0 bg-[url('/assets/grid-pattern.svg')] opacity-10 z-10" />
+             <img 
+               src="/assets/hero-slide-2.jpg" 
+               alt="Partners Network"  
+               className="w-full h-full object-cover"
+             />
+          </motion.div>
+        </div>
+
         <div className="container mx-auto px-6 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
+            className="max-w-4xl"
           >
-            <h1 className="text-5xl md:text-8xl font-heading font-bold text-white mb-8 leading-tight">
-              Strateški <span className="text-primary">Partneri</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-primary text-sm font-mono mb-6 backdrop-blur-sm">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+              </span>
+              Globalna Mreža
+            </div>
+            
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-heading font-bold text-white mb-8 leading-tight tracking-tight">
+              Strateški <br/>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-300">Partneri</span>
             </h1>
-            <p className="text-xl text-white/60 max-w-2xl font-light">
+            <p className="text-xl md:text-2xl text-white/60 max-w-2xl font-light leading-relaxed border-l-4 border-primary/50 pl-6">
               Povezujemo se samo sa najboljima. Naša snaga leži u saradnji sa globalnim liderima 
               koji dele našu viziju kvaliteta, inovacija i pouzdanosti.
             </p>
           </motion.div>
         </div>
       </section>
+
+      {/* Sticky Navigation */}
+      <div className="sticky top-20 z-50 bg-[#0e1035]/80 backdrop-blur-xl border-y border-white/5 shadow-2xl">
+        <div className="container mx-auto px-6">
+          <div className="flex items-center gap-1 overflow-x-auto hide-scrollbar py-4 md:justify-center">
+             {partners.map((partner) => (
+               <button
+                 key={partner.id}
+                 onClick={() => {
+                   document.getElementById(partner.id)?.scrollIntoView({ behavior: 'smooth' });
+                 }}
+                 className="flex items-center gap-2 px-4 py-2 rounded-full hover:bg-white/5 transition-all group shrink-0"
+               >
+                 <div className={`w-2 h-2 rounded-full ${partner.color} shadow-[0_0_8px_currentColor] group-hover:scale-125 transition-transform`} />
+                 <span className="text-sm font-bold text-white/70 group-hover:text-white transition-colors whitespace-nowrap">
+                   {partner.name}
+                 </span>
+               </button>
+             ))}
+          </div>
+        </div>
+      </div>
 
       {/* Partners Sections */}
       <div className="flex flex-col">
@@ -101,13 +156,14 @@ export default function Partners() {
           
           return (
             <section 
+              id={partner.id}
               key={partner.id} 
-              className={`py-16 md:py-24 relative overflow-hidden ${isLight ? 'bg-[#F5F7FA]' : 'bg-[#0e1035]'}`}
+              className={`py-24 md:py-32 relative overflow-hidden scroll-mt-32 ${isLight ? 'bg-[#F5F7FA]' : 'bg-[#0e1035]'}`}
             >
               {/* Soft transition gradient */}
               <div 
                 className={`absolute top-0 left-0 w-full h-32 bg-gradient-to-b pointer-events-none z-10 ${
-                  isLight ? 'from-[#0e1035]/10' : 'from-[#F5F7FA]/10'
+                  isLight ? 'from-[#0e1035]/5' : 'from-[#F5F7FA]/5'
                 } to-transparent`} 
               />
 
@@ -131,8 +187,8 @@ function PartnerCard({ partner, index, isLight }: { partner: typeof partners[0],
   const textColor = isLight ? "text-[#171A54]" : "text-white";
   const mutedTextColor = isLight ? "text-[#171A54]/70" : "text-white/70";
   const borderColor = isLight ? "border-[#171A54]/10" : "border-white/10";
-  const bgBadge = isLight ? "bg-[#171A54]/5" : "bg-white/5";
-  const cardBg = isLight ? "bg-white border-[#171A54]/5 shadow-xl" : "bg-black/20 border-white/10";
+  const bgBadge = isLight ? "bg-white shadow-sm border border-[#171A54]/10" : "bg-white/5 border border-white/10";
+  const cardBg = isLight ? "bg-white border-[#171A54]/5 shadow-2xl" : "bg-white/5 border-white/10 backdrop-blur-sm";
 
   return (
     <motion.div
@@ -143,90 +199,110 @@ function PartnerCard({ partner, index, isLight }: { partner: typeof partners[0],
       className={`flex flex-col ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-12 lg:gap-24 items-center`}
     >
       {/* Content Side */}
-      <div className="flex-1 space-y-6">
+      <div className="flex-1 space-y-8">
          <div className="flex items-center gap-4 mb-2">
-           <span className={`h-[2px] w-12 ${partner.color}`} />
+           <div className="flex items-center gap-2">
+             <span className={`h-2 w-2 rounded-full ${partner.color} animate-pulse`} />
+             <span className={`h-[1px] w-12 ${isLight ? 'bg-[#171A54]/20' : 'bg-white/20'}`} />
+           </div>
            <span className="text-primary font-mono uppercase tracking-widest text-sm font-bold">
              {partner.role}
            </span>
          </div>
          
-         <h2 className={`text-4xl md:text-5xl font-heading font-bold ${textColor}`}>
+         <h2 className={`text-4xl md:text-6xl font-heading font-bold ${textColor} leading-tight`}>
            {partner.name}
          </h2>
          
-         <div className={`${mutedTextColor} text-lg leading-relaxed space-y-4`}>
+         <div className={`${mutedTextColor} text-lg leading-relaxed space-y-4 font-light`}>
            <p>{partner.description}</p>
-           {partner.subtext && <p>{partner.subtext}</p>}
+           {partner.subtext && <p className="pl-4 border-l-2 border-primary/30 italic">{partner.subtext}</p>}
          </div>
 
          {partner.products && (
-           <div className="flex flex-wrap gap-3 pt-4">
+           <div className="flex flex-wrap gap-3 pt-2">
              {partner.products.map((prod, i) => (
-               <div key={i} className={`flex items-center gap-2 px-3 py-1.5 rounded-full ${bgBadge} border ${borderColor} text-sm ${isLight ? 'text-[#171A54]/80' : 'text-white/80'}`}>
-                 <CheckCircle2 className="w-3 h-3 text-primary" />
+               <div key={i} className={`flex items-center gap-2 px-4 py-2 rounded-lg ${bgBadge} text-sm font-medium ${isLight ? 'text-[#171A54]' : 'text-white/90'} transition-transform hover:-translate-y-1`}>
+                 <div className={`w-1.5 h-1.5 rounded-full ${partner.color}`} />
                  {prod}
                </div>
              ))}
            </div>
          )}
 
-         <div className="pt-6">
+         <div className="flex flex-wrap gap-4 pt-6">
            <Button 
               asChild 
-              variant="outline" 
-              className={`group ${borderColor} hover:border-primary hover:bg-primary/10 hover:text-primary transition-all duration-300 ${textColor}`}
+              className={`h-12 px-8 rounded-full font-bold text-white shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all duration-300 ${partner.color}`}
            >
              <a href={partner.link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
                Posetite Sajt
-               <ExternalLink className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+               <ExternalLink className="w-4 h-4" />
              </a>
+           </Button>
+           
+           <Button 
+              asChild 
+              variant="outline" 
+              className={`h-12 px-8 rounded-full border-2 font-bold hover:bg-transparent transition-all duration-300 ${isLight ? 'border-[#171A54]/10 hover:border-[#171A54] text-[#171A54]' : 'border-white/10 hover:border-white text-white'}`}
+           >
+             <Link href="/references" className="flex items-center gap-2">
+               <MousePointerClick className="w-4 h-4" />
+               Pogledajte Reference
+             </Link>
            </Button>
          </div>
       </div>
 
-      {/* Visual Side - Abstract Card */}
+      {/* Visual Side - Tech Card */}
       <div className="flex-1 w-full">
-        <div className={`relative aspect-square md:aspect-video lg:aspect-square w-full rounded-3xl overflow-hidden border group ${cardBg}`}>
-           {/* Background with brand color tint */}
-           <div className={`absolute inset-0 ${partner.color} ${isLight ? 'opacity-5' : 'opacity-10'} group-hover:opacity-20 transition-all duration-500`} />
+        <div className={`relative aspect-square md:aspect-video lg:aspect-square w-full rounded-[2rem] overflow-hidden border group ${cardBg}`}>
+           {/* Technical Grid Overlay */}
+           <div className="absolute inset-0 bg-[url('/assets/grid-pattern.svg')] opacity-[0.03]" />
            
-           {/* Grid Pattern */}
-           <div className={`absolute inset-0 bg-[linear-gradient(${isLight ? 'rgba(23,26,84,0.05)' : 'rgba(255,255,255,0.05)'}_1px,transparent_1px),linear-gradient(90deg,${isLight ? 'rgba(23,26,84,0.05)' : 'rgba(255,255,255,0.05)'}_1px,transparent_1px)] bg-[size:40px_40px] opacity-30`} />
-
+           {/* Background with brand color tint */}
+           <div className={`absolute inset-0 ${partner.color} opacity-[0.03] group-hover:opacity-[0.08] transition-all duration-500`} />
+           
            {/* Center Initial/Logo Placeholder */}
-           <div className="absolute inset-0 flex items-center justify-center p-12">
+           <div className="absolute inset-0 flex items-center justify-center p-12 md:p-20">
               <div className="relative w-full h-full flex items-center justify-center">
-                {/* Glow effect behind logo - increased opacity for better visibility */}
-                <div className={`absolute inset-0 ${partner.color} blur-[100px] opacity-40`} />
-                {/* White radial gradient for dark backgrounds to pop the logo */}
-                {!isLight && (
-                  <div className="absolute inset-0 bg-radial from-white/20 to-transparent blur-3xl opacity-50" />
-                )}
+                {/* Glow effect behind logo */}
+                <div className={`absolute inset-0 ${partner.color} blur-[120px] opacity-20 group-hover:opacity-40 transition-opacity duration-700`} />
                 
                 {/* Logo Image */}
                 {!imgError ? (
                   <img 
                     src={partner.logo} 
                     alt={`${partner.name} logo`}
-                    className="relative z-10 w-full h-full object-contain drop-shadow-2xl opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                    className="relative z-10 w-full h-full object-contain drop-shadow-xl filter grayscale-[0.2] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500"
                     onError={() => setImgError(true)}
                   />
                 ) : (
-                  /* Fallback Text */
-                  <h3 className={`relative text-6xl md:text-8xl font-heading font-bold ${isLight ? 'text-[#171A54]' : 'text-white'} opacity-20 select-none group-hover:scale-110 transition-transform duration-700`}>
+                  <h3 className={`relative text-6xl md:text-9xl font-heading font-bold ${isLight ? 'text-[#171A54]' : 'text-white'} opacity-10 select-none group-hover:scale-110 transition-transform duration-700`}>
                     {partner.name.split(' ')[0]}
                   </h3>
                 )}
               </div>
            </div>
 
-           {/* Corner Accents */}
-           <div className={`absolute top-8 left-8 w-16 h-[1px] ${isLight ? 'bg-[#171A54]/20' : 'bg-white/20'}`} />
-           <div className={`absolute top-8 left-8 w-[1px] h-16 ${isLight ? 'bg-[#171A54]/20' : 'bg-white/20'}`} />
+           {/* Tech UI Elements */}
+           <div className={`absolute top-0 left-0 p-6 font-mono text-xs tracking-widest opacity-40 ${isLight ? 'text-[#171A54]' : 'text-white'}`}>
+             PARTNER_ID: {partner.id.toUpperCase()}
+           </div>
            
-           <div className={`absolute bottom-8 right-8 w-16 h-[1px] ${isLight ? 'bg-[#171A54]/20' : 'bg-white/20'}`} />
-           <div className={`absolute bottom-8 right-8 w-[1px] h-16 ${isLight ? 'bg-[#171A54]/20' : 'bg-white/20'}`} />
+           <div className="absolute bottom-6 right-6 flex gap-2">
+             <div className={`w-2 h-2 rounded-full ${partner.color}`} />
+             <div className={`w-2 h-2 rounded-full ${partner.color} opacity-50`} />
+             <div className={`w-2 h-2 rounded-full ${partner.color} opacity-25`} />
+           </div>
+
+           {/* Corner Accents */}
+           <svg className={`absolute top-6 right-6 w-6 h-6 opacity-30 ${isLight ? 'text-[#171A54]' : 'text-white'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+             <path d="M5 5h14v14" />
+           </svg>
+           <svg className={`absolute bottom-6 left-6 w-6 h-6 opacity-30 ${isLight ? 'text-[#171A54]' : 'text-white'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+             <path d="M19 19H5V5" />
+           </svg>
         </div>
       </div>
     </motion.div>

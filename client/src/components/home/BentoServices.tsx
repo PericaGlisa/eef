@@ -92,9 +92,12 @@ export function BentoServices() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[minmax(350px,auto)]">
           {services.map((service, index) => {
             const Icon = service.icon;
+            // First item spans 2 columns on desktop for "Bento" look
+            const isFeatured = index === 0;
+            
             return (
               <motion.div
                 key={index}
@@ -102,69 +105,66 @@ export function BentoServices() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="h-full"
+                className={`${isFeatured ? 'md:col-span-2' : ''} h-full`}
               >
                 <Link href={service.link} className="block h-full">
-                  <div className="group relative bg-white border border-slate-200 hover:border-primary/50 transition-all duration-300 rounded-2xl p-8 flex flex-col h-full hover:shadow-xl cursor-pointer">
+                  <div className={`group relative bg-white border border-slate-200 hover:border-primary/50 transition-all duration-500 rounded-3xl p-8 flex flex-col h-full hover:shadow-2xl hover:shadow-primary/5 cursor-pointer overflow-hidden ${isFeatured ? 'md:flex-row md:items-center md:gap-8' : ''}`}>
+                    
+                    {/* Background Gradient Blob */}
+                    <div className="absolute -top-20 -right-20 w-64 h-64 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-colors duration-500" />
+
+                    {/* Image Section */}
                     {/* @ts-ignore */}
                     {service.image ? (
-                      <div className="mb-6 -mx-8 -mt-8 h-48 relative overflow-hidden rounded-t-2xl">
+                      <div className={`relative overflow-hidden rounded-2xl ${isFeatured ? 'w-full md:w-1/2 h-64 md:h-full mb-6 md:mb-0 order-first' : 'mb-6 -mx-8 -mt-8 h-48'}`}>
                         <div className="absolute inset-0 bg-[#171A54]/10 group-hover:bg-transparent transition-all duration-300 z-10" />
                         <img 
                           src={service.image} 
                           alt={service.title} 
-                          className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                         />
-                        <div className="absolute bottom-4 left-8 w-12 h-12 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-primary z-20 shadow-lg border border-white/20">
+                        <div className="absolute bottom-4 left-4 w-12 h-12 rounded-xl bg-white/90 backdrop-blur-sm flex items-center justify-center text-primary z-20 shadow-lg border border-white/20 group-hover:scale-110 transition-transform">
                           <Icon className="w-6 h-6" />
                         </div>
                       </div>
                     ) : (
-                      <div className="mb-6">
-                        <div className="w-12 h-12 rounded-full bg-[#171A54]/5 border border-[#171A54]/10 flex items-center justify-center text-primary group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all duration-300">
-                          <Icon className="w-6 h-6" />
+                      <div className="mb-6 relative z-10">
+                        <div className="w-14 h-14 rounded-2xl bg-[#171A54]/5 border border-[#171A54]/10 flex items-center justify-center text-primary group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-sm">
+                          <Icon className="w-7 h-7" />
                         </div>
                       </div>
                     )}
 
-                    <h3 className="text-xl font-bold text-[#171A54] mb-4 group-hover:text-primary transition-colors flex items-center justify-between">
-                      {service.title}
-                      <ArrowUpRight className="w-5 h-5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
-                    </h3>
-                    
-                    <p className="text-[#171A54]/70 mb-6 text-sm leading-relaxed flex-grow">
-                      {service.description}
-                    </p>
+                    {/* Content Section */}
+                    <div className={`flex flex-col h-full relative z-10 ${isFeatured ? 'w-full md:w-1/2 py-4' : ''}`}>
+                      <h3 className="text-2xl font-bold text-[#171A54] mb-3 group-hover:text-primary transition-colors flex items-center gap-2">
+                        {service.title}
+                        <ArrowUpRight className="w-5 h-5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-primary" />
+                      </h3>
+                      
+                      <p className="text-[#171A54]/70 mb-6 text-sm leading-relaxed flex-grow font-medium">
+                        {service.description}
+                      </p>
 
-                    <div className="space-y-4 mt-auto">
-                      {/* Badges (if any) */}
-                      {service.badges && (
+                      <div className="space-y-5 mt-auto">
                         <div className="flex flex-wrap gap-2">
-                          {service.badges.map((badge, i) => (
-                            <span key={i} className="px-2 py-1 border border-[#171A54]/10 bg-[#171A54]/5 rounded text-[10px] font-mono text-[#171A54]/60">
-                              {badge}
+                          {service.tags.map((tag, i) => (
+                            <span key={i} className="text-[10px] font-bold font-mono uppercase tracking-wider px-2.5 py-1 rounded-md bg-[#171A54]/5 text-[#171A54]/70 border border-[#171A54]/10 group-hover:border-primary/20 group-hover:text-primary transition-colors">
+                              {tag}
                             </span>
                           ))}
                         </div>
-                      )}
-
-                      <div className="flex flex-wrap gap-2">
-                        {service.tags.map((tag, i) => (
-                          <span key={i} className="text-[10px] font-mono uppercase tracking-wider px-2 py-1 rounded bg-[#171A54]/5 text-[#171A54]/60 border border-[#171A54]/10">
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                      
-                      <div className="pt-4 border-t border-slate-100">
-                        <ul className="space-y-2">
-                          {service.features.map((feature, i) => (
-                            <li key={i} className="flex items-center gap-2 text-xs text-[#171A54]/60">
-                              <CheckCircle2 className="w-3 h-3 text-primary" />
-                              {feature}
-                            </li>
-                          ))}
-                        </ul>
+                        
+                        <div className="pt-5 border-t border-slate-100 group-hover:border-primary/10 transition-colors">
+                          <ul className="grid grid-cols-1 gap-2">
+                            {service.features.map((feature, i) => (
+                              <li key={i} className="flex items-center gap-2 text-xs font-medium text-[#171A54]/60">
+                                <div className="w-1.5 h-1.5 rounded-full bg-primary/40 group-hover:bg-primary transition-colors" />
+                                {feature}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
                       </div>
                     </div>
                   </div>
