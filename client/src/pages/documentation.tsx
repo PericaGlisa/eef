@@ -7,6 +7,9 @@ import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 
 // Centralized documents data
+// KORISNIČKO UPUTSTVO:
+// 1. Postavite vaše PDF fajlove u folder: client/public/assets/documents/
+// 2. Dodajte novi objekat u ovu listu ispod za svaki novi fajl
 const documents = [
   {
     id: "cert-1",
@@ -16,7 +19,7 @@ const documents = [
     type: "certificate",
     category: "ISO Standard",
     date: "2024",
-    fileUrl: "/assets/documents/sertifikat-es-0038.pdf"
+    fileUrl: "/assets/documents/Sertifikat Br. ES-0038.pdf"
   },
   {
     id: "cert-2",
@@ -26,7 +29,7 @@ const documents = [
     type: "certificate",
     category: "ISO Standard",
     date: "2024",
-    fileUrl: "/assets/documents/sertifikat-oh-0055.pdf"
+    fileUrl: "/assets/documents/Sertifikat Br. OH-0055.pdf"
   },
   {
     id: "cert-3",
@@ -36,7 +39,7 @@ const documents = [
     type: "certificate",
     category: "ISO Standard",
     date: "2024",
-    fileUrl: "/assets/documents/sertifikat-qs-0211.pdf"
+    fileUrl: "/assets/documents/Sertifikat Br. QS-0211.pdf"
   },
   {
     id: "cert-4",
@@ -46,7 +49,7 @@ const documents = [
     type: "certificate",
     category: "Partnerstvo",
     date: "Jun 2022",
-    fileUrl: "/assets/documents/bitzer-sertifikat.pdf"
+    fileUrl: "/assets/documents/Bitzer Sertifikat.pdf"
   },
   {
     id: "dip-1",
@@ -56,7 +59,7 @@ const documents = [
     type: "diploma",
     category: "Partnerstvo",
     date: "2024",
-    fileUrl: "/assets/documents/danfoss-partner-diploma.pdf"
+    fileUrl: "/assets/documents/Danfoss Partner Diploma.pdf"
   }
 ];
 

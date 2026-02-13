@@ -357,27 +357,116 @@ export default function EcoCooling() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-24 relative overflow-hidden">
+      {/* CTA Section - Modernized */}
+      <section className="py-24 relative overflow-hidden group">
         <div className="absolute inset-0 bg-[#0e1035] z-0">
           <div className="absolute inset-0 bg-[url('/assets/grid-pattern.svg')] opacity-10" />
-          <div className="absolute right-0 bottom-0 w-1/2 h-full bg-gradient-to-l from-primary/20 to-transparent" />
+          <div className="absolute right-0 bottom-0 w-1/2 h-full bg-gradient-to-l from-primary/10 to-transparent" />
+          
+          {/* Animated Background Elements */}
+          <motion.div 
+            animate={{ 
+              scale: [1, 1.2, 1],
+              opacity: [0.1, 0.2, 0.1] 
+            }}
+            transition={{ 
+              duration: 8,
+              repeat: Infinity,
+              ease: "easeInOut" 
+            }}
+            className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] pointer-events-none"
+          />
+          <motion.div 
+            animate={{ 
+              scale: [1, 1.5, 1],
+              opacity: [0.05, 0.1, 0.05] 
+            }}
+            transition={{ 
+              duration: 10,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 1
+            }}
+            className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-[100px] pointer-events-none"
+          />
         </div>
         
-        <div className="container mx-auto px-6 relative z-10 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Spremni za <span className="text-primary">Unapređenje?</span>
-          </h2>
-          <p className="text-xl text-white/60 max-w-2xl mx-auto mb-10">
-            Kontaktirajte naš inženjerski tim za besplatnu procenu i predlog rešenja prilagođenog vašim potrebama.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-             <Button size="lg" className="bg-primary hover:bg-primary/90 text-white font-bold px-10 h-16 text-xl rounded-full shadow-[0_0_30px_rgba(86,170,74,0.4)] hover:shadow-[0_0_50px_rgba(86,170,74,0.6)] transition-all transform hover:-translate-y-1" asChild>
-               <Link href="/contact">Zatražite Ponudu</Link>
-             </Button>
-             <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 font-bold px-10 h-16 text-xl rounded-full" asChild>
-               <Link href="tel:+381113757287">Pozovite Nas</Link>
-             </Button>
+        <div className="container mx-auto px-6 relative z-10">
+          <div className="max-w-4xl mx-auto text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-primary mb-8 backdrop-blur-sm"
+            >
+              <span className="relative flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
+              </span>
+              <span className="text-sm font-medium tracking-wide uppercase">Dostupni smo za vaš projekat</span>
+            </motion.div>
+
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="text-4xl md:text-6xl font-heading font-bold text-white mb-6 leading-tight"
+            >
+              Spremni za <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-400">Unapređenje?</span>
+            </motion.h2>
+
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="text-xl text-white/60 mb-10 leading-relaxed max-w-2xl mx-auto"
+            >
+              Naš inženjerski tim je spreman da analizira vaše potrebe i kreira optimalno rešenje koje štedi energiju i novac.
+            </motion.p>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            >
+              <Button size="lg" className="bg-primary hover:bg-primary/90 text-white font-bold px-10 h-14 text-lg rounded-full shadow-[0_0_30px_rgba(86,170,74,0.3)] hover:shadow-[0_0_50px_rgba(86,170,74,0.5)] transition-all transform hover:-translate-y-1 w-full sm:w-auto" asChild>
+                <Link href="/contact" className="flex items-center gap-2">
+                  Zatražite Ponudu
+                  <ArrowRight className="w-5 h-5" />
+                </Link>
+              </Button>
+              <Button size="lg" variant="outline" className="border-white/10 text-white hover:bg-white/5 hover:border-white/20 font-bold px-10 h-14 text-lg rounded-full backdrop-blur-sm transition-all w-full sm:w-auto" asChild>
+                <a href="tel:+381113757287" className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-green-500" />
+                  +381 11 375 7287
+                </a>
+              </Button>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.5 }}
+              className="mt-12 pt-8 border-t border-white/5 flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm text-white/40"
+            >
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-primary" />
+                <span>Besplatna konsultacija</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-primary" />
+                <span>Izlazak na teren</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-primary" />
+                <span>Garancija kvaliteta</span>
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>

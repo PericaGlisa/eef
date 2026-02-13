@@ -95,8 +95,6 @@ export function BentoServices() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[minmax(350px,auto)]">
           {services.map((service, index) => {
             const Icon = service.icon;
-            // First item spans 2 columns on desktop for "Bento" look
-            const isFeatured = index === 0;
             
             return (
               <motion.div
@@ -105,10 +103,10 @@ export function BentoServices() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className={`${isFeatured ? 'md:col-span-2' : ''} h-full`}
+                className="h-full"
               >
                 <Link href={service.link} className="block h-full">
-                  <div className={`group relative bg-white border border-slate-200 hover:border-primary/50 transition-all duration-500 rounded-3xl p-8 flex flex-col h-full hover:shadow-2xl hover:shadow-primary/5 cursor-pointer overflow-hidden ${isFeatured ? 'md:flex-row md:items-center md:gap-8' : ''}`}>
+                  <div className="group relative bg-white border border-slate-200 hover:border-primary/50 transition-all duration-500 rounded-3xl p-8 flex flex-col h-full hover:shadow-2xl hover:shadow-primary/5 cursor-pointer overflow-hidden">
                     
                     {/* Background Gradient Blob */}
                     <div className="absolute -top-20 -right-20 w-64 h-64 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-colors duration-500" />
@@ -116,7 +114,7 @@ export function BentoServices() {
                     {/* Image Section */}
                     {/* @ts-ignore */}
                     {service.image ? (
-                      <div className={`relative overflow-hidden rounded-2xl ${isFeatured ? 'w-full md:w-1/2 h-64 md:h-full mb-6 md:mb-0 order-first' : 'mb-6 -mx-8 -mt-8 h-48'}`}>
+                      <div className="relative overflow-hidden rounded-2xl mb-6 -mx-8 -mt-8 h-48">
                         <div className="absolute inset-0 bg-[#171A54]/10 group-hover:bg-transparent transition-all duration-300 z-10" />
                         <img 
                           src={service.image} 
@@ -136,7 +134,7 @@ export function BentoServices() {
                     )}
 
                     {/* Content Section */}
-                    <div className={`flex flex-col h-full relative z-10 ${isFeatured ? 'w-full md:w-1/2 py-4' : ''}`}>
+                    <div className="flex flex-col h-full relative z-10">
                       <h3 className="text-2xl font-bold text-[#171A54] mb-3 group-hover:text-primary transition-colors flex items-center gap-2">
                         {service.title}
                         <ArrowUpRight className="w-5 h-5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-primary" />

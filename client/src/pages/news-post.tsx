@@ -6,9 +6,11 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Tag, Share2 } from "lucide-react";
 import NotFound from "@/pages/not-found";
 import { motion } from "framer-motion";
+import { useToast } from "@/hooks/use-toast";
 
 export default function NewsPost() {
   const [match, params] = useRoute("/news/:id");
+  const { toast } = useToast();
   
   if (!match || !params) return <NotFound />;
   
@@ -16,6 +18,26 @@ export default function NewsPost() {
   const post = newsItems.find(item => item.id === id);
 
   if (!post) return <NotFound />;
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: post.title,
+          text: post.desc,
+          url: window.location.href,
+        });
+      } catch (err) {
+        console.error("Error sharing:", err);
+      }
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      toast({
+        title: "Link kopiran!",
+        description: "Link vesti je kopiran u privremenu memoriju.",
+      });
+    }
+  };
 
   return (
     <div className="bg-[#0a0c29] min-h-screen text-white selection:bg-primary selection:text-white">
@@ -81,7 +103,12 @@ export default function NewsPost() {
             </div>
             
             <div className="mt-8 flex justify-end">
-               <Button variant="outline" size="sm" className="border-white/10 hover:bg-white/5 text-white/70">
+               <Button 
+                variant="outline" 
+                size="sm" 
+                className="border-white/10 hover:bg-white/5 text-white/70"
+                onClick={handleShare}
+              >
                   <Share2 className="w-4 h-4 mr-2" /> Podeli vest
                </Button>
             </div>

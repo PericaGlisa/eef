@@ -93,14 +93,16 @@ export function Showcase() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {products.map((product, i) => (
+          {products.map((product, i) => {
+            const isLast = i === products.length - 1;
+            return (
             <motion.div
               key={product.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="group relative h-[320px] overflow-hidden border border-white/10 hover:border-primary/50 cursor-pointer rounded-2xl bg-white/5 backdrop-blur-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/10"
+              className={`group relative h-[320px] overflow-hidden border border-white/10 hover:border-primary/50 cursor-pointer rounded-2xl bg-white/5 backdrop-blur-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/10 ${isLast ? 'md:col-span-2 lg:col-span-1 lg:col-start-2 xl:col-span-2 xl:col-start-auto' : ''}`}
               onMouseEnter={() => {
                   setActiveProduct(product.id);
                   import("@/lib/audio").then(m => m.audio.playHover());
@@ -140,7 +142,8 @@ export function Showcase() {
                 <span className="sr-only">Pogledaj detalje o {product.title}</span>
               </Link>
             </motion.div>
-          ))}
+          );
+        })}
         </div>
       </div>
     </section>

@@ -13,11 +13,11 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
-        <NewsTicker />
         <SocialProof />
         <BentoServices />
         <Showcase />
         <WebshopCTA />
+        <NewsTicker />
       </main>
       <Footer />
     </div>

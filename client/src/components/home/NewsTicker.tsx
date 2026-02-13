@@ -29,7 +29,7 @@ export function NewsTicker() {
           <Link href="/blog">
             <button className="group flex items-center gap-3 px-6 py-3 rounded-full border border-[#171A54]/10 hover:border-primary/50 hover:bg-primary/5 transition-all duration-300 cursor-pointer">
               <span className="text-sm font-medium text-[#171A54] group-hover:text-primary">Pogledaj arhivu</span>
-              <div className="w-8 h-8 rounded-full bg-[#171A54]/5 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all duration-300">
+              <div className="w-8 h-8 rounded-full bg-[#171A54]/5 flex items-center justify-center text-[#171A54] group-hover:bg-primary group-hover:text-white transition-all duration-300">
                 <ArrowRight className="w-4 h-4" />
               </div>
             </button>
