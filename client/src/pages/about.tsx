@@ -222,7 +222,7 @@ export default function About() {
              <div className="relative">
                <div className="absolute -inset-4 bg-primary/5 rounded-3xl -rotate-2" />
                <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-slate-200">
-                 <img src="/assets/service-engineering.png" alt="Engineering" className="w-full h-auto" />
+                 <img src="/assets/service-engineering.webp" alt="Engineering" className="w-full h-auto" />
                  
                  {/* Floating Badge */}
                  <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-white/50 max-w-[200px]">

@@ -18,6 +18,8 @@ import References from "@/pages/references";
 import ProjectAgrounija from "@/pages/project-agrounija";
 import Blog from "@/pages/blog";
 import NewsPost from "@/pages/news-post";
+import Privacy from "@/pages/privacy";
+import Terms from "@/pages/terms";
 import { useSmoothScroll } from "@/hooks/use-smooth-scroll";
 import { Preloader } from "@/components/layout/Preloader";
 import { ChatWidget } from "@/components/ChatWidget";
@@ -53,6 +55,8 @@ function Router() {
       <Route path="/references/agrounija" component={ProjectAgrounija} />
       <Route path="/blog" component={Blog} />
       <Route path="/news/:id" component={NewsPost} />
+      <Route path="/privacy" component={Privacy} />
+      <Route path="/terms" component={Terms} />
       <Route component={NotFound} />
     </Switch>
   );

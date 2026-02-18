@@ -2,7 +2,7 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { 
-  AlignRight, Phone, Mail, 
+  AlignRight, Phone, Mail, Linkedin, 
   Snowflake, Wind, Box, Server, Droplets, Zap, Thermometer,
   DraftingCompass, Factory, Wrench, BarChart3, Lightbulb, ShieldCheck,
   BookOpen, ChevronRight
@@ -112,13 +112,14 @@ export function Navbar() {
         </div>
 
         <div className="hidden md:flex items-center gap-2 relative z-10">
-          <div className="bg-black/10 px-3 py-1 rounded-full flex items-center gap-2 border border-white/5 backdrop-blur-sm group hover:bg-black/20 transition-colors">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]"></span>
-            </span>
-            <span className="text-white font-bold tracking-wider text-[10px] uppercase group-hover:tracking-widest transition-all duration-300">Servisni timovi: Aktivni (24/7)</span>
-          </div>
+          <a 
+            href="https://www.linkedin.com/feed/update/urn:li:activity:6899988285712596994" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-white/80 hover:text-white transition-colors p-1"
+          >
+            <Linkedin className="w-4 h-4" />
+          </a>
         </div>
       </div>
 

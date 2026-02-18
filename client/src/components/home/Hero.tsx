@@ -210,13 +210,13 @@ export function Hero() {
             <Magnetic>
               <Button 
                 size="lg" 
-                className="relative bg-primary hover:bg-primary/90 text-white px-6 py-3 text-base md:px-8 md:py-6 md:text-lg overflow-hidden group border border-white/10 shadow-[0_0_30px_rgba(0,183,255,0.3)] hover:shadow-[0_0_50px_rgba(0,183,255,0.5)] transition-all duration-500"
+                className="relative bg-primary hover:bg-primary/90 text-white px-6 py-3 text-base md:px-8 md:py-6 md:text-lg overflow-hidden group border border-white/10 shadow-[0_0_30px_rgba(0,183,255,0.3)] hover:shadow-[0_0_50px_rgba(0,183,255,0.5)] transition-all duration-500 rounded-full"
                 onClick={() => import("@/lib/audio").then(m => m.audio.playClick())}
                 asChild
               >
                 <Link href="/eco-cooling">
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-                  Naši Projekti <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  Naša Rešenja <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
             </Magnetic>
@@ -224,7 +224,7 @@ export function Hero() {
               <Button 
                 size="lg" 
                 variant="outline" 
-                className="border-white/20 bg-white/5 backdrop-blur-sm text-white hover:bg-white hover:text-[#171A54] px-6 py-3 text-base md:px-8 md:py-6 md:text-lg transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]"
+                className="border-white/20 bg-white/5 backdrop-blur-sm text-white hover:bg-white hover:text-[#171A54] px-6 py-3 text-base md:px-8 md:py-6 md:text-lg transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] rounded-full"
                 onClick={() => import("@/lib/audio").then(m => m.audio.playClick())}
                 asChild
               >

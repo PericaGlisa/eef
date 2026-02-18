@@ -3,7 +3,7 @@ import { FileText, ArrowRight, Linkedin, MapPin, Phone, Mail } from "lucide-reac
 
 export function Footer() {
   return (
-    <footer className="bg-[#0B0F19] text-white pt-20 pb-12 relative overflow-hidden">
+    <footer className="bg-[#0B0F19] text-white pt-20 pb-24 md:pb-12 relative overflow-hidden">
       {/* Vibrant Background Gradients - "Veseliji" vibe */}
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-50" />
       <div className="absolute -top-[300px] -right-[300px] w-[600px] h-[600px] bg-primary/10 rounded-full blur-[100px] animate-pulse pointer-events-none" />
@@ -128,11 +128,11 @@ export function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-slate-500 text-xs">
+        <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row md:justify-start items-center gap-6 md:gap-12">
+          <p className="text-slate-500 text-xs text-center md:text-left">
             © {new Date().getFullYear()} Eko Elektrofrigo. Sva prava zadržana.
           </p>
-          <div className="flex gap-4 text-xs text-slate-500">
+          <div className="flex gap-4 text-xs text-slate-500 flex-wrap justify-center">
              <Link href="/privacy" className="hover:text-white transition-colors">Politika privatnosti</Link>
              <Link href="/terms" className="hover:text-white transition-colors">Uslovi korišćenja</Link>
           </div>

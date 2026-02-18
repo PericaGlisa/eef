@@ -2,7 +2,8 @@ import { motion } from "framer-motion";
 
 export function SocialProof() {
   const partners = [
-    "Danfoss", "Copeland", "Bitzer", "Eliwell", "Dixell", "Ziehl-Abegg"
+    "Bitzer", "Danfoss", "Alfa Laval", "Alfa Lu-Ve", "Güven Soğutma", 
+    "Isolcell", "Sanyo", "Copeland", "Hongsen", "Eko Coolmax"
   ];
 
   return (
@@ -11,7 +12,7 @@ export function SocialProof() {
         <motion.div 
           initial={{ x: 0 }}
           animate={{ x: "-100%" }}
-          transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
           className="flex shrink-0 items-center"
         >
           {partners.map((partner, index) => (
@@ -30,7 +31,7 @@ export function SocialProof() {
         <motion.div 
           initial={{ x: 0 }}
           animate={{ x: "-100%" }}
-          transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
           className="flex shrink-0 items-center"
         >
           {partners.map((partner, index) => (
