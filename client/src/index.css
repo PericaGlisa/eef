@@ -39,6 +39,7 @@
   --radius-sm: calc(var(--radius) - 4px);
 
   --animate-grain: grain 8s steps(10) infinite;
+  --animate-shimmer: shimmer 2s infinite;
   
   @keyframes grain {
     0%, 100% { transform: translate(0, 0); }
@@ -51,6 +52,12 @@
     70% { transform: translate(0%, 15%); }
     80% { transform: translate(3%, 35%); }
     90% { transform: translate(-10%, 10%); }
+  }
+
+  @keyframes shimmer {
+    100% {
+      transform: translateX(100%);
+    }
   }
 }
 

@@ -2,6 +2,7 @@ import { useRoute, Link } from "wouter";
 import { solutionsData } from "@/data/solutions";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { Gallery } from "@/components/Gallery";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, CheckCircle2, Settings, Phone, FileText, ArrowRight } from "lucide-react";
 import NotFound from "@/pages/not-found";
@@ -139,6 +140,139 @@ export default function SolutionDetail() {
                   }}
                 />
               </motion.div>
+
+              {/* Gallery Section - Only for Rashladne Komore */}
+              {params.slug === "rashladne-komore" && (
+                <Gallery 
+                  title="Galerija Rešenja" 
+                  images={[
+                    "/assets/solutions/rashladne-komore/gallery-1.webp",
+                    "/assets/solutions/rashladne-komore/gallery-2.webp",
+                    "/assets/solutions/rashladne-komore/gallery-3.webp",
+                    "/assets/solutions/rashladne-komore/gallery-4.webp",
+                    "/assets/solutions/rashladne-komore/gallery-5.webp",
+                    "/assets/solutions/rashladne-komore/gallery-6.webp",
+                    "/assets/solutions/rashladne-komore/gallery-7.webp",
+                    "/assets/solutions/rashladne-komore/gallery-8.webp",
+                  ]} 
+                  embedded={true}
+                />
+              )}
+
+              {/* Gallery Section - Only for Tuneli za Smrzavanje */}
+              {params.slug === "tuneli-za-smrzavanje" && (
+                <Gallery 
+                  title="Galerija Rešenja" 
+                  images={[
+                    "/assets/solutions/tuneli-za-smrzavanje/gallery-1.webp",
+                    "/assets/solutions/tuneli-za-smrzavanje/gallery-2.webp",
+                    "/assets/solutions/tuneli-za-smrzavanje/gallery-3.webp",
+                    "/assets/solutions/tuneli-za-smrzavanje/gallery-4.webp",
+                  ]} 
+                  embedded={true}
+                />
+              )}
+
+              {/* Gallery Section - Only for ULO Komore */}
+              {params.slug === "ulo-komore" && (
+                <Gallery 
+                  title="Galerija Rešenja" 
+                  images={[
+                    "/assets/solutions/ulo-komore/gallery-1.webp",
+                    "/assets/solutions/ulo-komore/gallery-2.webp",
+                    "/assets/solutions/ulo-komore/gallery-3.webp",
+                    "/assets/solutions/ulo-komore/gallery-4.webp",
+                    "/assets/solutions/ulo-komore/gallery-5.webp",
+                    "/assets/solutions/ulo-komore/gallery-6.webp",
+                    "/assets/solutions/ulo-komore/gallery-7.webp",
+                    "/assets/solutions/ulo-komore/gallery-8.webp",
+                    "/assets/solutions/ulo-komore/gallery-9.webp",
+                    "/assets/solutions/ulo-komore/gallery-10.webp",
+                    "/assets/solutions/ulo-komore/gallery-11.webp",
+                    "/assets/solutions/ulo-komore/gallery-12.webp",
+                    "/assets/solutions/ulo-komore/gallery-13.webp",
+                  ]} 
+                  embedded={true}
+                />
+              )}
+
+              {/* Gallery Section - Only for Rashladni Agregati */}
+              {params.slug === "rashladni-agregati" && (
+                <Gallery 
+                  title="Galerija Rešenja" 
+                  images={[
+                    "/assets/solutions/rashladni-agregati/gallery-1.webp",
+                    "/assets/solutions/rashladni-agregati/gallery-2.webp",
+                    "/assets/solutions/rashladni-agregati/gallery-3.webp",
+                    "/assets/solutions/rashladni-agregati/gallery-4.webp",
+                    "/assets/solutions/rashladni-agregati/gallery-5.webp",
+                    "/assets/solutions/rashladni-agregati/gallery-6.webp",
+                    "/assets/solutions/rashladni-agregati/gallery-7.webp",
+                    "/assets/solutions/rashladni-agregati/gallery-8.webp",
+                    "/assets/solutions/rashladni-agregati/gallery-9.webp",
+                    "/assets/solutions/rashladni-agregati/gallery-10.webp",
+                  ]} 
+                  embedded={true}
+                />
+              )}
+
+              {/* Gallery Section - Only for Cileri */}
+              {params.slug === "cileri" && (
+                <Gallery 
+                  title="Galerija Rešenja" 
+                  images={[
+                    "/assets/solutions/cileri/gallery-1.webp",
+                    "/assets/solutions/cileri/gallery-2.webp",
+                    "/assets/solutions/cileri/gallery-3.webp",
+                    "/assets/solutions/cileri/gallery-4.webp",
+                    "/assets/solutions/cileri/gallery-5.webp",
+                    "/assets/solutions/cileri/gallery-6.webp",
+                    "/assets/solutions/cileri/gallery-7.webp",
+                    "/assets/solutions/cileri/gallery-8.webp",
+                  ]} 
+                  embedded={true}
+                />
+              )}
+
+              {/* Gallery Section - Only for Elektro Ormani */}
+              {params.slug === "elektro-ormani" && (
+                <Gallery 
+                  title="Galerija Rešenja" 
+                  images={[
+                    "/assets/solutions/elektro-ormani/gallery-1.webp",
+                    "/assets/solutions/elektro-ormani/gallery-2.webp",
+                    "/assets/solutions/elektro-ormani/gallery-3.webp",
+                    "/assets/solutions/elektro-ormani/gallery-4.webp",
+                    "/assets/solutions/elektro-ormani/gallery-5.webp",
+                    "/assets/solutions/elektro-ormani/gallery-6.webp",
+                    "/assets/solutions/elektro-ormani/gallery-7.webp",
+                    "/assets/solutions/elektro-ormani/gallery-8.webp",
+                    "/assets/solutions/elektro-ormani/gallery-9.webp",
+                    "/assets/solutions/elektro-ormani/gallery-10.webp",
+                    "/assets/solutions/elektro-ormani/gallery-11.webp",
+                    "/assets/solutions/elektro-ormani/gallery-12.webp",
+                  ]} 
+                  embedded={true}
+                />
+              )}
+
+              {/* Gallery Section - Only for Termoizolacija */}
+              {params.slug === "termoizolacija" && (
+                <Gallery 
+                  title="Galerija Rešenja" 
+                  images={[
+                    "/assets/solutions/termoizolacija/gallery-1.webp",
+                    "/assets/solutions/termoizolacija/gallery-2.webp",
+                    "/assets/solutions/termoizolacija/gallery-3.webp",
+                    "/assets/solutions/termoizolacija/gallery-4.webp",
+                    "/assets/solutions/termoizolacija/gallery-5.webp",
+                    "/assets/solutions/termoizolacija/gallery-6.webp",
+                    "/assets/solutions/termoizolacija/gallery-7.webp",
+                    "/assets/solutions/termoizolacija/gallery-8.webp",
+                  ]} 
+                  embedded={true}
+                />
+              )}
             </div>
 
             {/* Sidebar - Right Column */}
@@ -176,18 +310,28 @@ export default function SolutionDetail() {
                     ))}
                   </div>
 
-                  <div className="mt-8 pt-8 border-t border-white/10">
-                    <p className="text-xs text-white/40 mb-2 uppercase tracking-widest font-mono">Dostupnost</p>
-                    <div className="flex items-center gap-2 text-emerald-400 font-medium text-sm">
-                      <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                      </span>
-                      Dostupno za projektovanje
-                    </div>
-                  </div>
+
                 </div>
               </motion.div>
+
+              {/* Next Solution Teaser */}
+              {nextSolution && (
+                <div>
+                  <Link href={`/eco-cooling/${nextSolution.id}`}>
+                    <div className="block bg-gradient-to-br from-[#0e1035] to-[#1a1d5c] rounded-3xl p-1 cursor-pointer group hover:shadow-2xl hover:shadow-primary/20 transition-all duration-300">
+                      <div className="bg-[#0e1035] rounded-[22px] p-6 h-full relative overflow-hidden">
+                        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                          <ArrowRight className="w-12 h-12 text-white" />
+                        </div>
+                        
+                        <p className="text-xs text-primary font-mono uppercase tracking-widest mb-2">Sledeće Rešenje</p>
+                        <h4 className="text-lg font-bold text-white mb-1 group-hover:text-primary transition-colors">{nextSolution.title}</h4>
+                        <p className="text-white/40 text-sm line-clamp-1">{nextSolution.shortDesc}</p>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+              )}
 
               {/* Call to Action Card - Enhanced */}
               <div className="bg-white rounded-3xl p-8 border border-slate-200 shadow-xl shadow-slate-200/50 relative overflow-hidden group">
@@ -217,28 +361,13 @@ export default function SolutionDetail() {
                   </Button>
                 </div>
               </div>
-
-              {/* Next Solution Teaser */}
-              {nextSolution && (
-                <Link href={`/eco-cooling/${nextSolution.id}`}>
-                  <div className="block bg-gradient-to-br from-[#0e1035] to-[#1a1d5c] rounded-3xl p-1 cursor-pointer group hover:shadow-2xl hover:shadow-primary/20 transition-all duration-300">
-                    <div className="bg-[#0e1035] rounded-[22px] p-6 h-full relative overflow-hidden">
-                      <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <ArrowRight className="w-12 h-12 text-white" />
-                      </div>
-                      
-                      <p className="text-xs text-primary font-mono uppercase tracking-widest mb-2">Sledeće Rešenje</p>
-                      <h4 className="text-lg font-bold text-white mb-1 group-hover:text-primary transition-colors">{nextSolution.title}</h4>
-                      <p className="text-white/40 text-sm line-clamp-1">{nextSolution.shortDesc}</p>
-                    </div>
-                  </div>
-                </Link>
-              )}
             </div>
 
           </div>
         </div>
       </main>
+
+
 
       <Footer />
     </div>

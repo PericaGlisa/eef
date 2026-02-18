@@ -23,7 +23,7 @@ export default function EcoCooling() {
 
   const stats = [
     { value: "30+", label: "Godina Iskustva", icon: Award },
-    { value: "500+", label: "Završenih Projekata", icon: CheckCircle2 },
+    { value: "350+", label: "Završenih Projekata", icon: CheckCircle2 },
     { value: "40%", label: "Ušteda Energije", icon: Leaf },
     { value: "24/7", label: "Tehnička Podrška", icon: Zap },
   ];

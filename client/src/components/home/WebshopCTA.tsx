@@ -106,12 +106,33 @@ export function WebshopCTA() {
               className="flex-shrink-0 relative"
             >
               <a href="https://ekoelektrofrigo.rs" target="_blank" rel="noopener noreferrer" className="group block">
-                <Button className="relative bg-primary hover:bg-primary/90 text-white px-10 py-8 rounded-full text-xl font-bold shadow-[0_0_40px_rgba(86,170,74,0.3)] hover:shadow-[0_0_60px_rgba(86,170,74,0.5)] transition-all transform hover:-translate-y-1 overflow-hidden">
-                  <span className="relative z-20 flex items-center gap-3">
-                    Posetite Web Shop
-                    <ExternalLink className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                  </span>
-                </Button>
+                <motion.div
+                  animate={{ 
+                    scale: [1, 1.05, 1],
+                    boxShadow: [
+                      "0 0 40px rgba(86,170,74,0.3)",
+                      "0 0 70px rgba(86,170,74,0.6)",
+                      "0 0 40px rgba(86,170,74,0.3)"
+                    ]
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                  whileHover={{ scale: 1.08 }}
+                  className="rounded-full"
+                >
+                  <Button className="relative bg-primary hover:bg-primary/90 text-white px-10 py-8 rounded-full text-xl font-bold transition-all transform overflow-hidden w-full border-2 border-white/20">
+                    <span className="relative z-20 flex items-center gap-3">
+                      Posetite Web Shop
+                      <ExternalLink className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                    </span>
+                    
+                    {/* Shine Effect */}
+                    <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_2s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent z-10" />
+                  </Button>
+                </motion.div>
                 <p className="mt-4 text-center text-xs text-slate-500 font-mono">
                   Direktan pristup lageru 24/7
                 </p>

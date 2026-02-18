@@ -53,8 +53,8 @@ export default function Blog() {
              <div className="absolute inset-0 bg-[#0e1035]/80 z-10 mix-blend-multiply" />
              <div className="absolute inset-0 bg-gradient-to-t from-[#0e1035] via-transparent to-transparent z-10" />
              <div className="absolute inset-0 bg-[url('/assets/grid-pattern.svg')] opacity-10 z-10" />
-             <motion.img 
-               src="/assets/hero-slide-4.webp" 
+             <img 
+               src="/assets/blog7.webp" 
                alt="News Archive"  
                className="w-full h-full object-cover"
              />

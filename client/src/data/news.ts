@@ -53,5 +53,65 @@ Modifikovan sistem, pomoću ''Falling Film Chiller'', obezbeđuje hlađenje vode
 Medijum za hlađenje je etilen glikol, koji se obezbeđuje iz postojećeg sistema hlađenja, takođe projektovanog i izvedenog od strane Eko Elektrofrigo d.o.o.`,
     image: "/assets/blog3.webp",
     tags: ["#refrigeration", "#technology"]
+  },
+  {
+    id: 4,
+    date: "18. FEB 2026",
+    category: "Projekti",
+    title: "Minusna komora za arhivsku građu u novoj zgradi Arhiva Republičkog geodetskog zavoda",
+    desc: "Fleksibilnost u projektovanju i izvođenju, bez obzira na prostorna ograničenja, izbor rashladnog sredstva, tip skladištene robe i logističke zahteve, predstavlja naš zaštitni znak.",
+    content: `Fleksibilnost u projektovanju i izvođenju, bez obzira na prostorna ograničenja, izbor rashladnog sredstva, tip skladištene robe i logističke zahteve, predstavlja naš zaštitni znak. Novootvorena zgrada Arhiva Republičkog geodetskog zavoda, otvorena u Zemun polju, pored prostorija za smeštaj arhivske građe, sadrži i specijalizovane prostorije za dezinfekciju i restauraciju arhivske građe, u koje spada i minusna rashladna komora. Eko Elektrofrigo d.o.o.`,
+    image: "/assets/blog4.webp",
+    tags: ["#refrigeration", "#projects", "#archive"]
+  },
+  {
+    id: 5,
+    date: "18. FEB 2026",
+    category: "Događaji",
+    title: "Zajedno sa kompanijom MAF RODA AGROBOTIC na 89. Međunarodnom poljoprivrednom sajmu u Novom Sadu",
+    desc: "Veliko nam je zadovoljstvo da vas pozovemo da nas posetite na 89. Međunarodnom poljoprivrednom sajmu u Novom Sadu.",
+    content: `Veliko nam je zadovoljstvo da vas pozovemo da nas posetite na 89. Međunarodnom poljoprivrednom sajmu u Novom Sadu. Ove godine nastupamo zajedno sa našim partnerima, kompanijom MAF RODA AGROBOTIC, svetskim liderom u tehnologijama za sortiranje i pakovanje voća i povrća. 
+    
+    Očekujemo vas u Hali 1, gde ćemo vam predstaviti najnovija rešenja i inovacije u industriji. Dođite da razmenimo iskustva i dogovorimo buduću saradnju!`,
+    image: "/assets/blog5.webp",
+    tags: ["#eef", "#mafroda", "#novisadfair", "#agriculture"]
+  },
+  {
+    id: 6,
+    date: "18. FEB 2026",
+    category: "Projekti",
+    title: "RALU Logistika Srbija - Nova minusna komora",
+    desc: "U sastavni deo usluga koje Eko Elektrofrigo nudi, spadaju i rashladne komore. Naša ponuda obuhvata rashladne komore za skladištenje svih tipova proizvoda.",
+    content: `U sastavni deo usluga koje Eko Elektrofrigo nudi, spadaju i rashladne komore vrhunskog kvaliteta. Naša ponuda obuhvata projektovanje i izvođenje rashladnih komora za skladištenje svih tipova proizvoda, a naše dugogodišnje iskustvo i stručno znanje garantuju najadekvatnija rešenja pri različitim temperaturnim uslovima i zahtevima.
+    
+    Sa ponosom objavljujemo da je ovog meseca u kompaniji RALU Logistika Srbija uspešno završena i puštena u rad nova minusna komora za čuvanje smrznute robe, čime smo još jednom potvrdili našu posvećenost kvalitetu i pouzdanosti.`,
+    image: "/assets/blog6.webp",
+    tags: ["#refrigeration", "#logistics", "#coldstorage", "#projects"]
+  },
+  {
+    id: 7,
+    date: "18. FEB 2026",
+    category: "Događaji",
+    title: 'Učesnici internacionalnog samita "EER Summit for Industrial Refrigeration’s Distributors 2022"',
+    desc: 'Predstavnici Eko Elektrofrigo d.o.o. bili su učesnici internacionalnog samita "EER Summit for Industrial Refrigeration\'s Distributors 2022", čiji domaćin je bila kompanija Danfoss.',
+    content: `Predstavnici Eko Elektrofrigo d.o.o. bili su učesnici internacionalnog samita "EER Summit for Industrial Refrigeration's Distributors 2022", čiji domaćin je bila kompanija Danfoss. Povodom otvaranja nove fabrike u Poljskoj, kompanija Danfoss organizovala je dvodnevni događaj, koji je obuhvatao predavanja i treninge iz oblasti industrijskog hlađenja, kao i posetu samoj fabrici i obilazak proizvodnje. 
+    
+    Prvog dana samita govorilo se o novim Danfoss proizvodima, kao i njihovim prednostima i mogućoj primeni. Učesnici su takođe imali priliku da prošire svoje znanje o najčešće primenjivanim sistemima u svetu industrijskog hlađenja. Narednog dana priređena je poseta novootvorenoj Danfoss fabrici, gde se iz prve ruke mogla videti celokupna proizvodnja. 
+    
+    Nakon toga organizovan je i obilazak starog dela proizvodnje, a zatim i radionica, gde su se kroz praktične primere učesnici mogli upoznati sa svim benefitima novih proizvoda kompanije Danfoss. Kruna ovog događaja svakako ostaje razmena dobrih primera iz prakse, iskustava i nova poznanstva, koja uvek donose mogućnost za novim potencijalnim saradnjama i usavršavanjem.`,
+    image: "/assets/blog7.webp",
+    tags: ["#danfoss", "#summit", "#refrigeration", "#education"]
+  },
+  {
+    id: 8,
+    date: "18. FEB 2026",
+    category: "Projekti",
+    title: 'Isporuka opreme za "Sirogojno Company" d.o.o. i početak izvođačkih radova',
+    desc: 'Isporuka rashladnog agregata sa šest BITZER vijčanih kompresora i kompletnom Danfoss automatikom. Agregat je namenjen hladnjači za prijem, smrzavanje i čuvanje jagodičastog voća u okolini Bajine Bašte.',
+    content: `Isporuka rashladnog agregata sa šest BITZER vijčanih kompresora i kompletnom Danfoss automatikom. Agregat je namenjen hladnjači za prijem, smrzavanje i čuvanje jagodičastog voća u okolini Bajine Bašte. 
+    
+    "Sirogojno Company" d.o.o. je investitor ovog objekta koji sadrži četiri stacionarna tunela, lager komoru, prostor za pothladu svežeg voća, kao i ekspedit i predprostor za manipulaciju robom. Montažni radovi mogu da počnu.`,
+    image: "/assets/blog8.webp",
+    tags: ["#sirogojnocompany", "#bitzer", "#danfoss", "#coldstorage", "#fruits"]
   }
 ];

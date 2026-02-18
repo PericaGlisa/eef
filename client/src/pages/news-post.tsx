@@ -8,6 +8,8 @@ import NotFound from "@/pages/not-found";
 import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 
+import { Gallery } from "@/components/Gallery";
+
 export default function NewsPost() {
   const [match, params] = useRoute("/news/:id");
   const { toast } = useToast();
@@ -49,9 +51,9 @@ export default function NewsPost() {
         <div className="absolute -top-[20%] -right-[10%] w-[50vw] h-[50vw] bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="container mx-auto px-6 relative z-10 max-w-4xl">
-          <Link href="/">
+          <Link href="/blog">
             <Button variant="ghost" className="mb-8 text-white/50 hover:text-white hover:bg-white/5 -ml-4">
-              <ArrowLeft className="w-4 h-4 mr-2" /> Nazad na početnu
+              <ArrowLeft className="w-4 h-4 mr-2" /> Nazad na arhivnu stranicu
             </Button>
           </Link>
 
@@ -93,6 +95,141 @@ export default function NewsPost() {
                 ))}
               </div>
             </div>
+
+            {/* Gallery Section - Only for Masinski Fakultet post (id: 1) */}
+            {post.id === 1 && (
+              <div className="mt-12">
+                <Gallery 
+                  title="Galerija" 
+                  images={[
+                    "/assets/blog/masinski-fakultet/gallery-1.webp",
+                    "/assets/blog/masinski-fakultet/gallery-2.webp",
+                    "/assets/blog/masinski-fakultet/gallery-3.webp",
+                    "/assets/blog/masinski-fakultet/gallery-4.webp",
+                    "/assets/blog/masinski-fakultet/gallery-5.webp",
+                  ]} 
+                  embedded={true}
+                  transparent={true}
+                />
+              </div>
+            )}
+
+            {/* Gallery Section - Only for Zitostok post (id: 2) */}
+            {post.id === 2 && (
+              <div className="mt-12">
+                <Gallery 
+                  title="Galerija" 
+                  images={[
+                    "/assets/blog/zitostok/gallery-1.webp",
+                    "/assets/blog/zitostok/gallery-2.webp",
+                    "/assets/blog/zitostok/gallery-3.webp",
+                    "/assets/blog/zitostok/gallery-4.webp",
+                    "/assets/blog/zitostok/gallery-5.webp",
+                    "/assets/blog/zitostok/gallery-6.webp",
+                    "/assets/blog/zitostok/gallery-7.webp",
+                    "/assets/blog/zitostok/gallery-8.webp",
+                    "/assets/blog/zitostok/gallery-9.webp",
+                  ]} 
+                  embedded={true}
+                  transparent={true}
+                />
+              </div>
+            )}
+
+            {/* Gallery Section - Only for Delta Agrar Zajecar post (id: 3) */}
+            {post.id === 3 && (
+              <div className="mt-12">
+                <Gallery 
+                  title="Galerija" 
+                  images={[
+                    "/assets/blog/delta-agrar-zajecar/gallery-1.webp",
+                    "/assets/blog/delta-agrar-zajecar/gallery-2.webp",
+                    "/assets/blog/delta-agrar-zajecar/gallery-3.webp",
+                  ]} 
+                  embedded={true}
+                  transparent={true}
+                />
+              </div>
+            )}
+
+            {/* Gallery Section - Only for Archiv RGZ post (id: 4) */}
+            {post.id === 4 && (
+              <div className="mt-12">
+                <Gallery 
+                  title="Galerija" 
+                  images={[
+                    "/assets/blog/archiv-rgz/gallery-1.webp",
+                    "/assets/blog/archiv-rgz/gallery-2.webp",
+                    "/assets/blog/archiv-rgz/gallery-3.webp",
+                  ]} 
+                  embedded={true}
+                  transparent={true}
+                />
+              </div>
+            )}
+
+            {/* Gallery Section - Only for MAF RODA Sajam post (id: 5) */}
+            {post.id === 5 && (
+              <div className="mt-12">
+                <Gallery 
+                  title="Galerija" 
+                  images={[
+                    "/assets/blog/maf-roda-sajam/gallery-1.webp",
+                    "/assets/blog/maf-roda-sajam/gallery-2.webp",
+                  ]} 
+                  embedded={true}
+                  transparent={true}
+                />
+              </div>
+            )}
+
+            {/* Gallery Section - Only for RALU Logistika post (id: 6) */}
+            {post.id === 6 && (
+              <div className="mt-12">
+                <Gallery 
+                  title="Galerija" 
+                  images={[
+                    "/assets/blog/ralu-logistika/gallery-1.webp",
+                    "/assets/blog/ralu-logistika/gallery-2.webp",
+                    "/assets/blog/ralu-logistika/gallery-3.webp",
+                  ]} 
+                  embedded={true}
+                  transparent={true}
+                />
+              </div>
+            )}
+
+            {/* Gallery Section - Only for Danfoss Summit post (id: 7) */}
+            {post.id === 7 && (
+              <div className="mt-12">
+                <Gallery 
+                  title="Galerija" 
+                  images={[
+                    "/assets/blog/danfoss-summit/gallery-1.webp",
+                    "/assets/blog/danfoss-summit/gallery-2.webp",
+                    "/assets/blog/danfoss-summit/gallery-3.webp",
+                  ]} 
+                  embedded={true}
+                  transparent={true}
+                />
+              </div>
+            )}
+
+            {/* Gallery Section - Only for Sirogojno Company post (id: 8) */}
+            {post.id === 8 && (
+              <div className="mt-12">
+                <Gallery 
+                  title="Galerija" 
+                  images={[
+                    "/assets/blog/sirogojno-company/gallery-1.webp",
+                    "/assets/blog/sirogojno-company/gallery-2.webp",
+                    "/assets/blog/sirogojno-company/gallery-3.webp",
+                  ]} 
+                  embedded={true}
+                  transparent={true}
+                />
+              </div>
+            )}
 
             <div className="mt-12 pt-8 border-t border-white/10 flex flex-wrap gap-3">
               {post.tags?.map(tag => (

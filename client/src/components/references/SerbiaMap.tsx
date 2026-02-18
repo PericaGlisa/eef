@@ -215,7 +215,7 @@ function PopupContent({ location, onClose, className = "" }: { location: Locatio
         </button>
       </div>
       <div
-        className="flex-1 space-y-3 overflow-y-auto custom-scrollbar pr-2 min-h-0"
+        className="flex-1 space-y-4 overflow-y-auto custom-scrollbar pr-2 min-h-0"
         style={{ touchAction: 'pan-y', overscrollBehavior: 'contain' }}
         onWheel={(e) => e.stopPropagation()} 
         onTouchStart={(e) => e.stopPropagation()}
@@ -237,10 +237,12 @@ function PopupContent({ location, onClose, className = "" }: { location: Locatio
 
           if (project.link) {
             return (
-              <Link key={idx} href={project.link}>
-                <a className="block bg-white/5 rounded-lg p-3 text-sm border border-white/5 hover:bg-white/10 transition-colors group">
-                  <Content />
-                </a>
+              <Link 
+                key={idx} 
+                href={project.link}
+                className="block bg-white/5 rounded-lg p-3 text-sm border border-white/5 hover:bg-white/10 transition-colors group"
+              >
+                <Content />
               </Link>
             );
           }

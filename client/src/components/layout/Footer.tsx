@@ -46,6 +46,7 @@ export function Footer() {
                 { name: 'Kompanija', href: '/about' },
                 { name: 'Partneri', href: '/partners' },
                 { name: 'Reference', href: '/references' },
+                { name: 'Arhiva Vesti', href: '/blog' },
                 { name: 'Dokumentacija', href: '/documentation' },
                 { name: 'Kontakt', href: '/contact' }
               ].map((item) => (

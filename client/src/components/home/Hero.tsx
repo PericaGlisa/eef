@@ -198,7 +198,7 @@ export function Hero() {
             className="text-base sm:text-lg text-white/40 font-mono h-[32px] flex items-center gap-3 mt-4"
           >
              <div className="w-1 h-8 bg-primary/50" />
-            <TypewriterText text="30 godina tradicije. 500+ projekata." />
+            <TypewriterText text="30 godina tradicije. 350+ projekata." />
           </motion.div>
 
           <motion.div

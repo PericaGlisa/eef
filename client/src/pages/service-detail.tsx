@@ -2,6 +2,7 @@ import { useRoute, Link } from "wouter";
 import { servicesContent } from "@/data/services-content";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { Gallery } from "@/components/Gallery";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, CheckCircle2, Phone, Mail, Settings, FileText, ArrowRight } from "lucide-react";
 import NotFound from "@/pages/not-found";
@@ -139,6 +140,56 @@ export default function ServiceDetail() {
                   }}
                 />
               </motion.div>
+
+              {/* Gallery Section - Only for Engineering */}
+              {params.slug === "engineering" && (
+                <Gallery 
+                  title="Galerija Usluge" 
+                  images={[
+                    "/assets/services/engineering/gallery-1.webp",
+                    "/assets/services/engineering/gallery-2.webp",
+                    "/assets/services/engineering/gallery-3.webp",
+                    "/assets/services/engineering/gallery-4.webp",
+                    "/assets/services/engineering/gallery-5.webp",
+                    "/assets/services/engineering/gallery-6.webp",
+                    "/assets/services/engineering/gallery-7.webp",
+                    "/assets/services/engineering/gallery-8.webp",
+                    "/assets/services/engineering/gallery-9.webp",
+                    "/assets/services/engineering/gallery-10.webp",
+                  ]} 
+                  embedded={true}
+                />
+              )}
+
+              {/* Gallery Section - Only for Execution */}
+              {params.slug === "execution" && (
+                <Gallery 
+                  title="Galerija Usluge" 
+                  images={[
+                    "/assets/services/execution/gallery-1.webp",
+                    "/assets/services/execution/gallery-2.webp",
+                    "/assets/services/execution/gallery-3.webp",
+                    "/assets/services/execution/gallery-4.webp",
+                    "/assets/services/execution/gallery-5.webp",
+                  ]} 
+                  embedded={true}
+                />
+              )}
+
+              {/* Gallery Section - Only for Maintenance */}
+              {params.slug === "maintenance" && (
+                <Gallery 
+                  title="Galerija Usluge" 
+                  images={[
+                    "/assets/services/maintenance/gallery-1.webp",
+                    "/assets/services/maintenance/gallery-2.webp",
+                    "/assets/services/maintenance/gallery-3.webp",
+                    "/assets/services/maintenance/gallery-4.webp",
+                    "/assets/services/maintenance/gallery-5.webp",
+                  ]} 
+                  embedded={true}
+                />
+              )}
             </div>
 
             {/* Sidebar - Right Column */}
@@ -175,19 +226,27 @@ export default function ServiceDetail() {
                       </div>
                     ))}
                   </div>
-
-                  <div className="mt-8 pt-8 border-t border-white/10">
-                    <p className="text-xs text-white/40 mb-2 uppercase tracking-widest font-mono">Dostupnost</p>
-                    <div className="flex items-center gap-2 text-emerald-400 font-medium text-sm">
-                      <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                      </span>
-                      Dostupno odmah
-                    </div>
-                  </div>
                 </div>
               </motion.div>
+
+              {/* Next Service Teaser */}
+              {nextService && (
+                <div>
+                  <Link href={`/services/${nextService.id}`}>
+                    <div className="block bg-gradient-to-br from-[#0e1035] to-[#1a1d5c] rounded-3xl p-1 cursor-pointer group hover:shadow-2xl hover:shadow-primary/20 transition-all duration-300">
+                      <div className="bg-[#0e1035] rounded-[22px] p-6 h-full relative overflow-hidden">
+                        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                          <ArrowRight className="w-12 h-12 text-white" />
+                        </div>
+                        
+                        <p className="text-xs text-primary font-mono uppercase tracking-widest mb-2">Sledeća Usluga</p>
+                        <h4 className="text-lg font-bold text-white mb-1 group-hover:text-primary transition-colors">{nextService.title}</h4>
+                        <p className="text-white/40 text-sm line-clamp-1">{nextService.shortDesc}</p>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+              )}
 
               {/* Contact Card - Enhanced */}
               <div className="bg-white rounded-3xl p-8 border border-slate-200 shadow-xl shadow-slate-200/50 relative overflow-hidden group">
@@ -217,23 +276,6 @@ export default function ServiceDetail() {
                   </Button>
                 </div>
               </div>
-
-              {/* Next Service Teaser */}
-              {nextService && (
-                <Link href={`/services/${nextService.id}`}>
-                  <div className="block bg-gradient-to-br from-[#0e1035] to-[#1a1d5c] rounded-3xl p-1 cursor-pointer group hover:shadow-2xl hover:shadow-primary/20 transition-all duration-300">
-                    <div className="bg-[#0e1035] rounded-[22px] p-6 h-full relative overflow-hidden">
-                      <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <ArrowRight className="w-12 h-12 text-white" />
-                      </div>
-                      
-                      <p className="text-xs text-primary font-mono uppercase tracking-widest mb-2">Sledeća Usluga</p>
-                      <h4 className="text-lg font-bold text-white mb-1 group-hover:text-primary transition-colors">{nextService.title}</h4>
-                      <p className="text-white/40 text-sm line-clamp-1">{nextService.shortDesc}</p>
-                    </div>
-                  </div>
-                </Link>
-              )}
             </div>
 
           </div>

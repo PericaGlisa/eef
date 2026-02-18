@@ -315,9 +315,9 @@ export default function Documentation() {
                 </Button>
                 
                 <Button size="lg" variant="outline" className="w-full sm:w-auto border-white/20 text-white hover:bg-white/10 hover:text-white hover:border-white/40 font-bold px-8 h-14 text-base rounded-full backdrop-blur-sm transition-all" asChild>
-                  <a href="mailto:office@ekorashlade.com">
+                  <a href="mailto:office@eef.rs">
                     <Mail className="mr-2 w-4 h-4" />
-                    office@ekorashlade.com
+                    office@eef.rs
                   </a>
                 </Button>
               </div>
