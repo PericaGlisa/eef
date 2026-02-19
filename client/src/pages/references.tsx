@@ -81,7 +81,7 @@ export default function References() {
             {/* Hero Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 border-t border-white/10 pt-12">
               {[
-                { label: "Završenih Projekata", value: "500+" },
+                { label: "Završenih Projekata", value: "350+" },
                 { label: "Zadovoljnih Klijenata", value: "200+" },
                 { label: "Godina Iskustva", value: "30+" },
                 { label: "Država u Regionu", value: "8" },
