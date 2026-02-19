@@ -19,7 +19,7 @@ export function Footer() {
               <img 
                 src="/assets/logo.png" 
                 alt="EEF" 
-                className="h-20 md:h-28 w-auto brightness-0 invert group-hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] transition-all duration-500" 
+                className="h-14 md:h-20 w-auto brightness-0 invert group-hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] transition-all duration-500" 
               />
             </Link>
             <p className="text-slate-400 text-base leading-relaxed max-w-sm">
@@ -61,7 +61,7 @@ export function Footer() {
           </div>
 
           {/* Column 3: Certificates (Visual Card) */}
-          <div className="space-y-8">
+          <div className="space-y-8 md:col-span-2 lg:col-span-1">
             <h4 className="text-lg font-bold text-white flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-primary" />
               Kvalitet
@@ -89,7 +89,7 @@ export function Footer() {
         </div>
 
         {/* ROW 2: Contact Info Cards (Redesigned) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 border-t border-white/5 pt-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12 border-t border-white/5 pt-12">
             <div className="flex items-start gap-4 p-4 rounded-xl hover:bg-white/5 transition-colors duration-300">
                 <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
                     <MapPin className="w-6 h-6" />
@@ -112,7 +112,7 @@ export function Footer() {
                 </div>
             </div>
 
-            <div className="flex items-start gap-4 p-4 rounded-xl hover:bg-white/5 transition-colors duration-300">
+            <div className="flex items-start gap-4 p-4 rounded-xl hover:bg-white/5 transition-colors duration-300 md:col-span-2 lg:col-span-1">
                 <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
                     <Mail className="w-6 h-6" />
                 </div>

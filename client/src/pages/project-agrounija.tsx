@@ -17,6 +17,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import Autoplay from "embla-carousel-autoplay";
 
 export default function ProjectAgrounija() {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
@@ -205,6 +206,11 @@ export default function ProjectAgrounija() {
                     align: "start",
                     loop: true,
                   }}
+                  plugins={[
+                    Autoplay({
+                      delay: 3000,
+                    }),
+                  ]}
                   className="w-full"
                 >
                   <CarouselContent className="-ml-2 md:-ml-4">

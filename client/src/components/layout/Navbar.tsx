@@ -131,11 +131,11 @@ export function Navbar() {
       >
         <div className="container mx-auto px-6 flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
+          <Link href="/" className="flex items-center gap-3 group shrink-0">
             <img 
               src="/assets/logo.png" 
               alt="EEF Logo" 
-              className="h-12 md:h-14 lg:h-16 w-auto brightness-0 invert group-hover:brightness-100 group-hover:invert-0 transition-all duration-500" 
+              className="h-12 md:h-14 lg:h-16 w-auto object-contain brightness-0 invert group-hover:brightness-100 group-hover:invert-0 transition-all duration-500" 
             />
           </Link>
 
@@ -321,6 +321,24 @@ export function Navbar() {
                     viewport={{ once: true }}
                     className="mt-auto pt-12 border-t border-white/10 grid grid-cols-1 gap-8"
                   >
+                     <Button 
+                        variant="default"
+                        size="lg"
+                        className="w-full bg-primary hover:bg-primary/90 text-white transition-all duration-300 shadow-[0_0_15px_rgba(86,170,74,0.4)] hover:shadow-[0_0_25px_rgba(86,170,74,0.6)] text-sm font-bold uppercase tracking-wide h-12 rounded-xl"
+                        onClick={() => {
+                          import("@/lib/audio").then(m => m.audio.playClick());
+                          setIsOpen(false);
+                        }}
+                        asChild
+                     >
+                       <Link href="/contact">
+                         <span className="flex items-center justify-center gap-2">
+                           Zatražite ponudu
+                           <ChevronRight className="w-4 h-4" />
+                         </span>
+                       </Link>
+                     </Button>
+
                      <div>
                         <h4 className="text-xs font-bold uppercase tracking-widest text-primary/80 mb-6 flex items-center gap-2">
                           <span className="w-8 h-[1px] bg-primary/50"></span>
