@@ -20,9 +20,9 @@ export const servicesContent: ServiceItem[] = [
     shortDesc: "Inženjerska podrška i projektovanje najsavremenijih rashladnih sistema.",
     icon: DraftingCompass,
     image: "/assets/service-engineering.webp",
-    features: ["26 godina iskustva", "Tim od 8 inženjera", "CO2 i NH3 rešenja", "3D Modelovanje"],
+    features: ["30+ godina iskustva", "350+ završenih projekata", "8+ inženjera", "3D Modelovanje"],
     fullContent: `
-      <p>Uz 26 godina iskustva i tim od 8 inženjera, veliki broj ozbiljnih referenci, garantuje se najviši nivo kvaliteta inženjering usluga projektovanja.</p>
+      <p>Uz 30+ godina iskustva, 350+ završenih projekata i tim od 8+ inženjera, garantuje se najviši nivo kvaliteta inženjering usluga projektovanja.</p>
       <p>Uz kreativan timski rad, cilj je da pomognemo našim klijentima da ostvare svoje zahteve, dodajući vrednost kroz tehničku iznovrsnost i efikasnu organizaciju.</p>
       <p>Nudimo kompletnu projektnu dokumentaciju, jasno izrađenu i prilagođenu mogućim narednim fazama. U bilo kom trenutku smo dovoljno fleksibilni da se prilagodimo promenama u Vašim zahtevima i pružimo Vam savršeno odgovarajuće rešenje.</p>
       <p>Projektujemo sisteme sa različitim rashladnim fluidima, od freona i amonijaka, do najsavremenijih CO2 rešenja.</p>

@@ -62,7 +62,7 @@ const servicesData = [
 
 const stats = [
   { value: "24/7", label: "Servisna Podrška", icon: Clock },
-  { value: "15+", label: "Stručnih Inženjera", icon: Users },
+  { value: "8+", label: "Stručnih Inženjera", icon: Users },
   { value: "100%", label: "Garancija Kvaliteta", icon: ShieldCheck },
   { value: "ISO", label: "Sertifikovani Procesi", icon: CheckCircle2 },
 ];
