@@ -7,9 +7,26 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { motion, AnimatePresence } from "framer-motion";
 import { MapPin, Phone, Mail, Clock, MessageSquare, ArrowRight, ShieldCheck, Zap, Users } from "lucide-react";
 import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
 
 export default function Contact() {
   const [selectedTopic, setSelectedTopic] = useState<string>("project");
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    company: "",
+    email: "",
+    message: "",
+    projectType: "",
+    equipmentId: "",
+    urgency: "",
+    position: "",
+    portfolio: "",
+    website: "",
+    projectTypeOther: "",
+  });
 
   const contactCards = [
     {
@@ -104,7 +121,7 @@ export default function Contact() {
 
             {/* Topic Selector Cards */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {[
+                {[
                 { id: "project", label: "Novi Projekat", icon: Zap },
                 { id: "service", label: "Servis", icon: ShieldCheck },
                 { id: "career", label: "Karijera", icon: Users },
@@ -112,7 +129,18 @@ export default function Contact() {
               ].map((option) => (
                 <div 
                   key={option.id}
-                  onClick={() => setSelectedTopic(option.id)}
+                  onClick={() => {
+                    setSelectedTopic(option.id);
+                    setFormData((prev) => ({
+                      ...prev,
+                      projectType: "",
+                      equipmentId: "",
+                      urgency: "",
+                      position: "",
+                      portfolio: "",
+                      projectTypeOther: "",
+                    }));
+                  }}
                   className={`p-4 border cursor-pointer transition-all duration-300 flex flex-col items-center justify-center gap-3 rounded-xl backdrop-blur-md group ${
                     selectedTopic === option.id 
                       ? "bg-primary/20 border-primary text-white shadow-[0_0_20px_rgba(86,170,74,0.3)]" 
@@ -168,8 +196,89 @@ export default function Contact() {
                   Odgovor u roku od 24h
                 </div>
               </div>
+              <div className="text-xs text-slate-400 font-mono mb-6">
+                Polja označena * su obavezna.
+              </div>
 
-              <form className="space-y-6">
+              <form
+                className="space-y-6"
+                onSubmit={async (event) => {
+                  event.preventDefault();
+                  if (isSubmitting) {
+                    return;
+                  }
+                  const missing: string[] = [];
+                  if (!formData.name.trim()) missing.push("Ime i prezime");
+                  if (!formData.email.trim()) missing.push("Email");
+                  if (!formData.message.trim()) missing.push("Poruka");
+                  if (selectedTopic === "project" && !formData.projectType.trim()) {
+                    missing.push("Tip projekta");
+                  }
+                  if (selectedTopic === "project" && formData.projectType === "other" && !formData.projectTypeOther.trim()) {
+                    missing.push("Drugi tip projekta");
+                  }
+                  if (selectedTopic === "service" && !formData.equipmentId.trim()) {
+                    missing.push("ID opreme");
+                  }
+                  if (selectedTopic === "service" && !formData.urgency.trim()) {
+                    missing.push("Hitnost");
+                  }
+                  if (selectedTopic === "career" && !formData.position.trim()) {
+                    missing.push("Pozicija");
+                  }
+                  if (missing.length > 0) {
+                    toast({
+                      title: "Nedostaju obavezni podaci",
+                      description: missing.join(", "),
+                      variant: "destructive",
+                    });
+                    return;
+                  }
+                  setIsSubmitting(true);
+                  try {
+                    await apiRequest("POST", "/api/contact", {
+                      topic: selectedTopic,
+                      name: formData.name.trim(),
+                      company: formData.company.trim(),
+                      email: formData.email.trim(),
+                      message: formData.message.trim(),
+                      projectType: formData.projectType,
+                      projectTypeOther: formData.projectTypeOther.trim(),
+                      equipmentId: formData.equipmentId.trim(),
+                      urgency: formData.urgency,
+                      position: formData.position.trim(),
+                      portfolio: formData.portfolio.trim(),
+                      website: formData.website.trim(),
+                    });
+                    toast({
+                      title: "Upit je uspešno poslat",
+                      description: "Javićemo se u najkraćem roku.",
+                    });
+                    setFormData({
+                      name: "",
+                      company: "",
+                      email: "",
+                      message: "",
+                      projectType: "",
+                      equipmentId: "",
+                      urgency: "",
+                      position: "",
+                      portfolio: "",
+                      website: "",
+                      projectTypeOther: "",
+                    });
+                    setSelectedTopic("project");
+                  } catch (error) {
+                    toast({
+                      title: "Slanje nije uspelo",
+                      description: "Pokušajte ponovo ili nas kontaktirajte direktno.",
+                      variant: "destructive",
+                    });
+                  } finally {
+                    setIsSubmitting(false);
+                  }
+                }}
+              >
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={selectedTopic}
@@ -182,51 +291,97 @@ export default function Contact() {
                     {/* Common Fields */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                          <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Ime i Prezime</label>
-                          <Input className="bg-slate-50 border-slate-200 h-12 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" placeholder="Vaše ime" />
+                          <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                            Ime i Prezime <span className="text-red-500">*</span>
+                          </label>
+                          <Input
+                            className="bg-slate-50 border-slate-200 h-12 text-[#171A54] placeholder:text-slate-400 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                            placeholder="Vaše ime"
+                            value={formData.name}
+                            onChange={(event) => setFormData((prev) => ({ ...prev, name: event.target.value }))}
+                          />
                         </div>
                         <div className="space-y-2">
                           <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Kompanija</label>
-                          <Input className="bg-slate-50 border-slate-200 h-12 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" placeholder="Naziv kompanije" />
+                          <Input
+                            className="bg-slate-50 border-slate-200 h-12 text-[#171A54] placeholder:text-slate-400 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                            placeholder="Naziv kompanije"
+                            value={formData.company}
+                            onChange={(event) => setFormData((prev) => ({ ...prev, company: event.target.value }))}
+                          />
                         </div>
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Email Adresa</label>
-                        <Input className="bg-slate-50 border-slate-200 h-12 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" placeholder="vas@email.com" />
+                        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                          Email Adresa <span className="text-red-500">*</span>
+                        </label>
+                        <Input
+                          type="email"
+                          className="bg-slate-50 border-slate-200 h-12 text-[#171A54] placeholder:text-slate-400 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                          placeholder="vas@email.com"
+                          value={formData.email}
+                          onChange={(event) => setFormData((prev) => ({ ...prev, email: event.target.value }))}
+                        />
                     </div>
 
                     {/* Dynamic Fields */}
                     {selectedTopic === 'project' && (
                         <div className="space-y-2">
-                          <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Tip Projekta</label>
-                          <Select>
-                              <SelectTrigger className="bg-slate-50 border-slate-200 h-12 focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                          <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                            Tip Projekta <span className="text-red-500">*</span>
+                          </label>
+                          <Select
+                            value={formData.projectType}
+                            onValueChange={(value) => setFormData((prev) => ({ ...prev, projectType: value, projectTypeOther: "" }))}
+                          >
+                              <SelectTrigger className="bg-slate-50 border-slate-200 h-12 text-[#171A54] data-[placeholder]:text-slate-400 focus:ring-2 focus:ring-primary/20 focus:border-primary">
                                 <SelectValue placeholder="Izaberite tip..." />
                               </SelectTrigger>
-                              <SelectContent>
+                              <SelectContent className="bg-white text-[#171A54] border-slate-200">
                                 <SelectItem value="industrial">Industrijska Hladnjača</SelectItem>
                                 <SelectItem value="commercial">Komercijalni Objekat</SelectItem>
                                 <SelectItem value="hvac">HVAC Sistem</SelectItem>
                                 <SelectItem value="solar">Solarna Elektrana</SelectItem>
+                                <SelectItem value="other">Ostalo (upišite)</SelectItem>
                               </SelectContent>
                           </Select>
+                          {formData.projectType === "other" && (
+                            <Input
+                              className="mt-3 bg-slate-50 border-slate-200 h-12 text-[#171A54] placeholder:text-slate-400 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                              placeholder="Unesite tip projekta"
+                              value={formData.projectTypeOther}
+                              onChange={(event) => setFormData((prev) => ({ ...prev, projectTypeOther: event.target.value }))}
+                            />
+                          )}
                         </div>
                     )}
 
                     {selectedTopic === 'service' && (
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                           <div className="space-y-2">
-                              <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">ID Opreme</label>
-                              <Input className="bg-slate-50 border-slate-200 h-12 focus:ring-2 focus:ring-primary/20 focus:border-primary" placeholder="npr. CH-2023-01" />
+                              <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                                ID Opreme <span className="text-red-500">*</span>
+                              </label>
+                              <Input
+                                className="bg-slate-50 border-slate-200 h-12 text-[#171A54] placeholder:text-slate-400 focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                                placeholder="npr. CH-2023-01"
+                                value={formData.equipmentId}
+                                onChange={(event) => setFormData((prev) => ({ ...prev, equipmentId: event.target.value }))}
+                              />
                           </div>
                           <div className="space-y-2">
-                              <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Hitnost</label>
-                              <Select>
-                                <SelectTrigger className="bg-slate-50 border-slate-200 h-12 focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                              <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                                Hitnost <span className="text-red-500">*</span>
+                              </label>
+                              <Select
+                                value={formData.urgency}
+                                onValueChange={(value) => setFormData((prev) => ({ ...prev, urgency: value }))}
+                              >
+                                <SelectTrigger className="bg-slate-50 border-slate-200 h-12 text-[#171A54] data-[placeholder]:text-slate-400 focus:ring-2 focus:ring-primary/20 focus:border-primary">
                                     <SelectValue placeholder="Nivo hitnosti..." />
                                 </SelectTrigger>
-                                <SelectContent>
+                                <SelectContent className="bg-white text-[#171A54] border-slate-200">
                                     <SelectItem value="low">Redovno Održavanje</SelectItem>
                                     <SelectItem value="medium">Manji Kvar (48h)</SelectItem>
                                     <SelectItem value="high" className="text-red-600 font-bold">Urgentno (4h odziv)</SelectItem>
@@ -239,25 +394,59 @@ export default function Contact() {
                     {selectedTopic === 'career' && (
                         <div className="space-y-6">
                           <div className="space-y-2">
-                              <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Pozicija</label>
-                              <Input className="bg-slate-50 border-slate-200 h-12 focus:ring-2 focus:ring-primary/20 focus:border-primary" placeholder="npr. Servisni Tehničar" />
+                              <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                                Pozicija <span className="text-red-500">*</span>
+                              </label>
+                              <Input
+                                className="bg-slate-50 border-slate-200 h-12 text-[#171A54] placeholder:text-slate-400 focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                                placeholder="npr. Servisni Tehničar"
+                                value={formData.position}
+                                onChange={(event) => setFormData((prev) => ({ ...prev, position: event.target.value }))}
+                              />
                           </div>
                           <div className="space-y-2">
                               <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">LinkedIn / Portfolio</label>
-                              <Input className="bg-slate-50 border-slate-200 h-12 focus:ring-2 focus:ring-primary/20 focus:border-primary" placeholder="URL profila" />
+                              <Input
+                                className="bg-slate-50 border-slate-200 h-12 text-[#171A54] placeholder:text-slate-400 focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                                placeholder="URL profila"
+                                value={formData.portfolio}
+                                onChange={(event) => setFormData((prev) => ({ ...prev, portfolio: event.target.value }))}
+                              />
                           </div>
                         </div>
                     )}
                   </motion.div>
                 </AnimatePresence>
 
+                <div className="hidden">
+                  <label>Website</label>
+                  <Input
+                    autoComplete="off"
+                    tabIndex={-1}
+                    className="text-[#171A54] placeholder:text-slate-400"
+                    value={formData.website}
+                    onChange={(event) => setFormData((prev) => ({ ...prev, website: event.target.value }))}
+                  />
+                </div>
+
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Poruka</label>
-                  <Textarea className="bg-slate-50 border-slate-200 min-h-[150px] focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none" placeholder="Detaljniji opis vašeg zahteva..." />
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                    Poruka <span className="text-red-500">*</span>
+                  </label>
+                  <Textarea
+                    className="bg-slate-50 border-slate-200 min-h-[150px] text-[#171A54] placeholder:text-slate-400 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none"
+                    placeholder="Detaljniji opis vašeg zahteva..."
+                    value={formData.message}
+                    onChange={(event) => setFormData((prev) => ({ ...prev, message: event.target.value }))}
+                  />
                 </div>
                 
-                <Button size="lg" className="w-full bg-[#171A54] hover:bg-primary text-white font-bold h-14 text-lg rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1">
-                  Pošalji Upit <ArrowRight className="ml-2 w-5 h-5" />
+                <Button
+                  size="lg"
+                  className="w-full bg-[#171A54] hover:bg-primary text-white font-bold h-14 text-lg rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Šaljem..." : "Pošalji Upit"} <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </form>
             </div>

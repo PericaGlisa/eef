@@ -154,7 +154,7 @@ export default function Documentation() {
         <div className="container mx-auto px-6 relative z-10">
           
           {/* Controls Bar */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12 sticky top-24 z-30 bg-[#F8FAFC]/80 backdrop-blur-xl p-4 -mx-4 rounded-2xl border border-slate-200/50 shadow-sm">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12 bg-[#F8FAFC]/80 backdrop-blur-xl p-4 -mx-4 rounded-2xl border border-slate-200/50 shadow-sm">
             
             {/* Filter Tabs */}
             <div className="flex items-center gap-2 bg-slate-100 p-1 rounded-xl">

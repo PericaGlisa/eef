@@ -354,10 +354,10 @@ export default function SolutionDetail() {
                     className="w-full border-slate-200 bg-white text-[#0e1035] hover:bg-slate-50 hover:text-[#0e1035] h-12 text-base"
                     asChild
                   >
-                    <Link href="/contact">
+                    <a href="tel:+381113757287">
                       <Phone className="w-4 h-4 mr-2" />
-                      Kontaktirajte nas
-                    </Link>
+                      +381 11 375 72 87
+                    </a>
                   </Button>
                 </div>
               </div>

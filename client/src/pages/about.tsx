@@ -116,10 +116,12 @@ const history = [
 ];
 
 const team = [
-  { name: "Marko Petrović", role: "Glavni Inženjer", img: "/assets/team-professional.png" },
-  { name: "Ana Jovanović", role: "Dizajner Sistema", img: "/assets/team-professional.png" }, // Using placeholder
-  { name: "Nikola Đorđević", role: "Servisni Menadžer", img: "/assets/team-professional.png" },
-  { name: "Jelena Nikolić", role: "R&D Specijalista", img: "/assets/team-professional.png" }
+  { name: "Boban Čelarević", role: "Tehnička podrška", img: "/assets/team-professional.png" },
+  { name: "Damjan Novaković", role: "Inženjer mašinstva", img: "/assets/team-professional.png" },
+  { name: "Milan Parić", role: "Inženjer mašinstva", img: "/assets/team-professional.png" },
+  { name: "Marica Marinković", role: "Inženjer mašinstva", img: "/assets/team-professional.png" },
+  { name: "Uroš Milošević", role: "Inženjer mašinstva", img: "/assets/team-professional.png" },
+  { name: "Dane Cvijan", role: "Inženjer mašinstva", img: "/assets/team-professional.png" }
 ];
 
 export default function About() {
@@ -355,7 +357,7 @@ export default function About() {
              </Button>
            </div>
 
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {team.map((member, i) => (
                 <div key={i} className="group cursor-pointer">
                   <div className="relative overflow-hidden rounded-2xl mb-6 aspect-[4/5]">

@@ -1,5 +1,4 @@
-import { Switch, Route, useLocation } from "wouter";
-import { useEffect } from "react";
+import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -21,7 +20,6 @@ import NewsPost from "@/pages/news-post";
 import Privacy from "@/pages/privacy";
 import Terms from "@/pages/terms";
 import { useSmoothScroll } from "@/hooks/use-smooth-scroll";
-import { Preloader } from "@/components/layout/Preloader";
 import { ChatWidget } from "@/components/ChatWidget";
 
 function NoiseOverlay() {
@@ -66,7 +64,6 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Preloader />
         <NoiseOverlay />
         <ChatWidget />
         <Toaster />

@@ -87,6 +87,7 @@ export function Navbar() {
         { name: "Diplome", href: "/documentation/diplomas", icon: BookOpen, desc: "Partnerska priznanja" }
       ]
     },
+    { name: "Kontakt", href: "/contact" },
   ];
 
   return (
@@ -222,16 +223,20 @@ export function Navbar() {
              <Button 
                 variant="default"
                 size="sm"
-                className="hidden lg:flex bg-primary hover:bg-primary/90 text-white transition-all duration-300 shadow-[0_0_15px_rgba(86,170,74,0.4)] hover:shadow-[0_0_25px_rgba(86,170,74,0.6)] hover:-translate-y-0.5 text-xs font-bold uppercase tracking-wide h-9 px-6 rounded-full border border-white/10"
+                className="hidden lg:flex bg-primary hover:bg-primary/90 text-white transition-all duration-300 shadow-[0_0_15px_rgba(86,170,74,0.4)] hover:shadow-[0_0_25px_rgba(86,170,74,0.6)] hover:-translate-y-0.5 text-xs font-bold tracking-wide h-9 px-6 rounded-full border border-white/10"
                 onClick={() => import("@/lib/audio").then(m => m.audio.playClick())}
                 asChild
              >
-               <Link href="/contact">
+               <a href="https://ekoelektrofrigo.rs" target="_blank" rel="noopener noreferrer">
                  <span className="flex items-center gap-2">
-                   Zatražite ponudu
+                   <span className="relative flex h-2 w-2">
+                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
+                     <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
+                   </span>
+                   Posetite Web Shop
                    <ChevronRight className="w-3 h-3" />
                  </span>
-               </Link>
+               </a>
              </Button>
 
             {/* Hamburger Menu (Mobile) */}
@@ -324,19 +329,23 @@ export function Navbar() {
                      <Button 
                         variant="default"
                         size="lg"
-                        className="w-full bg-primary hover:bg-primary/90 text-white transition-all duration-300 shadow-[0_0_15px_rgba(86,170,74,0.4)] hover:shadow-[0_0_25px_rgba(86,170,74,0.6)] text-sm font-bold uppercase tracking-wide h-12 rounded-xl"
+                        className="w-full bg-primary hover:bg-primary/90 text-white transition-all duration-300 shadow-[0_0_15px_rgba(86,170,74,0.4)] hover:shadow-[0_0_25px_rgba(86,170,74,0.6)] text-sm font-bold tracking-wide h-12 rounded-xl"
                         onClick={() => {
                           import("@/lib/audio").then(m => m.audio.playClick());
                           setIsOpen(false);
                         }}
                         asChild
                      >
-                       <Link href="/contact">
+                       <a href="https://ekoelektrofrigo.rs" target="_blank" rel="noopener noreferrer">
                          <span className="flex items-center justify-center gap-2">
-                           Zatražite ponudu
+                           <span className="relative flex h-2 w-2">
+                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
+                             <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
+                           </span>
+                           Posetite Web Shop
                            <ChevronRight className="w-4 h-4" />
                          </span>
-                       </Link>
+                       </a>
                      </Button>
 
                      <div>

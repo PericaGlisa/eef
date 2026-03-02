@@ -124,8 +124,8 @@ export default function Partners() {
         </div>
       </section>
 
-      {/* Sticky Navigation */}
-      <div className="sticky top-20 z-50 bg-[#0e1035]/80 backdrop-blur-xl border-y border-white/5 shadow-2xl">
+      {/* Brand Navigation */}
+      <div className="bg-[#0e1035]/80 backdrop-blur-xl border-y border-white/5 shadow-2xl">
         <div className="container mx-auto px-6">
           <div className="flex items-center gap-1 overflow-x-auto hide-scrollbar py-4 md:justify-center">
              {partners.map((partner) => (
