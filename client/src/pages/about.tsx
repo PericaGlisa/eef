@@ -116,12 +116,12 @@ const history = [
 ];
 
 const team = [
-  { name: "Boban Čelarević", role: "Tehnička podrška", img: "/assets/team-professional.png" },
-  { name: "Damjan Novaković", role: "Inženjer mašinstva", img: "/assets/team-professional.png" },
-  { name: "Milan Parić", role: "Inženjer mašinstva", img: "/assets/team-professional.png" },
-  { name: "Marica Marinković", role: "Inženjer mašinstva", img: "/assets/team-professional.png" },
-  { name: "Uroš Milošević", role: "Inženjer mašinstva", img: "/assets/team-professional.png" },
-  { name: "Dane Cvijan", role: "Inženjer mašinstva", img: "/assets/team-professional.png" }
+  { name: "Boban Čelarević", role: "Tehnička podrška", gender: "male" as const, email: "celarevic.boban@eef.rs" },
+  { name: "Damjan Novaković", role: "Inženjer mašinstva", gender: "male" as const, email: "novakovic.damjan@eef.rs" },
+  { name: "Milan Parić", role: "Inženjer mašinstva", gender: "male" as const, email: "paric.milan@eef.rs" },
+  { name: "Marica Marinković", role: "Inženjer mašinstva", gender: "female" as const, email: "marinkovic.marica@eef.rs" },
+  { name: "Uroš Milošević", role: "Inženjer mašinstva", gender: "male" as const, email: "milosevic.uros@eef.rs" },
+  { name: "Dane Cvijan", role: "Inženjer mašinstva", gender: "male" as const, email: "cvijan.dane@eef.rs" }
 ];
 
 export default function About() {
@@ -360,11 +360,17 @@ export default function About() {
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {team.map((member, i) => (
                 <div key={i} className="group cursor-pointer">
-                  <div className="relative overflow-hidden rounded-2xl mb-6 aspect-[4/5]">
+                  <div className="relative overflow-hidden rounded-2xl mb-6 aspect-[5/6]">
                     <div className="absolute inset-0 bg-[#171A54]/10 group-hover:bg-transparent transition-colors z-10" />
                     <img 
-                      src={member.img} 
+                      src={member.gender === "female" ? "/assets/team-expert-female.webp" : "/assets/team-expert-male.webp"} 
                       alt={member.name} 
+                      onError={(e) => {
+                        const img = e.currentTarget;
+                        if (img.dataset.fallbackApplied) return;
+                        img.dataset.fallbackApplied = "true";
+                        img.src = "/assets/team-professional.png";
+                      }}
                       className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
                     />
                     
@@ -374,9 +380,13 @@ export default function About() {
                         <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white hover:bg-primary hover:text-white transition-colors">
                           <Linkedin className="w-5 h-5" />
                         </div>
-                        <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white hover:bg-primary hover:text-white transition-colors">
+                        <a
+                          href={`mailto:${member.email}`}
+                          aria-label={`Pošalji email: ${member.email}`}
+                          className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white hover:bg-primary hover:text-white transition-colors"
+                        >
                           <Mail className="w-5 h-5" />
-                        </div>
+                        </a>
                       </div>
                     </div>
                   </div>
