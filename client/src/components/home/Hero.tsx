@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { motion, useScroll, useTransform, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Magnetic } from "@/components/ui/magnetic";
@@ -94,8 +94,6 @@ export function Hero() {
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
-  const isFirstSlide = currentSlide === 0;
-
   return (
     <div ref={ref} className="relative h-[100dvh] w-full overflow-hidden bg-background">
       {/* Background Image Layer with Overlay */}
@@ -103,18 +101,30 @@ export function Hero() {
         style={{ y, opacity }}
         className="absolute inset-0 z-0"
       >
-        <img 
+        <motion.img 
           src={heroSlides[currentSlide]}
           alt={currentSlide === 0 ? "Industrijska rashladna tehnika" : `Slide ${currentSlide + 1}`}
-          srcSet={
-            isFirstSlide
-              ? "/assets/hero-slide-1-768.webp 768w, /assets/hero-slide-1-1280.webp 1280w, /assets/hero-slide-1.webp 1536w"
-              : undefined
+          initial={false}
+          animate={
+            enableBackgroundMotion && shouldAnimateBackground
+              ? {
+                  opacity: 1,
+                  scale: 1.12,
+                  x: ["0%", "-1.5%", "0%", "1.5%", "0%"],
+                  y: ["0%", "-1.5%", "0%", "1.5%", "0%"],
+                }
+              : { opacity: 1, scale: 1.02, x: "0%", y: "0%" }
           }
-          sizes={isFirstSlide ? "100vw" : undefined}
-          className={`absolute inset-0 w-full h-full object-cover will-change-transform ${
-            enableBackgroundMotion && shouldAnimateBackground ? "hero-kenburns" : ""
-          }`}
+          transition={
+            enableBackgroundMotion && shouldAnimateBackground
+              ? {
+                  scale: { duration: 22, ease: "linear" },
+                  x: { duration: 22, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" },
+                  y: { duration: 22, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" },
+                }
+              : { opacity: { duration: 0 } }
+          }
+          className="absolute inset-0 w-full h-full object-cover will-change-transform"
           loading={currentSlide === 0 ? "eager" : "lazy"}
           decoding="async"
           fetchPriority={currentSlide === 0 ? "high" : "low"}
@@ -215,7 +225,7 @@ export function Hero() {
                 onClick={() => import("@/lib/audio").then(m => m.audio.playClick())}
                 asChild
               >
-                <Link href="/contact">
+                <Link href="/kontakt">
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
                   Zatražite rešenje <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
@@ -229,7 +239,7 @@ export function Hero() {
                 onClick={() => import("@/lib/audio").then(m => m.audio.playClick())}
                 asChild
               >
-                <Link href="/eco-cooling">Pogledajte rešenja</Link>
+                <Link href="/eko-rashlada">Pogledajte rešenja</Link>
               </Button>
             </Magnetic>
           </motion.div>
@@ -242,7 +252,6 @@ export function Hero() {
           >
             <span className="px-3 py-2 rounded-full bg-white/5 border border-white/10">350+ projekata</span>
             <span className="px-3 py-2 rounded-full bg-white/5 border border-white/10">ISO 9001</span>
-            <span className="px-3 py-2 rounded-full bg-white/5 border border-white/10">24/7 podrška</span>
           </motion.div>
         </div>
       </div>

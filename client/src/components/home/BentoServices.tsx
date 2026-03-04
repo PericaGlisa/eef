@@ -10,7 +10,7 @@ const services = [
     image: "/assets/service-engineering.webp",
     tags: ["3D Modelovanje", "Termodinamika", "AutoCAD", "Revit"],
     features: ["Analiza zahteva", "Izbor opreme", "3D modelovanje", "Optimizacija"],
-    link: "/services/engineering"
+    link: "/usluge/inzenjering"
   },
   {
     title: "Izvođenje Radova",
@@ -19,7 +19,7 @@ const services = [
     image: "/assets/service-execution.webp",
     tags: ["Sertifikovani Varioci", "Ključ u Ruke"],
     features: ["Montaža cevovoda", "Elektro ormani", "Puštanje u rad"],
-    link: "/services/execution"
+    link: "/usluge/izvodjenje"
   },
   {
     title: "Servis & Održavanje",
@@ -28,7 +28,7 @@ const services = [
     image: "/assets/service-maintenance.webp",
     tags: ["24/7 Podrška", "Originalni Delovi"],
     features: ["Redovni servisi", "Interventni izlasci", "Rezervni delovi"],
-    link: "/services/maintenance"
+    link: "/usluge/servis"
   },
   {
     title: "Energetska Revizija",
@@ -37,7 +37,7 @@ const services = [
     image: "/assets/service-energy.webp",
     tags: ["ROI Analiza", "ISO 50001"],
     features: ["Merenje potrošnje", "Analiza gubitaka", "Predlog mera"],
-    link: "/services/energy-audit"
+    link: "/usluge/energetska-revizija"
   },
   {
     title: "Konsalting",
@@ -46,7 +46,7 @@ const services = [
     image: "/assets/service-consulting.webp",
     tags: ["CO2 Sistemi", "Amonijak"],
     features: ["Studije izvodljivosti", "Tehnička rešenja", "Zakonska regulativa"],
-    link: "/services/consulting"
+    link: "/usluge/konsalting"
   },
   {
     title: "Sigurnost & Kvalitet",
@@ -56,7 +56,7 @@ const services = [
     tags: ["HACCP", "Bezbednost"],
     badges: ["ISO 9001", "ISO 14001", "HACCP"],
     features: ["Procena rizika", "Obuka zaposlenih", "Kontrola kvaliteta"],
-    link: "/services/safety"
+    link: "/usluge/sigurnost"
   }
 ];
 

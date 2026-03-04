@@ -11,7 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Gallery } from "@/components/Gallery";
 
 export default function NewsPost() {
-  const [match, params] = useRoute("/news/:id");
+  const [match, params] = useRoute("/vesti/:id");
   const { toast } = useToast();
   
   if (!match || !params) return <NotFound />;
@@ -51,7 +51,7 @@ export default function NewsPost() {
         <div className="absolute -top-[20%] -right-[10%] w-[50vw] h-[50vw] bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="container mx-auto px-6 relative z-10 max-w-4xl">
-          <Link href="/blog">
+          <Link href="/vesti">
             <Button variant="ghost" className="mb-8 text-white/50 hover:text-white hover:bg-white/5 -ml-4">
               <ArrowLeft className="w-4 h-4 mr-2" /> Nazad na arhivnu stranicu
             </Button>

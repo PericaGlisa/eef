@@ -10,7 +10,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 
 export default function SolutionDetail() {
-  const [match, params] = useRoute("/eco-cooling/:slug");
+  const [match, params] = useRoute("/eko-rashlada/:slug");
   const containerRef = useRef(null);
   
   const { scrollYProgress } = useScroll({
@@ -54,7 +54,7 @@ export default function SolutionDetail() {
         </div>
         
         <div className="container mx-auto px-6 relative z-10">
-          <Link href="/eco-cooling">
+          <Link href="/eko-rashlada">
             <Button variant="ghost" className="mb-8 text-white/70 hover:text-white hover:bg-white/10 -ml-4 group backdrop-blur-sm border border-transparent hover:border-white/10">
               <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" /> Nazad na Rešenja
             </Button>
@@ -317,7 +317,7 @@ export default function SolutionDetail() {
               {/* Next Solution Teaser */}
               {nextSolution && (
                 <div>
-                  <Link href={`/eco-cooling/${nextSolution.id}`}>
+                  <Link href={`/eko-rashlada/${nextSolution.id}`}>
                     <div className="block bg-gradient-to-br from-[#0e1035] to-[#1a1d5c] rounded-3xl p-1 cursor-pointer group hover:shadow-2xl hover:shadow-primary/20 transition-all duration-300">
                       <div className="bg-[#0e1035] rounded-[22px] p-6 h-full relative overflow-hidden">
                         <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
@@ -344,7 +344,7 @@ export default function SolutionDetail() {
                 
                 <div className="grid gap-3 relative z-10">
                   <Button className="w-full bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/25 h-12 text-base" asChild>
-                    <Link href="/contact">
+                    <Link href="/kontakt">
                       <FileText className="w-4 h-4 mr-2" />
                       Zatražite ponudu
                     </Link>

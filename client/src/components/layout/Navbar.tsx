@@ -50,44 +50,44 @@ export function Navbar() {
   const navLinks = [
     {
       name: "Eko Rashlada",
-      href: "/eco-cooling",
+      href: "/eko-rashlada",
       description: "Istražite naša eko rashladna rešenja dizajnirana za maksimalnu efikasnost, održivost i pouzdanost.",
       items: [
-        { name: "Rashladne komore", href: "/eco-cooling/rashladne-komore", icon: Snowflake, desc: "Plusne i minusne komore" },
-        { name: "Tuneli za smrzavanje", href: "/eco-cooling/tuneli-za-smrzavanje", icon: Wind, desc: "Brzo smrzavanje" },
-        { name: "ULO Komore", href: "/eco-cooling/ulo-komore", icon: Box, desc: "Kontrolisana atmosfera" },
-        { name: "Rashladni agregati", href: "/eco-cooling/rashladni-agregati", icon: Server, desc: "Ekološki freoni i CO2" },
-        { name: "Čileri", href: "/eco-cooling/cileri", icon: Droplets, desc: "Indirektno hlađenje" },
-        { name: "Elektro ormani & CNSU", href: "/eco-cooling/elektro-ormani", icon: Zap, desc: "Nadzor i upravljanje" },
-        { name: "Termoizolacija", href: "/eco-cooling/termoizolacija", icon: Thermometer, desc: "Paneli i vrata" }
+        { name: "Rashladne komore", href: "/eko-rashlada/rashladne-komore", icon: Snowflake, desc: "Plusne i minusne komore" },
+        { name: "Tuneli za smrzavanje", href: "/eko-rashlada/tuneli-za-smrzavanje", icon: Wind, desc: "Brzo smrzavanje" },
+        { name: "ULO Komore", href: "/eko-rashlada/ulo-komore", icon: Box, desc: "Kontrolisana atmosfera" },
+        { name: "Rashladni agregati", href: "/eko-rashlada/rashladni-agregati", icon: Server, desc: "Ekološki freoni i CO2" },
+        { name: "Čileri", href: "/eko-rashlada/cileri", icon: Droplets, desc: "Indirektno hlađenje" },
+        { name: "Elektro ormani & CNSU", href: "/eko-rashlada/elektro-ormani", icon: Zap, desc: "Nadzor i upravljanje" },
+        { name: "Termoizolacija", href: "/eko-rashlada/termoizolacija", icon: Thermometer, desc: "Paneli i vrata" }
       ]
     },
     {
       name: "Usluge",
-      href: "/services",
+      href: "/usluge",
       description: "Sveobuhvatna inženjerska podrška: od idejnog rešenja i projektovanja, preko stručne montaže, do pouzdanog servisa i održavanja 24/7.",
       items: [
-        { name: "Inženjering", href: "/services/engineering", icon: DraftingCompass, desc: "Projektovanje i 3D modeli" },
-        { name: "Izvođenje", href: "/services/execution", icon: Factory, desc: "Montaža ključ u ruke" },
-        { name: "Servis", href: "/services/maintenance", icon: Wrench, desc: "Održavanje 24/7" },
-        { name: "Energetska Revizija", href: "/services/energy-audit", icon: BarChart3, desc: "ROI i uštede" },
-        { name: "Konsalting", href: "/services/consulting", icon: Lightbulb, desc: "Stručno savetovanje" },
-        { name: "Sigurnost", href: "/services/safety", icon: ShieldCheck, desc: "Kvalitet i standardi" }
+        { name: "Inženjering", href: "/usluge/inzenjering", icon: DraftingCompass, desc: "Projektovanje i 3D modeli" },
+        { name: "Izvođenje", href: "/usluge/izvodjenje", icon: Factory, desc: "Montaža ključ u ruke" },
+        { name: "Servis", href: "/usluge/servis", icon: Wrench, desc: "Održavanje 24/7" },
+        { name: "Energetska Revizija", href: "/usluge/energetska-revizija", icon: BarChart3, desc: "ROI i uštede" },
+        { name: "Konsalting", href: "/usluge/konsalting", icon: Lightbulb, desc: "Stručno savetovanje" },
+        { name: "Sigurnost", href: "/usluge/sigurnost", icon: ShieldCheck, desc: "Kvalitet i standardi" }
       ]
     },
-    { name: "Kompanija", href: "/about" },
-    { name: "Partneri", href: "/partners" },
-    { name: "Reference", href: "/references" },
+    { name: "Kompanija", href: "/o-nama" },
+    { name: "Partneri", href: "/partneri" },
+    { name: "Reference", href: "/reference" },
     {
       name: "Dokumentacija",
-      href: "/documentation",
+      href: "/dokumentacija",
       description: "Pristupite našim zvaničnim sertifikatima i potvrdama kvaliteta.",
       items: [
-        { name: "Sertifikati", href: "/documentation/certificates", icon: ShieldCheck, desc: "ISO 9001, 14001, 45001" },
-        { name: "Diplome", href: "/documentation/diplomas", icon: BookOpen, desc: "Partnerska priznanja" }
+        { name: "Sertifikati", href: "/dokumentacija/sertifikati", icon: ShieldCheck, desc: "ISO 9001, 14001, 45001" },
+        { name: "Diplome", href: "/dokumentacija/diplome", icon: BookOpen, desc: "Partnerska priznanja" }
       ]
     },
-    { name: "Kontakt", href: "/contact" },
+    { name: "Kontakt", href: "/kontakt" },
   ];
 
   return (

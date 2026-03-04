@@ -128,7 +128,7 @@ export default function Blog() {
                 <span className="w-2 h-8 bg-primary rounded-full" />
                 Izdvajamo
               </h2>
-              <Link href={`/news/${featuredPost.id}`}>
+              <Link href={`/vesti/${featuredPost.id}`}>
                 <div className="group relative grid grid-cols-1 lg:grid-cols-2 gap-8 bg-white/5 rounded-3xl overflow-hidden border border-white/10 hover:border-primary/30 transition-all duration-500 cursor-pointer">
                   <div className="relative h-[400px] lg:h-full overflow-hidden">
                     <div className="absolute inset-0 bg-[#0a0c29]/20 group-hover:bg-transparent transition-all duration-500 z-10" />
@@ -175,7 +175,7 @@ export default function Blog() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {otherPosts.length > 0 ? (
                 otherPosts.map((item, i) => (
-                  <Link key={item.id} href={`/news/${item.id}`}>
+                  <Link key={item.id} href={`/vesti/${item.id}`}>
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}

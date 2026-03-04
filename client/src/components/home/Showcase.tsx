@@ -85,7 +85,7 @@ export function Showcase() {
               Naša <span className="text-primary">Ekspertiza</span>
             </h2>
           </div>
-          <Link href="/eco-cooling">
+          <Link href="/eko-rashlada">
             <button className="text-white/60 hover:text-white flex items-center gap-2 transition-colors group cursor-pointer">
               Pogledajte sve proizvode <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
@@ -138,7 +138,7 @@ export function Showcase() {
                 <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
               </div>
               
-              <Link href={`/eco-cooling/${product.slug}`} className="absolute inset-0 z-30">
+              <Link href={`/eko-rashlada/${product.slug}`} className="absolute inset-0 z-30">
                 <span className="sr-only">Pogledaj detalje o {product.title}</span>
               </Link>
             </motion.div>

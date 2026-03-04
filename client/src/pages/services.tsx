@@ -16,7 +16,7 @@ const servicesData = [
     features: ["3D Modelovanje", "Termodinamika", "AutoCAD", "Revit"],
     icon: DraftingCompass,
     image: "/assets/service-engineering.webp",
-    link: "/services/engineering"
+    link: "/usluge/inzenjering"
   },
   {
     title: "Izvođenje Radova",
@@ -24,7 +24,7 @@ const servicesData = [
     features: ["Sertifikovani Varioci", "Ključ u Ruke", "Montaža cevovoda"],
     icon: Factory,
     image: "/assets/service-execution.webp",
-    link: "/services/execution"
+    link: "/usluge/izvodjenje"
   },
   {
     title: "Servis & Održavanje",
@@ -32,7 +32,7 @@ const servicesData = [
     features: ["24/7 Podrška", "Originalni Delovi", "Redovni servisi"],
     icon: Wrench,
     image: "/assets/service-maintenance.webp",
-    link: "/services/maintenance"
+    link: "/usluge/servis"
   },
   {
     title: "Energetska Revizija",
@@ -40,7 +40,7 @@ const servicesData = [
     features: ["ROI Analiza", "ISO 50001", "Merenje potrošnje"],
     icon: BarChart3,
     image: "/assets/service-energy.webp",
-    link: "/services/energy-audit"
+    link: "/usluge/energetska-revizija"
   },
   {
     title: "Konsalting",
@@ -48,7 +48,7 @@ const servicesData = [
     features: ["CO2 Sistemi", "Amonijak", "Studije izvodljivosti"],
     icon: Lightbulb,
     image: "/assets/service-consulting.webp",
-    link: "/services/consulting"
+    link: "/usluge/konsalting"
   },
   {
     title: "Sigurnost & Kvalitet",
@@ -56,7 +56,7 @@ const servicesData = [
     features: ["HACCP", "Bezbednost", "ISO 9001"],
     icon: ShieldCheck,
     image: "/assets/service-safety.webp",
-    link: "/services/safety"
+    link: "/usluge/sigurnost"
   }
 ];
 
@@ -342,7 +342,7 @@ export default function Services() {
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <Button size="lg" className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white font-bold px-8 h-14 text-base rounded-full shadow-[0_0_40px_rgba(86,170,74,0.3)] hover:shadow-[0_0_60px_rgba(86,170,74,0.5)] transition-all transform hover:-translate-y-1 group" asChild>
-                  <Link href="/contact">
+                  <Link href="/kontakt">
                     Zatražite Ponudu
                     <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </Link>

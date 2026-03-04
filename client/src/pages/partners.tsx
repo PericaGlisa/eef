@@ -246,7 +246,7 @@ function PartnerCard({ partner, index, isLight }: { partner: typeof partners[0],
               variant="outline" 
               className={`h-12 px-8 rounded-full border-2 font-bold hover:bg-transparent transition-all duration-300 ${isLight ? 'border-[#171A54]/10 hover:border-[#171A54] text-[#171A54]' : 'border-white/10 hover:border-white text-white'}`}
            >
-             <Link href="/references" className="flex items-center gap-2">
+             <Link href="/reference" className="flex items-center gap-2">
                <MousePointerClick className="w-4 h-4" />
                Pogledajte Reference
              </Link>

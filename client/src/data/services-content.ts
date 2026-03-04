@@ -15,7 +15,7 @@ export interface ServiceItem {
 
 export const servicesContent: ServiceItem[] = [
   {
-    id: "engineering",
+    id: "inzenjering",
     title: "Projektovanje",
     shortDesc: "Inženjerska podrška i projektovanje najsavremenijih rashladnih sistema.",
     icon: DraftingCompass,
@@ -29,7 +29,7 @@ export const servicesContent: ServiceItem[] = [
     `
   },
   {
-    id: "execution",
+    id: "izvodjenje",
     title: "Izvođenje",
     shortDesc: "Stručna montaža i puštanje u rad po principu ključ u ruke.",
     icon: Factory,
@@ -43,7 +43,7 @@ export const servicesContent: ServiceItem[] = [
     `
   },
   {
-    id: "maintenance",
+    id: "servis",
     title: "Servis",
     shortDesc: "Održavanje 24/7 i servisna podrška za maksimalnu pouzdanost.",
     icon: Wrench,
@@ -56,7 +56,7 @@ export const servicesContent: ServiceItem[] = [
     `
   },
   {
-    id: "energy-audit",
+    id: "energetska-revizija",
     title: "Energetska Revizija",
     shortDesc: "Analiza efikasnosti i ROI studije za smanjenje troškova.",
     icon: BarChart3,
@@ -70,7 +70,7 @@ export const servicesContent: ServiceItem[] = [
     `
   },
   {
-    id: "consulting",
+    id: "konsalting",
     title: "Konsalting",
     shortDesc: "Stručno savetovanje za izbor optimalnih rashladnih rešenja.",
     icon: Lightbulb,
@@ -83,7 +83,7 @@ export const servicesContent: ServiceItem[] = [
     `
   },
   {
-    id: "safety",
+    id: "sigurnost",
     title: "Sigurnost",
     shortDesc: "Implementacija najviših standarda bezbednosti i kvaliteta.",
     icon: ShieldCheck,

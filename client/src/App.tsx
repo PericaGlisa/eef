@@ -1,4 +1,4 @@
-import { Switch, Route } from "wouter";
+import { Switch, Route, useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Suspense, lazy, useEffect, useState } from "react";
@@ -38,6 +38,14 @@ function NoiseOverlay() {
   );
 }
 
+function RedirectTo({ to }: { to: string }) {
+  const [, setLocation] = useLocation();
+  useEffect(() => {
+    setLocation(to);
+  }, [setLocation, to]);
+  return null;
+}
+
 function Router() {
   useSmoothScroll();
   
@@ -45,22 +53,81 @@ function Router() {
     <Suspense fallback={<div className="min-h-svh bg-background" />}>
       <Switch>
         <Route path="/" component={Home} />
-        <Route path="/about" component={About} />
-        <Route path="/contact" component={Contact} />
-        <Route path="/services" component={Services} />
-        <Route path="/services/:slug" component={ServiceDetail} />
-        <Route path="/eco-cooling" component={EcoCooling} />
-        <Route path="/eco-cooling/:slug" component={SolutionDetail} />
-        <Route path="/partners" component={Partners} />
-        <Route path="/documentation" component={Documentation} />
-        <Route path="/documentation/certificates" component={Documentation} />
-        <Route path="/documentation/diplomas" component={Documentation} />
-        <Route path="/references" component={References} />
-        <Route path="/references/agrounija" component={ProjectAgrounija} />
-        <Route path="/blog" component={Blog} />
-        <Route path="/news/:id" component={NewsPost} />
-        <Route path="/privacy" component={Privacy} />
-        <Route path="/terms" component={Terms} />
+        <Route path="/about">
+          <RedirectTo to="/o-nama" />
+        </Route>
+        <Route path="/contact">
+          <RedirectTo to="/kontakt" />
+        </Route>
+        <Route path="/services">
+          <RedirectTo to="/usluge" />
+        </Route>
+        <Route path="/services/:slug">
+          {(params) => {
+            const slugMap: Record<string, string> = {
+              engineering: "inzenjering",
+              execution: "izvodjenje",
+              maintenance: "servis",
+              "energy-audit": "energetska-revizija",
+              consulting: "konsalting",
+              safety: "sigurnost",
+            };
+            const slug = params?.slug ? slugMap[params.slug] ?? params.slug : "";
+            return <RedirectTo to={`/usluge/${slug}`} />;
+          }}
+        </Route>
+        <Route path="/eco-cooling">
+          <RedirectTo to="/eko-rashlada" />
+        </Route>
+        <Route path="/eco-cooling/:slug">
+          {(params) => <RedirectTo to={`/eko-rashlada/${params.slug}`} />}
+        </Route>
+        <Route path="/partners">
+          <RedirectTo to="/partneri" />
+        </Route>
+        <Route path="/documentation">
+          <RedirectTo to="/dokumentacija" />
+        </Route>
+        <Route path="/documentation/certificates">
+          <RedirectTo to="/dokumentacija/sertifikati" />
+        </Route>
+        <Route path="/documentation/diplomas">
+          <RedirectTo to="/dokumentacija/diplome" />
+        </Route>
+        <Route path="/references">
+          <RedirectTo to="/reference" />
+        </Route>
+        <Route path="/references/agrounija">
+          <RedirectTo to="/reference/agrounija" />
+        </Route>
+        <Route path="/blog">
+          <RedirectTo to="/vesti" />
+        </Route>
+        <Route path="/news/:id">
+          {(params) => <RedirectTo to={`/vesti/${params.id}`} />}
+        </Route>
+        <Route path="/privacy">
+          <RedirectTo to="/politika-privatnosti" />
+        </Route>
+        <Route path="/terms">
+          <RedirectTo to="/uslovi-koriscenja" />
+        </Route>
+        <Route path="/o-nama" component={About} />
+        <Route path="/kontakt" component={Contact} />
+        <Route path="/usluge" component={Services} />
+        <Route path="/usluge/:slug" component={ServiceDetail} />
+        <Route path="/eko-rashlada" component={EcoCooling} />
+        <Route path="/eko-rashlada/:slug" component={SolutionDetail} />
+        <Route path="/partneri" component={Partners} />
+        <Route path="/dokumentacija" component={Documentation} />
+        <Route path="/dokumentacija/sertifikati" component={Documentation} />
+        <Route path="/dokumentacija/diplome" component={Documentation} />
+        <Route path="/reference" component={References} />
+        <Route path="/reference/agrounija" component={ProjectAgrounija} />
+        <Route path="/vesti" component={Blog} />
+        <Route path="/vesti/:id" component={NewsPost} />
+        <Route path="/politika-privatnosti" component={Privacy} />
+        <Route path="/uslovi-koriscenja" component={Terms} />
         <Route component={NotFound} />
       </Switch>
     </Suspense>

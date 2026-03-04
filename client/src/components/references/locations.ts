@@ -341,13 +341,13 @@ export const locations: Location[] = [
         "title": "AGROUNIJA",
         "desc": "ULO hladnjača za jabuku kapaciteta 3500 tona (faza I).",
         "client": "AGROUNIJA",
-        "link": "/references/agrounija"
+        "link": "/reference/agrounija"
       },
       {
         "title": "AGROUNIJA",
         "desc": "ULO hladnjača za jabuku kapaciteta 4000 tona (faza II).",
         "client": "AGROUNIJA",
-        "link": "/references/agrounija"
+        "link": "/reference/agrounija"
       }
     ]
   },

@@ -87,10 +87,10 @@ export default function EcoCooling() {
               className="flex flex-wrap gap-4"
             >
               <Button size="lg" className="bg-primary hover:bg-primary/90 text-white font-bold px-8 h-14 text-lg rounded-full" asChild>
-                <Link href="/contact">Zakažite Konsultacije <ArrowRight className="ml-2 w-5 h-5" /></Link>
+                <Link href="/kontakt">Zakažite Konsultacije <ArrowRight className="ml-2 w-5 h-5" /></Link>
               </Button>
               <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 font-bold px-8 h-14 text-lg rounded-full backdrop-blur-sm" asChild>
-                <Link href="/references">Pogledajte Reference</Link>
+                <Link href="/reference">Pogledajte Reference</Link>
               </Button>
             </motion.div>
           </div>
@@ -151,7 +151,7 @@ export default function EcoCooling() {
             {storageSolutions.map((solution, index) => {
                const Icon = solution.icon;
                return (
-                <Link key={index} href={`/eco-cooling/${solution.id}`}>
+                <Link key={index} href={`/eko-rashlada/${solution.id}`}>
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -206,7 +206,7 @@ export default function EcoCooling() {
             {machinerySolutions.map((solution, index) => {
               const Icon = solution.icon;
               return (
-                <Link key={index} href={`/eco-cooling/${solution.id}`}>
+                <Link key={index} href={`/eko-rashlada/${solution.id}`}>
                   <motion.div
                     initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
                     whileInView={{ opacity: 1, x: 0 }}
@@ -268,7 +268,7 @@ export default function EcoCooling() {
             {infrastructureSolutions.map((solution, index) => {
                const Icon = solution.icon;
                return (
-                <Link key={index} href={`/eco-cooling/${solution.id}`}>
+                <Link key={index} href={`/eko-rashlada/${solution.id}`}>
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -434,7 +434,7 @@ export default function EcoCooling() {
               className="flex flex-col sm:flex-row gap-4 justify-center items-center"
             >
               <Button size="lg" className="bg-primary hover:bg-primary/90 text-white font-bold px-10 h-14 text-lg rounded-full shadow-[0_0_30px_rgba(86,170,74,0.3)] hover:shadow-[0_0_50px_rgba(86,170,74,0.5)] transition-all transform hover:-translate-y-1 w-full sm:w-auto" asChild>
-                <Link href="/contact" className="flex items-center gap-2">
+                <Link href="/kontakt" className="flex items-center gap-2">
                   Zatražite Ponudu
                   <ArrowRight className="w-5 h-5" />
                 </Link>

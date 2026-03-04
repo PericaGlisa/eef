@@ -353,7 +353,7 @@ export default function About() {
                </p>
              </div>
              <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white" asChild>
-               <Link href="/contact">Pridruži se timu</Link>
+               <Link href="/kontakt">Pridruži se timu</Link>
              </Button>
            </div>
 

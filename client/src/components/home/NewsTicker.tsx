@@ -35,7 +35,7 @@ export function NewsTicker() {
           </div>
           
           <div className="hidden md:block">
-            <Link href="/blog">
+            <Link href="/vesti">
               <button className="group flex items-center gap-3 px-6 py-3 rounded-full border border-[#171A54]/10 hover:border-primary/50 hover:bg-primary/5 transition-all duration-300 cursor-pointer">
                 <span className="text-sm font-medium text-[#171A54] group-hover:text-primary">Pogledaj arhivu</span>
                 <div className="w-8 h-8 rounded-full bg-[#171A54]/5 flex items-center justify-center text-[#171A54] group-hover:bg-primary group-hover:text-white transition-all duration-300">
@@ -63,7 +63,7 @@ export function NewsTicker() {
           <CarouselContent className="-ml-8">
             {newsItems.map((item, i) => (
               <CarouselItem key={item.id} className="pl-8 md:basis-1/2 lg:basis-1/3 h-auto">
-                <Link href={`/news/${item.id}`} className="h-full block">
+                <Link href={`/vesti/${item.id}`} className="h-full block">
                   <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -115,7 +115,7 @@ export function NewsTicker() {
         </Carousel>
 
         <div className="mt-12 md:hidden flex justify-center">
-            <Link href="/blog">
+            <Link href="/vesti">
               <button className="group flex items-center gap-3 px-6 py-3 rounded-full border border-[#171A54]/10 hover:border-primary/50 hover:bg-primary/5 transition-all duration-300 cursor-pointer">
                 <span className="text-sm font-medium text-[#171A54] group-hover:text-primary">Pogledaj arhivu</span>
                 <div className="w-8 h-8 rounded-full bg-[#171A54]/5 flex items-center justify-center text-[#171A54] group-hover:bg-primary group-hover:text-white transition-all duration-300">

@@ -65,7 +65,7 @@ export default function ProjectAgrounija() {
         </div>
         
         <div className="relative container mx-auto px-4 h-full flex flex-col justify-end pb-24 lg:pb-32">
-          <Link href="/references">
+          <Link href="/reference">
             <a className="inline-flex items-center text-white/80 hover:text-white mb-8 transition-colors absolute top-32 left-4 md:left-8">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Nazad na reference

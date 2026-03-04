@@ -9,6 +9,111 @@
   status = 200
 
 [[redirects]]
+  from = "/about"
+  to = "/o-nama"
+  status = 301
+
+[[redirects]]
+  from = "/contact"
+  to = "/kontakt"
+  status = 301
+
+[[redirects]]
+  from = "/services"
+  to = "/usluge"
+  status = 301
+
+[[redirects]]
+  from = "/services/engineering"
+  to = "/usluge/inzenjering"
+  status = 301
+
+[[redirects]]
+  from = "/services/execution"
+  to = "/usluge/izvodjenje"
+  status = 301
+
+[[redirects]]
+  from = "/services/maintenance"
+  to = "/usluge/servis"
+  status = 301
+
+[[redirects]]
+  from = "/services/energy-audit"
+  to = "/usluge/energetska-revizija"
+  status = 301
+
+[[redirects]]
+  from = "/services/consulting"
+  to = "/usluge/konsalting"
+  status = 301
+
+[[redirects]]
+  from = "/services/safety"
+  to = "/usluge/sigurnost"
+  status = 301
+
+[[redirects]]
+  from = "/eco-cooling"
+  to = "/eko-rashlada"
+  status = 301
+
+[[redirects]]
+  from = "/eco-cooling/*"
+  to = "/eko-rashlada/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/partners"
+  to = "/partneri"
+  status = 301
+
+[[redirects]]
+  from = "/references"
+  to = "/reference"
+  status = 301
+
+[[redirects]]
+  from = "/references/*"
+  to = "/reference/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/documentation"
+  to = "/dokumentacija"
+  status = 301
+
+[[redirects]]
+  from = "/documentation/certificates"
+  to = "/dokumentacija/sertifikati"
+  status = 301
+
+[[redirects]]
+  from = "/documentation/diplomas"
+  to = "/dokumentacija/diplome"
+  status = 301
+
+[[redirects]]
+  from = "/blog"
+  to = "/vesti"
+  status = 301
+
+[[redirects]]
+  from = "/news/*"
+  to = "/vesti/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/privacy"
+  to = "/politika-privatnosti"
+  status = 301
+
+[[redirects]]
+  from = "/terms"
+  to = "/uslovi-koriscenja"
+  status = 301
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200

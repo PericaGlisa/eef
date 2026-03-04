@@ -183,7 +183,7 @@ export default function Terms() {
                   Slobodno nas kontaktirajte za sva dodatna pojašnjenja.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <a href="/contact" className="inline-flex items-center justify-center px-6 py-3 rounded-full bg-primary text-white font-medium hover:bg-primary/90 transition-colors">
+                  <a href="/kontakt" className="inline-flex items-center justify-center px-6 py-3 rounded-full bg-primary text-white font-medium hover:bg-primary/90 transition-colors">
                     Kontaktirajte nas
                   </a>
                   <a href="mailto:office@eef.rs" className="inline-flex items-center justify-center px-6 py-3 rounded-full bg-white/10 text-white font-medium hover:bg-white/20 transition-colors">

@@ -41,14 +41,14 @@ export function Footer() {
             </h4>
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {[
-                { name: 'Eko Rashlada', href: '/eco-cooling' },
-                { name: 'Usluge', href: '/services' },
-                { name: 'Kompanija', href: '/about' },
-                { name: 'Partneri', href: '/partners' },
-                { name: 'Reference', href: '/references' },
-                { name: 'Arhiva Vesti', href: '/blog' },
-                { name: 'Dokumentacija', href: '/documentation' },
-                { name: 'Kontakt', href: '/contact' }
+                { name: 'Eko Rashlada', href: '/eko-rashlada' },
+                { name: 'Usluge', href: '/usluge' },
+                { name: 'Kompanija', href: '/o-nama' },
+                { name: 'Partneri', href: '/partneri' },
+                { name: 'Reference', href: '/reference' },
+                { name: 'Vesti', href: '/vesti' },
+                { name: 'Dokumentacija', href: '/dokumentacija' },
+                { name: 'Kontakt', href: '/kontakt' }
               ].map((item) => (
                 <li key={item.name}>
                   <Link href={item.href} className="text-slate-400 hover:text-primary transition-colors text-sm flex items-center gap-2 group">
@@ -66,7 +66,7 @@ export function Footer() {
               <span className="w-2 h-2 rounded-full bg-primary" />
               Kvalitet
             </h4>
-            <Link href="/documentation/certificates">
+            <Link href="/dokumentacija/sertifikati">
               <div className="group cursor-pointer p-8 border border-white/10 hover:border-primary/50 bg-gradient-to-br from-white/5 to-transparent hover:from-primary/10 hover:to-primary/5 transition-all duration-500 rounded-2xl relative overflow-hidden shadow-2xl hover:shadow-primary/20">
                 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                    <FileText className="w-24 h-24" />
@@ -134,8 +134,8 @@ export function Footer() {
             © {new Date().getFullYear()} Eko Elektrofrigo. Sva prava zadržana.
           </p>
           <div className="flex gap-4 text-xs text-slate-500 flex-wrap justify-center">
-             <Link href="/privacy" className="hover:text-white transition-colors">Politika privatnosti</Link>
-             <Link href="/terms" className="hover:text-white transition-colors">Uslovi korišćenja</Link>
+             <Link href="/politika-privatnosti" className="hover:text-white transition-colors">Politika privatnosti</Link>
+             <Link href="/uslovi-koriscenja" className="hover:text-white transition-colors">Uslovi korišćenja</Link>
           </div>
         </div>
       </div>
