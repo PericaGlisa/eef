@@ -7,7 +7,7 @@ export function SocialProof() {
   ];
 
   return (
-    <section className="py-10 border-b border-white/5 bg-[#0e1035] overflow-hidden relative z-20">
+    <section className="content-auto py-10 border-b border-white/5 bg-[#0e1035] overflow-hidden relative z-20">
       <div className="flex items-center h-full" style={{ maskImage: "linear-gradient(to right, transparent, black 20%, black 80%, transparent)", WebkitMaskImage: "linear-gradient(to right, transparent, black 20%, black 80%, transparent)" }}>
         <motion.div 
           initial={{ x: 0 }}

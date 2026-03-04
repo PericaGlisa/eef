@@ -1,10 +1,9 @@
-import { useRef, useMemo, useState, useEffect } from "react";
-import { motion, useScroll, useTransform, useSpring, useMotionValue, AnimatePresence } from "framer-motion";
+import { useRef, useState, useEffect } from "react";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Magnetic } from "@/components/ui/magnetic";
-import { RevealText } from "@/components/ui/reveal-text";
-import { ArrowRight, ChevronDown, Cpu, Snowflake, Wind, Settings, Zap } from "lucide-react";
+import { ArrowRight, Cpu, Snowflake, Wind, Settings, Zap } from "lucide-react";
 
 const FloatingIcon = ({ icon: Icon, initialX, initialY, delay }: any) => (
   <motion.div
@@ -36,8 +35,10 @@ const heroSlides = [
 
 export function Hero() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isLoaded, setIsLoaded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [firstSlideReady, setFirstSlideReady] = useState(false);
+  const [enableBackgroundMotion, setEnableBackgroundMotion] = useState(false);
+  const reduceMotion = useReducedMotion();
 
   // Check for mobile device
   useEffect(() => {
@@ -50,28 +51,39 @@ export function Hero() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Preload images
-  useEffect(() => {
-    const promises = heroSlides.map((src) => {
-      return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.src = src;
-        img.onload = resolve;
-        img.onerror = reject;
-      });
-    });
+  const shouldAnimateBackground = !isMobile && !reduceMotion;
 
-    Promise.all(promises)
-      .then(() => setIsLoaded(true))
-      .catch(() => setIsLoaded(true));
+  useEffect(() => {
+    const img = new Image();
+    img.src = heroSlides[0];
+    img.onload = () => setFirstSlideReady(true);
   }, []);
 
   useEffect(() => {
-    const timer = setInterval(() => {
+    if (!shouldAnimateBackground || !firstSlideReady) {
+      setCurrentSlide(0);
+      return;
+    }
+
+    const timer = window.setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, []);
+    }, 7000);
+
+    return () => window.clearInterval(timer);
+  }, [shouldAnimateBackground, firstSlideReady]);
+
+  useEffect(() => {
+    if (!shouldAnimateBackground) return;
+    const nextIndex = (currentSlide + 1) % heroSlides.length;
+    const img = new Image();
+    img.src = heroSlides[nextIndex];
+  }, [currentSlide, shouldAnimateBackground]);
+
+  useEffect(() => {
+    if (!firstSlideReady) return;
+    const rafId = window.requestAnimationFrame(() => setEnableBackgroundMotion(true));
+    return () => window.cancelAnimationFrame(rafId);
+  }, [firstSlideReady]);
 
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -79,20 +91,10 @@ export function Hero() {
     offset: ["start start", "end start"]
   });
 
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseX.set(e.clientX);
-      mouseY.set(e.clientY);
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [mouseX, mouseY]);
-
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+
+  const isFirstSlide = currentSlide === 0;
 
   return (
     <div ref={ref} className="relative h-[100dvh] w-full overflow-hidden bg-background">
@@ -101,30 +103,27 @@ export function Hero() {
         style={{ y, opacity }}
         className="absolute inset-0 z-0"
       >
-        <AnimatePresence mode="popLayout">
-          <motion.img 
-            key={currentSlide}
-            src={heroSlides[currentSlide]}
-            alt={`Slide ${currentSlide + 1}`}
-            initial={{ opacity: 0, scale: 1.1 }}
-            animate={{ 
-              opacity: 1, 
-              scale: 1.2,
-              x: isMobile ? "0%" : ["0%", "-2%", "0%", "2%", "0%"],
-              y: isMobile ? "0%" : ["0%", "-2%", "0%", "2%", "0%"]
-            }}
-            exit={{ opacity: 0 }}
-            transition={{ 
-              opacity: { duration: 1.5 },
-              scale: { duration: 25, ease: "linear" },
-              x: { duration: 25, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" },
-              y: { duration: 25, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }
-            }}
-            className="absolute inset-0 w-full h-full object-cover will-change-transform"
-            loading="eager"
-            decoding="async"
-          />
-        </AnimatePresence>
+        <img 
+          src={heroSlides[currentSlide]}
+          alt={currentSlide === 0 ? "Industrijska rashladna tehnika" : `Slide ${currentSlide + 1}`}
+          srcSet={
+            isFirstSlide
+              ? "/assets/hero-slide-1-768.webp 768w, /assets/hero-slide-1-1280.webp 1280w, /assets/hero-slide-1.webp 1536w"
+              : undefined
+          }
+          sizes={isFirstSlide ? "100vw" : undefined}
+          className={`absolute inset-0 w-full h-full object-cover will-change-transform ${
+            enableBackgroundMotion && shouldAnimateBackground ? "hero-kenburns" : ""
+          }`}
+          loading={currentSlide === 0 ? "eager" : "lazy"}
+          decoding="async"
+          fetchPriority={currentSlide === 0 ? "high" : "low"}
+          width={1920}
+          height={1080}
+          onLoad={() => {
+            if (currentSlide === 0) setFirstSlideReady(true);
+          }}
+        />
         
          {/* Lightened overlays for reliability/clarity */}
         <div className="absolute inset-0 bg-[#0e1035]/40 mix-blend-multiply" />
@@ -139,6 +138,7 @@ export function Hero() {
       </motion.div>
 
       {/* Floating Technical Icons - Hidden on mobile for better performance */}
+      {!reduceMotion && (
       <div className="hidden md:block absolute inset-0 overflow-hidden pointer-events-none">
           <FloatingIcon icon={Snowflake} initialX="10%" initialY="20%" delay={0} />
           <FloatingIcon icon={Cpu} initialX="85%" initialY="15%" delay={2} />
@@ -146,6 +146,7 @@ export function Hero() {
           <FloatingIcon icon={Settings} initialX="15%" initialY="70%" delay={3} />
           <FloatingIcon icon={Zap} initialX="50%" initialY="85%" delay={1.5} />
       </div>
+      )}
 
 
 
@@ -210,27 +211,38 @@ export function Hero() {
             <Magnetic>
               <Button 
                 size="lg" 
-                className="relative bg-primary hover:bg-primary/90 text-white px-6 py-3 text-base md:px-8 md:py-6 md:text-lg overflow-hidden group border border-white/10 shadow-[0_0_30px_rgba(0,183,255,0.3)] hover:shadow-[0_0_50px_rgba(0,183,255,0.5)] transition-all duration-500 rounded-full"
+                className="relative bg-primary hover:bg-primary/90 text-white px-6 py-3 text-base md:px-9 md:py-6 md:text-lg overflow-hidden group border border-white/10 shadow-[0_0_30px_rgba(86,170,74,0.35)] hover:shadow-[0_0_60px_rgba(86,170,74,0.55)] transition-all duration-500 rounded-full"
                 onClick={() => import("@/lib/audio").then(m => m.audio.playClick())}
                 asChild
               >
-                <Link href="/eco-cooling">
+                <Link href="/contact">
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-                  Naša Rešenja <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  Zatražite rešenje <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
             </Magnetic>
             <Magnetic>
               <Button 
                 size="lg" 
-                variant="outline" 
-                className="border-white/20 bg-white/5 backdrop-blur-sm text-white hover:bg-white hover:text-[#171A54] px-6 py-3 text-base md:px-8 md:py-6 md:text-lg transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] rounded-full"
+                variant="ghost" 
+                className="text-white/70 hover:text-white px-6 py-3 text-base md:px-6 md:py-6 md:text-lg transition-all duration-300 rounded-full"
                 onClick={() => import("@/lib/audio").then(m => m.audio.playClick())}
                 asChild
               >
-                <Link href="/services">Usluge</Link>
+                <Link href="/eco-cooling">Pogledajte rešenja</Link>
               </Button>
             </Magnetic>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: isMobile ? 1.9 : 1.2 }}
+            className="flex flex-wrap items-center gap-3 text-[10px] sm:text-xs uppercase tracking-widest text-white/50"
+          >
+            <span className="px-3 py-2 rounded-full bg-white/5 border border-white/10">350+ projekata</span>
+            <span className="px-3 py-2 rounded-full bg-white/5 border border-white/10">ISO 9001</span>
+            <span className="px-3 py-2 rounded-full bg-white/5 border border-white/10">24/7 podrška</span>
           </motion.div>
         </div>
       </div>

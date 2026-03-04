@@ -136,12 +136,12 @@ export function Navbar() {
             <img 
               src="/assets/logo.png" 
               alt="EEF Logo" 
-              className="h-12 md:h-14 lg:h-16 w-auto object-contain brightness-0 invert group-hover:brightness-100 group-hover:invert-0 transition-all duration-500" 
+              className="h-11 sm:h-12 md:h-14 xl:h-16 w-auto object-contain brightness-0 invert group-hover:brightness-100 group-hover:invert-0 transition-all duration-500" 
             />
           </Link>
 
           {/* Desktop Navigation (Mega Menu) */}
-          <div className="hidden lg:flex items-center gap-1">
+          <div className="hidden xl:flex items-center gap-1">
             <NavigationMenu className="max-w-none">
               <NavigationMenuList>
                 {navLinks.map((link) => (
@@ -223,7 +223,7 @@ export function Navbar() {
              <Button 
                 variant="default"
                 size="sm"
-                className="hidden lg:flex bg-primary hover:bg-primary/90 text-white transition-all duration-300 shadow-[0_0_15px_rgba(86,170,74,0.4)] hover:shadow-[0_0_25px_rgba(86,170,74,0.6)] hover:-translate-y-0.5 text-xs font-bold tracking-wide h-9 px-6 rounded-full border border-white/10"
+                className="hidden xl:flex bg-primary hover:bg-primary/90 text-white transition-all duration-300 shadow-[0_0_15px_rgba(86,170,74,0.4)] hover:shadow-[0_0_25px_rgba(86,170,74,0.6)] hover:-translate-y-0.5 text-xs font-bold tracking-wide h-9 px-6 rounded-full border border-white/10"
                 onClick={() => import("@/lib/audio").then(m => m.audio.playClick())}
                 asChild
              >
@@ -245,7 +245,7 @@ export function Navbar() {
                 <Button 
                   variant="ghost" 
                   size="icon" 
-                  className="lg:hidden text-white hover:bg-white/10 hover:text-primary transition-all duration-300 rounded-full w-12 h-12"
+                  className="xl:hidden text-white hover:bg-white/10 hover:text-primary transition-all duration-300 rounded-full w-12 h-12"
                   onClick={() => import("@/lib/audio").then(m => m.audio.playClick())}
                 >
                   <AlignRight className="w-7 h-7" />

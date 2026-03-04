@@ -34,6 +34,33 @@
   --font-heading: 'Inter', sans-serif;
   --font-mono: 'Inter', monospace;
 
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1rem;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.25rem;
+  --text-base: 1rem;
+  --text-base--line-height: 1.625rem;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.875rem;
+  --text-xl: 1.25rem;
+  --text-xl--line-height: 1.875rem;
+  --text-2xl: 1.5rem;
+  --text-2xl--line-height: 2.125rem;
+  --text-3xl: clamp(1.75rem, 1.45rem + 0.9vw, 2.25rem);
+  --text-3xl--line-height: 1.15;
+  --text-4xl: clamp(2.1rem, 1.6rem + 1.6vw, 3rem);
+  --text-4xl--line-height: 1.08;
+  --text-5xl: clamp(2.6rem, 2.0rem + 2.2vw, 3.75rem);
+  --text-5xl--line-height: 1.02;
+  --text-6xl: clamp(3.1rem, 2.3rem + 2.9vw, 4.75rem);
+  --text-6xl--line-height: 1;
+  --text-7xl: clamp(3.5rem, 2.6rem + 3.4vw, 5.75rem);
+  --text-7xl--line-height: 0.98;
+  --text-8xl: clamp(4rem, 3rem + 4.2vw, 6.75rem);
+  --text-8xl--line-height: 0.95;
+  --text-9xl: clamp(4.5rem, 3.3rem + 5.4vw, 7.75rem);
+  --text-9xl--line-height: 0.92;
+
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
@@ -59,6 +86,11 @@
       transform: translateX(100%);
     }
   }
+}
+
+.content-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 1000px;
 }
 
 /* DARK MODE DEFAULT - THE DEEP NAVY THEME */
@@ -108,11 +140,18 @@
     @apply border-border;
   }
   body {
-    @apply font-sans antialiased bg-background text-foreground;
+    @apply font-sans antialiased bg-background text-foreground text-base leading-relaxed;
+    text-rendering: optimizeLegibility;
+    font-kerning: normal;
   }
   
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading tracking-tight;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
   }
 }
 
@@ -146,4 +185,26 @@
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: rgba(86, 170, 74, 0.8);
+}
+
+@keyframes hero-kenburns {
+  0% {
+    transform: scale(1.02) translate3d(0, 0, 0);
+  }
+  50% {
+    transform: scale(1.08) translate3d(-1.5%, -1.5%, 0);
+  }
+  100% {
+    transform: scale(1.12) translate3d(1.5%, 1.5%, 0);
+  }
+}
+
+.hero-kenburns {
+  animation: hero-kenburns 22s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-kenburns {
+    animation: none;
+  }
 }

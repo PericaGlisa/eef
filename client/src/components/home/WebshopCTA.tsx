@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 
 export function WebshopCTA() {
   return (
-    <section className="py-12 md:py-24 bg-white relative overflow-hidden">
+    <section className="content-auto py-12 md:py-24 bg-white relative overflow-hidden">
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}

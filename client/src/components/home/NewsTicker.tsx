@@ -13,7 +13,7 @@ import Autoplay from "embla-carousel-autoplay";
 
 export function NewsTicker() {
   return (
-    <section className="py-24 bg-white relative overflow-hidden">
+    <section className="content-auto py-24 bg-white relative overflow-hidden">
       {/* Background Decor */}
       <div className="absolute top-0 right-0 w-1/3 h-full bg-slate-50/50 -skew-x-12 translate-x-1/2" />
       
