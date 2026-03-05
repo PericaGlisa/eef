@@ -95,7 +95,7 @@ export function Hero() {
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   return (
-    <div ref={ref} className="relative h-[100dvh] w-full overflow-hidden bg-background">
+    <div ref={ref} className="relative min-h-[100dvh] md:h-[100dvh] w-full overflow-hidden bg-background">
       {/* Background Image Layer with Overlay */}
       <motion.div 
         style={{ y, opacity }}
@@ -253,6 +253,19 @@ export function Hero() {
             <span className="px-3 py-2 rounded-full bg-white/5 border border-white/10">350+ projekata</span>
             <span className="px-3 py-2 rounded-full bg-white/5 border border-white/10">ISO 9001</span>
           </motion.div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 2, duration: 1 }}
+            className="mt-6 flex md:hidden flex-col items-center gap-2 text-white/50"
+          >
+            <span className="text-[10px] uppercase tracking-[0.2em] font-mono text-primary/80">Skrolujte dalje</span>
+            <motion.div
+              animate={{ y: [0, 10, 0], opacity: [0.5, 1, 0.5] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              className="w-px h-12 bg-gradient-to-b from-primary to-transparent"
+            />
+          </motion.div>
         </div>
       </div>
 
@@ -261,7 +274,7 @@ export function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2, duration: 1 }}
-        className="absolute bottom-2 md:bottom-8 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2 text-white/50"
+        className="absolute bottom-2 md:bottom-8 left-1/2 -translate-x-1/2 z-30 hidden md:flex flex-col items-center gap-2 text-white/50"
       >
         <span className="text-[10px] uppercase tracking-[0.2em] font-mono text-primary/80">Skrolujte dalje</span>
         <motion.div
