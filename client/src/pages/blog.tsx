@@ -4,13 +4,17 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowUpRight, Tag, Search, Filter, ChevronRight, Newspaper } from "lucide-react";
-import { useState, useRef, useMemo } from "react";
+import { useState, useRef, useMemo, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export default function Blog() {
   const [activeCategory, setActiveCategory] = useState("all");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(() => {
+    if (typeof window === "undefined") return "";
+    const params = new URLSearchParams(window.location.search);
+    return params.get("q") ?? "";
+  });
   const containerRef = useRef(null);
   
   const { scrollYProgress } = useScroll({
@@ -41,6 +45,18 @@ export default function Blog() {
   const otherPosts = activeCategory === "all" && !searchQuery 
     ? newsItems.slice(1) 
     : filteredItems;
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (searchQuery) {
+      params.set("q", searchQuery);
+    } else {
+      params.delete("q");
+    }
+    const nextQuery = params.toString();
+    const nextUrl = nextQuery ? `/vesti?${nextQuery}` : "/vesti";
+    window.history.replaceState(window.history.state, "", nextUrl);
+  }, [searchQuery]);
 
   return (
     <div className="bg-background min-h-screen selection:bg-primary selection:text-white" ref={containerRef}>

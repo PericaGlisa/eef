@@ -5,6 +5,7 @@ import { Suspense, lazy, useEffect, useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useSmoothScroll } from "@/hooks/use-smooth-scroll";
+import { SeoManager } from "@/components/SeoManager";
 
 const NotFound = lazy(() => import("@/pages/not-found"));
 const Home = lazy(() => import("@/pages/home"));
@@ -177,6 +178,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <NoiseOverlay />
+        <SeoManager />
         <Suspense fallback={null}>{showChat ? <ChatWidget /> : null}</Suspense>
         <Toaster />
         <Router />

@@ -22,6 +22,54 @@ app.use(
 
 app.use(express.urlencoded({ extended: false }));
 
+function normalizePathname(pathname: string) {
+  const compact = pathname.replace(/\/{2,}/g, "/");
+  const trimmed = compact.length > 1 ? compact.replace(/\/+$/, "") : compact;
+  return trimmed.toLowerCase();
+}
+
+app.use((req, res, next) => {
+  if (req.method !== "GET" && req.method !== "HEAD") {
+    next();
+    return;
+  }
+
+  const normalizedPath = normalizePathname(req.path);
+  const query = req.originalUrl.includes("?") ? req.originalUrl.slice(req.originalUrl.indexOf("?")) : "";
+  const forwardedHost = req.headers["x-forwarded-host"];
+  const hostHeader = (Array.isArray(forwardedHost) ? forwardedHost[0] : forwardedHost || req.headers.host || "")
+    .toString()
+    .split(",")[0]
+    .trim();
+  const forwardedProto = req.headers["x-forwarded-proto"];
+  const protocol = (Array.isArray(forwardedProto) ? forwardedProto[0] : forwardedProto || req.protocol || "http")
+    .toString()
+    .split(",")[0]
+    .trim()
+    .toLowerCase();
+
+  const isEefHost = /(^|\.)eef\.rs$/i.test(hostHeader);
+  const enforceSiteCanonical = process.env.NODE_ENV === "production" && isEefHost;
+  const targetHost = enforceSiteCanonical ? "eef.rs" : hostHeader;
+  const needsHostRedirect = enforceSiteCanonical && hostHeader.toLowerCase() !== targetHost;
+  const needsProtocolRedirect = enforceSiteCanonical && protocol === "http";
+  const needsPathRedirect = normalizedPath !== req.path;
+
+  if (!needsHostRedirect && !needsProtocolRedirect && !needsPathRedirect) {
+    next();
+    return;
+  }
+
+  const targetPath = `${normalizedPath}${query}`;
+  if (targetHost) {
+    const targetProtocol = enforceSiteCanonical ? "https" : protocol === "https" ? "https" : "http";
+    res.redirect(301, `${targetProtocol}://${targetHost}${targetPath}`);
+    return;
+  }
+
+  res.redirect(301, targetPath);
+});
+
 export function log(message: string, source = "express") {
   const formattedTime = new Date().toLocaleTimeString("en-US", {
     hour: "numeric",
