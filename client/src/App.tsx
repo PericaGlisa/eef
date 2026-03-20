@@ -142,6 +142,37 @@ function App() {
     return () => window.clearTimeout(timeoutId);
   }, []);
 
+  useEffect(() => {
+    const prefetchRoutes = () => {
+      void Promise.allSettled([
+        import("@/pages/about"),
+        import("@/pages/contact"),
+        import("@/pages/services"),
+        import("@/pages/service-detail"),
+        import("@/pages/eco-cooling"),
+        import("@/pages/solution-detail"),
+        import("@/pages/partners"),
+        import("@/pages/documentation"),
+        import("@/pages/references"),
+        import("@/pages/project-agrounija"),
+        import("@/pages/blog"),
+        import("@/pages/news-post"),
+        import("@/pages/privacy"),
+        import("@/pages/terms"),
+        import("@/pages/not-found"),
+        import("@/components/ChatWidget"),
+      ]);
+    };
+
+    if (typeof globalThis.requestIdleCallback === "function") {
+      const idleId = globalThis.requestIdleCallback(prefetchRoutes, { timeout: 1400 });
+      return () => globalThis.cancelIdleCallback(idleId);
+    }
+
+    const timeoutId = globalThis.setTimeout(prefetchRoutes, 900);
+    return () => globalThis.clearTimeout(timeoutId);
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>

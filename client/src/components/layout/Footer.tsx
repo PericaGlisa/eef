@@ -1,9 +1,9 @@
 import { Link } from "wouter";
-import { FileText, ArrowRight, Linkedin, MapPin, Phone, Mail } from "lucide-react";
+import { FileText, ArrowRight, Linkedin, MapPin, Phone, Mail, ChevronUp } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="bg-[#0B0F19] text-white pt-20 pb-24 md:pb-12 relative overflow-hidden">
+    <footer className="bg-[#0B0F19] text-white pt-20 pb-24 md:pb-28 lg:pb-12 relative overflow-hidden">
       {/* Vibrant Background Gradients - "Veseliji" vibe */}
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-50" />
       <div className="absolute -top-[300px] -right-[300px] w-[600px] h-[600px] bg-primary/10 rounded-full blur-[100px] animate-pulse pointer-events-none" />
@@ -129,14 +129,23 @@ export function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row md:justify-start items-center gap-6 md:gap-12">
-          <p className="text-slate-500 text-xs text-center md:text-left">
+        <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row md:flex-wrap md:justify-start items-center gap-6 md:gap-12">
+          <p className="order-2 md:order-1 text-slate-500 text-xs text-center md:text-left">
             © {new Date().getFullYear()} Eko Elektrofrigo. Sva prava zadržana.
           </p>
-          <div className="flex gap-4 text-xs text-slate-500 flex-wrap justify-center">
+          <div className="order-1 md:order-2 flex gap-4 text-xs text-slate-500 flex-wrap justify-center">
              <Link href="/politika-privatnosti" className="hover:text-white transition-colors">Politika privatnosti</Link>
              <Link href="/uslovi-koriscenja" className="hover:text-white transition-colors">Uslovi korišćenja</Link>
           </div>
+          <button
+            type="button"
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="order-3 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs font-semibold text-white/90 hover:bg-primary hover:text-white transition-all md:mx-auto lg:mx-0"
+            aria-label="Nazad na vrh"
+          >
+            <ChevronUp className="h-4 w-4" />
+            Nazad na vrh
+          </button>
         </div>
       </div>
     </footer>
