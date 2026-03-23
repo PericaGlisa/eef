@@ -8,6 +8,7 @@ import { ArrowLeft, CheckCircle2, Settings, Phone, FileText, ArrowRight } from "
 import NotFound from "@/pages/not-found";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { solutionSeoDetails } from "@/data/seo-enhancements";
 
 export default function SolutionDetail() {
   const [match, params] = useRoute("/eko-rashlada/:slug");
@@ -28,6 +29,7 @@ export default function SolutionDetail() {
   if (!solution) return <NotFound />;
 
   const Icon = solution.icon;
+  const details = solutionSeoDetails[solution.id];
 
   // Find next solution for navigation
   const currentIndex = solutionsData.findIndex(s => s.id === params.slug);
@@ -49,6 +51,11 @@ export default function SolutionDetail() {
                src={solution.image || "/assets/hero-bg.jpg"} 
                alt={solution.title} 
                className="w-full h-full object-cover"
+               loading="eager"
+               fetchPriority="high"
+               decoding="async"
+               width={1920}
+               height={1080}
              />
           </motion.div>
         </div>
@@ -61,9 +68,9 @@ export default function SolutionDetail() {
           </Link>
 
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.35 }}
             className="max-w-4xl"
           >
             <div className="inline-flex items-center gap-3 mb-8">
@@ -80,6 +87,9 @@ export default function SolutionDetail() {
             
             <p className="text-xl md:text-2xl text-white/60 max-w-3xl font-light leading-relaxed border-l-4 border-primary/50 pl-6">
               {solution.shortDesc}
+            </p>
+            <p className="mt-4 text-sm text-white/45 tracking-wide">
+              Poslednje ažuriranje sadržaja: {details?.lastUpdated ?? "2026-03-23"}
             </p>
           </motion.div>
         </div>
@@ -123,6 +133,12 @@ export default function SolutionDetail() {
                 transition={{ delay: 0.2 }}
                 className="bg-white rounded-3xl p-8 md:p-12 shadow-xl shadow-slate-200/50 border border-slate-100"
               >
+                <h2 className="text-3xl font-bold text-[#0e1035] mb-4">
+                  Rešenje industrijskog hlađenja: {solution.title}
+                </h2>
+                <p className="text-slate-600 leading-relaxed mb-8">
+                  Ovo rešenje je optimizovano za industrijsko hlađenje sa fokusom na stabilan proces, bezbedan rad i uštedu energije u svakodnevnoj eksploataciji.
+                </p>
                 <div 
                   className="prose prose-lg max-w-none text-slate-600 
                     [&_p]:leading-relaxed [&_p]:mb-6 
@@ -140,6 +156,35 @@ export default function SolutionDetail() {
                   }}
                 />
               </motion.div>
+
+              {details?.faqs?.length ? (
+                <section className="mt-12 bg-white rounded-3xl p-8 md:p-12 shadow-xl shadow-slate-200/50 border border-slate-100">
+                  <h2 className="text-3xl font-bold text-[#0e1035] mb-6">Često postavljana pitanja</h2>
+                  <div className="space-y-6">
+                    {details.faqs.map((item) => (
+                      <article key={item.question} className="border-b border-slate-200 pb-5 last:border-b-0 last:pb-0">
+                        <h3 className="text-xl font-semibold text-[#0e1035] mb-2">{item.question}</h3>
+                        <p className="text-slate-600 leading-relaxed">{item.answer}</p>
+                      </article>
+                    ))}
+                  </div>
+                </section>
+              ) : null}
+
+              <section className="mt-12 bg-[#0e1035] rounded-3xl p-8 md:p-10 border border-white/10">
+                <h2 className="text-2xl font-bold text-white mb-3">Treba vam ponuda za ovo rešenje?</h2>
+                <p className="text-white/70 mb-6">
+                  Naš inženjerski tim priprema predlog opreme, tehnički koncept i plan implementacije prema vašem objektu.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <Button asChild className="bg-primary hover:bg-primary/90 text-white">
+                    <Link href="/kontakt">Kontaktirajte nas</Link>
+                  </Button>
+                  <Button asChild variant="outline" className="border-white/20 text-white bg-white/5 hover:bg-white/10">
+                    <Link href="/usluge/inzenjering">Pogledajte uslugu projektovanja</Link>
+                  </Button>
+                </div>
+              </section>
 
               {/* Gallery Section - Only for Rashladne Komore */}
               {params.slug === "rashladne-komore" && (
@@ -341,6 +386,9 @@ export default function SolutionDetail() {
                 <p className="text-slate-500 mb-8 text-sm leading-relaxed relative z-10">
                   Naš tim inženjera je spreman da odgovori na vaše zahteve i ponudi optimalno rešenje.
                 </p>
+                <div className="text-xs text-slate-400 mb-5 relative z-10">
+                  Ažurirano: {details?.lastUpdated ?? "2026-03-23"}
+                </div>
                 
                 <div className="grid gap-3 relative z-10">
                   <Button className="w-full bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/25 h-12 text-base" asChild>

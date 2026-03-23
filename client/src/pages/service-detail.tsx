@@ -8,6 +8,7 @@ import { ArrowLeft, CheckCircle2, Phone, Mail, Settings, FileText, ArrowRight } 
 import NotFound from "@/pages/not-found";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { serviceSeoDetails } from "@/data/seo-enhancements";
 
 export default function ServiceDetail() {
   const [match, params] = useRoute("/usluge/:slug");
@@ -28,6 +29,7 @@ export default function ServiceDetail() {
   if (!service) return <NotFound />;
 
   const Icon = service.icon;
+  const details = serviceSeoDetails[service.id];
 
   // Find next service for navigation
   const currentIndex = servicesContent.findIndex(s => s.id === params.slug);
@@ -49,6 +51,11 @@ export default function ServiceDetail() {
                src={service.image || "/assets/hero-bg.jpg"} 
                alt={service.title} 
                className="w-full h-full object-cover"
+               loading="eager"
+               fetchPriority="high"
+               decoding="async"
+               width={1920}
+               height={1080}
              />
           </motion.div>
         </div>
@@ -61,9 +68,9 @@ export default function ServiceDetail() {
           </Link>
 
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.35 }}
             className="max-w-4xl"
           >
             <div className="inline-flex items-center gap-3 mb-8">
@@ -80,6 +87,9 @@ export default function ServiceDetail() {
             
             <p className="text-xl md:text-2xl text-white/60 max-w-3xl font-light leading-relaxed border-l-4 border-primary/50 pl-6">
               {service.shortDesc}
+            </p>
+            <p className="mt-4 text-sm text-white/45 tracking-wide">
+              Poslednje ažuriranje sadržaja: {details?.lastUpdated ?? "2026-03-23"}
             </p>
           </motion.div>
         </div>
@@ -123,6 +133,12 @@ export default function ServiceDetail() {
                 transition={{ delay: 0.2 }}
                 className="bg-white rounded-3xl p-8 md:p-12 shadow-xl shadow-slate-200/50 border border-slate-100"
               >
+                <h2 className="text-3xl font-bold text-[#0e1035] mb-4">
+                  Usluga industrijskog hlađenja: {service.title}
+                </h2>
+                <p className="text-slate-600 leading-relaxed mb-8">
+                  Ova usluga je fokusirana na industrijsko hlađenje i projektovana je da obezbedi pouzdan rad sistema, energetsku efikasnost i dugoročnu stabilnost procesa.
+                </p>
                 <div 
                   className="prose prose-lg max-w-none text-slate-600 
                     [&_p]:leading-relaxed [&_p]:mb-6 
@@ -140,6 +156,36 @@ export default function ServiceDetail() {
                   }}
                 />
               </motion.div>
+
+              {details?.faqs?.length ? (
+                <section className="mt-12 bg-white rounded-3xl p-8 md:p-12 shadow-xl shadow-slate-200/50 border border-slate-100">
+                  <h2 className="text-3xl font-bold text-[#0e1035] mb-6">Često postavljana pitanja</h2>
+                  <div className="space-y-6">
+                    {details.faqs.map((item) => (
+                      <article key={item.question} className="border-b border-slate-200 pb-5 last:border-b-0 last:pb-0">
+                        <h3 className="text-xl font-semibold text-[#0e1035] mb-2">{item.question}</h3>
+                        <p className="text-slate-600 leading-relaxed">{item.answer}</p>
+                      </article>
+                    ))}
+                  </div>
+                </section>
+              ) : null}
+
+              {details?.relatedReferences?.length ? (
+                <section className="mt-12 bg-[#0e1035] rounded-3xl p-8 md:p-10 border border-white/10">
+                  <h2 className="text-2xl font-bold text-white mb-3">Povezane reference</h2>
+                  <p className="text-white/70 mb-6">
+                    Pogledajte projekte u kojima je ova usluga primenjena u realnim industrijskim uslovima.
+                  </p>
+                  <div className="flex flex-wrap gap-3">
+                    {details.relatedReferences.map((item) => (
+                      <Button key={item.path} asChild variant="outline" className="border-white/20 text-white bg-white/5 hover:bg-white/10">
+                        <Link href={item.path}>{item.label}</Link>
+                      </Button>
+                    ))}
+                  </div>
+                </section>
+              ) : null}
 
               {/* Gallery Section - Only for Engineering */}
               {params.slug === "inzenjering" && (
@@ -256,6 +302,9 @@ export default function ServiceDetail() {
                 <p className="text-slate-500 mb-8 text-sm leading-relaxed relative z-10">
                   Kontaktirajte naš stručni tim za besplatnu konsultaciju i ponudu.
                 </p>
+                <div className="text-xs text-slate-400 mb-5 relative z-10">
+                  Ažurirano: {details?.lastUpdated ?? "2026-03-23"}
+                </div>
                 
                 <div className="grid gap-3 relative z-10">
                   <Button className="w-full bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/25 h-12 text-base" asChild>

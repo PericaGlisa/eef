@@ -120,6 +120,11 @@ export default function Services() {
               src="/assets/service-engineering.webp" 
               alt="Inženjering i projektovanje"  
                className="w-full h-full object-cover"
+               loading="eager"
+               fetchPriority="high"
+               decoding="async"
+               width={1920}
+               height={1080}
                onError={(e) => {
                  // Fallback if image doesn't exist
                  e.currentTarget.src = "https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=2070&auto=format&fit=crop";
@@ -131,9 +136,9 @@ export default function Services() {
         <div className="container mx-auto px-6 relative z-30">
           <div className="max-w-4xl">
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
+              initial={false}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.35 }}
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-primary text-sm font-mono mb-6 backdrop-blur-md"
             >
               <Zap className="w-4 h-4" />
@@ -141,9 +146,9 @@ export default function Services() {
             </motion.div>
 
             <motion.h1 
-              initial={{ opacity: 0, y: 30 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.1 }}
+              transition={{ duration: 0.35 }}
               className="text-5xl md:text-7xl lg:text-8xl font-heading font-bold text-white mb-8 leading-tight tracking-tight drop-shadow-2xl"
             >
               Industrijska <br />
@@ -151,9 +156,9 @@ export default function Services() {
             </motion.h1>
             
             <motion.p 
-              initial={{ opacity: 0, y: 30 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
+              transition={{ duration: 0.35 }}
               className="text-xl md:text-2xl text-white/70 max-w-2xl font-light leading-relaxed mb-10 border-l-4 border-primary pl-6"
             >
               Sveobuhvatna inženjerska rešenja. Od prvog nacrta do dugoročnog održavanja, mi smo vaš pouzdan partner u hladnom lancu.

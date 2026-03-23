@@ -3,6 +3,7 @@ import { useLocation } from "wouter";
 import { newsItems } from "@/data/news";
 import { servicesContent } from "@/data/services-content";
 import { solutionsData } from "@/data/solutions";
+import { newsSeoDetails, serviceSeoDetails, solutionSeoDetails } from "@/data/seo-enhancements";
 
 export const SITE_URL = "https://eef.rs";
 export const SITE_NAME = "Eko Elektrofrigo";
@@ -18,6 +19,8 @@ export type SeoMeta = {
   breadcrumbs: Array<{ name: string; path: string }>;
   image?: string;
   articleDate?: string;
+  lastUpdated?: string;
+  faq?: Array<{ question: string; answer: string }>;
 };
 
 export function normalizePathname(pathname: string) {
@@ -218,6 +221,7 @@ export function getSeoMeta(pathname: string): SeoMeta {
   if (normalizedPath.startsWith("/usluge/")) {
     const slug = normalizedPath.replace("/usluge/", "");
     const service = servicesContent.find((item) => item.id === slug);
+    const serviceSeo = serviceSeoDetails[slug];
     if (service) {
       return {
         title: `${service.title} | Usluge | Eko Elektrofrigo`,
@@ -225,6 +229,8 @@ export function getSeoMeta(pathname: string): SeoMeta {
         canonicalPath: normalizedPath,
         kind: "service",
         image: service.image,
+        lastUpdated: serviceSeo?.lastUpdated,
+        faq: serviceSeo?.faqs ?? [],
         breadcrumbs: [
           { name: "Početna", path: "/" },
           { name: "Usluge", path: "/usluge" },
@@ -237,6 +243,7 @@ export function getSeoMeta(pathname: string): SeoMeta {
   if (normalizedPath.startsWith("/eko-rashlada/")) {
     const slug = normalizedPath.replace("/eko-rashlada/", "");
     const solution = solutionsData.find((item) => item.id === slug);
+    const solutionSeo = solutionSeoDetails[slug];
     if (solution) {
       return {
         title: `${solution.title} | Eko Rashlada | Eko Elektrofrigo`,
@@ -244,6 +251,8 @@ export function getSeoMeta(pathname: string): SeoMeta {
         canonicalPath: normalizedPath,
         kind: "solution",
         image: solution.image,
+        lastUpdated: solutionSeo?.lastUpdated,
+        faq: solutionSeo?.faqs ?? [],
         breadcrumbs: [
           { name: "Početna", path: "/" },
           { name: "Eko Rashlada", path: "/eko-rashlada" },
@@ -256,6 +265,7 @@ export function getSeoMeta(pathname: string): SeoMeta {
   if (normalizedPath.startsWith("/vesti/")) {
     const id = Number(normalizedPath.replace("/vesti/", ""));
     const post = newsItems.find((item) => item.id === id);
+    const newsSeo = newsSeoDetails[id];
     if (post) {
       return {
         title: `${post.title} | Vesti | Eko Elektrofrigo`,
@@ -264,6 +274,8 @@ export function getSeoMeta(pathname: string): SeoMeta {
         kind: "article",
         image: post.image,
         articleDate: parseNewsDate(post.date),
+        lastUpdated: parseNewsDate(post.date),
+        faq: newsSeo?.faqs ?? [],
         breadcrumbs: [
           { name: "Početna", path: "/" },
           { name: "Vesti", path: "/vesti" },
@@ -454,6 +466,22 @@ export function buildPageSchemas(meta: SeoMeta, canonicalUrl: string, pageImage:
       areaServed: "RS",
       url: canonicalUrl,
       image: pageImage,
+      dateModified: meta.lastUpdated ?? new Date().toISOString().slice(0, 10),
+    });
+  }
+
+  if (meta.faq && meta.faq.length > 0) {
+    schemas.push({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: meta.faq.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.answer,
+        },
+      })),
     });
   }
 

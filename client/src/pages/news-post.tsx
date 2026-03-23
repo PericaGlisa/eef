@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 
 import { Gallery } from "@/components/Gallery";
+import { newsSeoDetails } from "@/data/seo-enhancements";
 
 export default function NewsPost() {
   const [match, params] = useRoute("/vesti/:id");
@@ -18,6 +19,7 @@ export default function NewsPost() {
   
   const id = parseInt(params.id);
   const post = newsItems.find(item => item.id === id);
+  const newsSeo = newsSeoDetails[id];
 
   if (!post) return <NotFound />;
 
@@ -58,9 +60,9 @@ export default function NewsPost() {
           </Link>
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.3 }}
           >
             <div className="flex items-center gap-4 mb-6">
               <span className="flex items-center text-white/50 text-sm bg-white/5 px-3 py-1 rounded-full border border-white/10">
@@ -88,6 +90,15 @@ export default function NewsPost() {
               <p className="lead text-xl text-white/80 font-light mb-8 border-l-4 border-primary pl-6">
                 {post.desc}
               </p>
+              <p className="text-sm text-white/55 mb-8">
+                Poslednje ažuriranje sadržaja: {post.date}
+              </p>
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
+                Industrijsko hlađenje kroz aktuelne projekte i iskustva
+              </h2>
+              <p className="text-white/70 mb-8">
+                Kroz ovu vest donosimo praktične uvide iz oblasti industrijskog hlađenja, sa fokusom na tehnološka rešenja, izvođenje i rezultate na terenu.
+              </p>
               
               <div className="space-y-6 text-white/70">
                 {post.content.split('\n\n').map((paragraph, idx) => (
@@ -95,6 +106,40 @@ export default function NewsPost() {
                 ))}
               </div>
             </div>
+
+            {newsSeo?.relatedLinks?.length ? (
+              <section className="mt-14 border-t border-white/10 pt-10">
+                <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">Povezane usluge i rešenja</h2>
+                <p className="text-white/70 mb-6">
+                  Ako vas zanima ova tema, pogledajte i povezane stranice sa tehničkim detaljima.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  {newsSeo.relatedLinks.map((item) => (
+                    <Link
+                      key={item.path}
+                      href={item.path}
+                      className="inline-flex items-center rounded-full border border-white/20 px-4 py-2 text-sm font-semibold text-white/80 hover:bg-white/10 hover:text-white transition-colors"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              </section>
+            ) : null}
+
+            {newsSeo?.faqs?.length ? (
+              <section className="mt-14 border-t border-white/10 pt-10">
+                <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">Često postavljana pitanja</h2>
+                <div className="space-y-6">
+                  {newsSeo.faqs.map((item) => (
+                    <article key={item.question} className="rounded-2xl border border-white/15 bg-white/5 p-5">
+                      <h3 className="text-lg md:text-xl font-semibold text-white mb-2">{item.question}</h3>
+                      <p className="text-white/70 leading-relaxed">{item.answer}</p>
+                    </article>
+                  ))}
+                </div>
+              </section>
+            ) : null}
 
             {/* Gallery Section - Only for Masinski Fakultet post (id: 1) */}
             {post.id === 1 && (

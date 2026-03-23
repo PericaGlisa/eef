@@ -2,6 +2,7 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
 import { createServer } from "http";
+import { isGonePath, normalizeQuery, resolveLegacyRedirect } from "./url-policy";
 
 const app = express();
 const httpServer = createServer(app);
@@ -29,13 +30,39 @@ function normalizePathname(pathname: string) {
 }
 
 app.use((req, res, next) => {
+  const pathname = req.path.toLowerCase();
+  if (pathname === "/api" || pathname.startsWith("/api/")) {
+    res.setHeader("X-Robots-Tag", "noindex, nofollow, noarchive");
+  } else if (
+    pathname.startsWith("/@vite") ||
+    pathname.startsWith("/@fs/") ||
+    pathname.startsWith("/vite-hmr") ||
+    /\.[a-z0-9]+$/i.test(pathname)
+  ) {
+    res.setHeader("X-Robots-Tag", "noindex, noarchive");
+  }
+  next();
+});
+
+app.use((req, res, next) => {
   if (req.method !== "GET" && req.method !== "HEAD") {
     next();
     return;
   }
 
   const normalizedPath = normalizePathname(req.path);
-  const query = req.originalUrl.includes("?") ? req.originalUrl.slice(req.originalUrl.indexOf("?")) : "";
+  const rawQuery = req.originalUrl.includes("?") ? req.originalUrl.slice(req.originalUrl.indexOf("?") + 1) : "";
+  if (isGonePath(normalizedPath)) {
+    res.status(410).send("Gone");
+    return;
+  }
+
+  const redirectedLegacyPath = resolveLegacyRedirect(normalizedPath);
+  const canonicalPath = redirectedLegacyPath ?? normalizedPath;
+  const isApiRequest = canonicalPath === "/api" || canonicalPath.startsWith("/api/");
+  const queryResult = isApiRequest
+    ? { query: rawQuery, changed: false, hasSearchQuery: false }
+    : normalizeQuery(canonicalPath, rawQuery);
   const forwardedHost = req.headers["x-forwarded-host"];
   const hostHeader = (Array.isArray(forwardedHost) ? forwardedHost[0] : forwardedHost || req.headers.host || "")
     .toString()
@@ -53,14 +80,26 @@ app.use((req, res, next) => {
   const targetHost = enforceSiteCanonical ? "eef.rs" : hostHeader;
   const needsHostRedirect = enforceSiteCanonical && hostHeader.toLowerCase() !== targetHost;
   const needsProtocolRedirect = enforceSiteCanonical && protocol === "http";
-  const needsPathRedirect = normalizedPath !== req.path;
+  const needsPathRedirect = canonicalPath !== req.path;
+  const needsLegacyRedirect = typeof redirectedLegacyPath === "string";
+  const needsQueryRedirect = queryResult.changed;
 
-  if (!needsHostRedirect && !needsProtocolRedirect && !needsPathRedirect) {
+  if (
+    !needsHostRedirect &&
+    !needsProtocolRedirect &&
+    !needsPathRedirect &&
+    !needsLegacyRedirect &&
+    !needsQueryRedirect
+  ) {
+    if (queryResult.hasSearchQuery && canonicalPath === "/vesti") {
+      res.setHeader("X-Robots-Tag", "noindex, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1");
+    }
     next();
     return;
   }
 
-  const targetPath = `${normalizedPath}${query}`;
+  const targetQuery = queryResult.query ? `?${queryResult.query}` : "";
+  const targetPath = `${canonicalPath}${targetQuery}`;
   if (targetHost) {
     const targetProtocol = enforceSiteCanonical ? "https" : protocol === "https" ? "https" : "http";
     res.redirect(301, `${targetProtocol}://${targetHost}${targetPath}`);

@@ -2,6 +2,7 @@ import { build as esbuild } from "esbuild";
 import { build as viteBuild } from "vite";
 import { rm, readFile } from "fs/promises";
 import { generateSitemap } from "./generate-sitemap";
+import { generateImageSitemap } from "./generate-image-sitemap";
 import { prerenderRoutes } from "./prerender-routes";
 
 // server deps to bundle to reduce openat(2) syscalls
@@ -37,6 +38,7 @@ const allowlist = [
 async function buildAll() {
   await rm("dist", { recursive: true, force: true });
   await generateSitemap();
+  await generateImageSitemap();
 
   console.log("building client...");
   await viteBuild();

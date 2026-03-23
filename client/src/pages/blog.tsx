@@ -73,15 +73,20 @@ export default function Blog() {
                src="/assets/blog7.webp" 
                alt="News Archive"  
                className="w-full h-full object-cover"
+               loading="eager"
+               fetchPriority="high"
+               decoding="async"
+               width={1920}
+               height={1080}
              />
           </motion.div>
         </div>
 
         <div className="container mx-auto px-6 relative z-10">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.35 }}
             className="max-w-4xl"
           >
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-primary text-sm font-mono mb-6 backdrop-blur-sm">

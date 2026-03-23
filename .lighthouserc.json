@@ -1,0 +1,52 @@
+{
+  "ci": {
+    "collect": {
+      "numberOfRuns": 1,
+      "startServerCommand": "cross-env PORT=5001 npm run start",
+      "startServerReadyPattern": "serving on port 5001",
+      "startServerReadyTimeout": 120000,
+      "url": [
+        "http://localhost:5001/",
+        "http://localhost:5001/usluge",
+        "http://localhost:5001/eko-rashlada",
+        "http://localhost:5001/vesti"
+      ],
+      "settings": {
+        "formFactor": "mobile",
+        "screenEmulation": {
+          "mobile": true,
+          "width": 390,
+          "height": 844,
+          "deviceScaleFactor": 3,
+          "disabled": false
+        },
+        "throttlingMethod": "simulate"
+      }
+    },
+    "assert": {
+      "assertions": {
+        "largest-contentful-paint": [
+          "error",
+          {
+            "maxNumericValue": 2500
+          }
+        ],
+        "interaction-to-next-paint": [
+          "error",
+          {
+            "maxNumericValue": 200
+          }
+        ],
+        "cumulative-layout-shift": [
+          "error",
+          {
+            "maxNumericValue": 0.1
+          }
+        ]
+      }
+    },
+    "upload": {
+      "target": "temporary-public-storage"
+    }
+  }
+}

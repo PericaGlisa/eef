@@ -57,6 +57,9 @@ async function run() {
   const publicDir = path.resolve(process.cwd(), "dist/public");
   const htmlFilePaths = await collectHtmlFiles(publicDir);
   const pages: HtmlPage[] = [];
+  const robotsPath = path.resolve(publicDir, "robots.txt");
+  const sitemapPath = path.resolve(publicDir, "sitemap.xml");
+  const imageSitemapPath = path.resolve(publicDir, "image-sitemap.xml");
 
   for (const filePath of htmlFilePaths) {
     const html = await readFile(filePath, "utf8");
@@ -71,6 +74,22 @@ async function run() {
   const titleIndex = new Map<string, string[]>();
   const descriptionIndex = new Map<string, string[]>();
   const issues: string[] = [];
+
+  const robotsContent = await readFile(robotsPath, "utf8");
+  const sitemapContent = await readFile(sitemapPath, "utf8");
+  const imageSitemapContent = await readFile(imageSitemapPath, "utf8");
+  if (!robotsContent.includes("Sitemap: https://eef.rs/sitemap.xml")) {
+    issues.push("robots.txt missing sitemap.xml reference");
+  }
+  if (!robotsContent.includes("Sitemap: https://eef.rs/image-sitemap.xml")) {
+    issues.push("robots.txt missing image-sitemap.xml reference");
+  }
+  if (!sitemapContent.includes("<urlset")) {
+    issues.push("sitemap.xml is not a valid urlset");
+  }
+  if (!imageSitemapContent.includes("xmlns:image=\"http://www.google.com/schemas/sitemap-image/1.1\"")) {
+    issues.push("image-sitemap.xml missing image namespace");
+  }
 
   for (const page of pages) {
     const title = getTagContent(page.html, /<title>([\s\S]*?)<\/title>/i);

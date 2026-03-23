@@ -164,9 +164,9 @@ export function Hero() {
       <div className="relative z-30 container mx-auto px-6 h-full flex flex-col justify-center pt-32 pb-20 md:pt-20 md:pb-0 lg:pt-32">
         <div className="max-w-5xl space-y-8">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: isMobile ? 0.5 : 0 }}
+            transition={{ duration: 0.35 }}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md text-primary font-mono text-xs uppercase tracking-widest mb-6 hover:bg-white/10 transition-colors cursor-default shadow-[0_0_20px_rgba(86,170,74,0.1)] group"
           >
             <span className="w-2 h-2 rounded-full bg-primary animate-pulse shadow-[0_0_10px_rgba(86,170,74,0.8)] group-hover:scale-150 transition-transform"></span>
@@ -178,9 +178,9 @@ export function Hero() {
             
             {/* Split Headline for Modern Look */}
             <motion.h1 
-              initial={{ opacity: 0, y: 30 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
+              transition={{ duration: 0.35 }}
               className="text-5xl sm:text-6xl md:text-8xl font-bold text-white leading-[0.9] font-heading tracking-tight drop-shadow-2xl"
             >
               Inženjerska <br />
@@ -193,9 +193,9 @@ export function Hero() {
             </motion.h1>
 
             <motion.p
-              initial={{ opacity: 0, x: -20 }}
+              initial={false}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
+              transition={{ duration: 0.35 }}
               className="text-xl sm:text-2xl md:text-3xl text-white/60 font-light max-w-2xl border-l-2 border-primary/30 pl-6 mt-6"
             >
               Projektovanje, izvođenje i održavanje <span className="text-white font-medium">najsavremenijih</span> rashladnih sistema.
@@ -203,9 +203,9 @@ export function Hero() {
           </div>
 
           <motion.div
-            initial={{ opacity: 0 }}
+            initial={false}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: isMobile ? 1.4 : 0.8 }}
+            transition={{ duration: 0.35 }}
             className="text-base sm:text-lg text-white/40 font-mono h-[32px] flex items-center gap-3 mt-4"
           >
              <div className="w-1 h-8 bg-primary/50" />
@@ -213,9 +213,9 @@ export function Hero() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: isMobile ? 1.6 : 1 }}
+            transition={{ duration: 0.35 }}
             className="flex flex-col sm:flex-row gap-4 pt-8"
           >
             <Magnetic>
