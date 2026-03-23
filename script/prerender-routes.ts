@@ -36,6 +36,13 @@ function applyHeadMeta(html: string, route: string) {
   const meta = getSeoMeta(route);
   const canonicalUrl = buildCanonicalUrl(meta.canonicalPath);
   const image = toAbsoluteUrl(meta.image);
+  const ogType = meta.kind === "article" ? "article" : "website";
+  const imageType = image.toLowerCase().endsWith(".png")
+    ? "image/png"
+    : image.toLowerCase().endsWith(".webp")
+      ? "image/webp"
+      : "image/jpeg";
+  const imageAlt = `${meta.title} | ${SITE_NAME}`;
   const pageSchemas = buildPageSchemas(meta, canonicalUrl, image);
   const schemas = [...getGlobalSchemas(), ...pageSchemas];
   const jsonLd = `<script type="application/ld+json">${JSON.stringify(schemas)}</script>`;
@@ -63,7 +70,7 @@ function applyHeadMeta(html: string, route: string) {
   output = replaceOrInsert(
     output,
     /<meta\s+property="og:type"\s+content="[^"]*"\s*\/?>/i,
-    `<meta property="og:type" content="website">`,
+    `<meta property="og:type" content="${ogType}">`,
     "</head>",
   );
   output = replaceOrInsert(
@@ -92,6 +99,36 @@ function applyHeadMeta(html: string, route: string) {
   );
   output = replaceOrInsert(
     output,
+    /<meta\s+property="og:image:secure_url"\s+content="[^"]*"\s*\/?>/i,
+    `<meta property="og:image:secure_url" content="${image || DEFAULT_IMAGE}">`,
+    "</head>",
+  );
+  output = replaceOrInsert(
+    output,
+    /<meta\s+property="og:image:type"\s+content="[^"]*"\s*\/?>/i,
+    `<meta property="og:image:type" content="${imageType}">`,
+    "</head>",
+  );
+  output = replaceOrInsert(
+    output,
+    /<meta\s+property="og:image:width"\s+content="[^"]*"\s*\/?>/i,
+    `<meta property="og:image:width" content="1200">`,
+    "</head>",
+  );
+  output = replaceOrInsert(
+    output,
+    /<meta\s+property="og:image:height"\s+content="[^"]*"\s*\/?>/i,
+    `<meta property="og:image:height" content="630">`,
+    "</head>",
+  );
+  output = replaceOrInsert(
+    output,
+    /<meta\s+property="og:image:alt"\s+content="[^"]*"\s*\/?>/i,
+    `<meta property="og:image:alt" content="${imageAlt}">`,
+    "</head>",
+  );
+  output = replaceOrInsert(
+    output,
     /<meta\s+name="twitter:card"\s+content="[^"]*"\s*\/?>/i,
     `<meta name="twitter:card" content="summary_large_image">`,
     "</head>",
@@ -114,6 +151,31 @@ function applyHeadMeta(html: string, route: string) {
     `<meta name="twitter:image" content="${image || DEFAULT_IMAGE}">`,
     "</head>",
   );
+  output = replaceOrInsert(
+    output,
+    /<meta\s+name="twitter:image:alt"\s+content="[^"]*"\s*\/?>/i,
+    `<meta name="twitter:image:alt" content="${imageAlt}">`,
+    "</head>",
+  );
+  if (meta.kind === "article") {
+    const published = meta.articleDate ?? new Date().toISOString().slice(0, 10);
+    const modified = meta.lastUpdated ?? published;
+    output = replaceOrInsert(
+      output,
+      /<meta\s+property="article:published_time"\s+content="[^"]*"\s*\/?>/i,
+      `<meta property="article:published_time" content="${published}">`,
+      "</head>",
+    );
+    output = replaceOrInsert(
+      output,
+      /<meta\s+property="article:modified_time"\s+content="[^"]*"\s*\/?>/i,
+      `<meta property="article:modified_time" content="${modified}">`,
+      "</head>",
+    );
+  } else {
+    output = output.replace(/<meta\s+property="article:published_time"\s+content="[^"]*"\s*\/?>\s*/gi, "");
+    output = output.replace(/<meta\s+property="article:modified_time"\s+content="[^"]*"\s*\/?>\s*/gi, "");
+  }
   output = replaceOrInsert(
     output,
     /<meta\s+name="robots"\s+content="[^"]*"\s*\/?>/i,

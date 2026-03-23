@@ -95,10 +95,24 @@ async function run() {
     const title = getTagContent(page.html, /<title>([\s\S]*?)<\/title>/i);
     const description = getTagContent(page.html, /<meta[^>]+name="description"[^>]+content="([^"]*)"/i);
     const canonical = getTagContent(page.html, /<link[^>]+rel="canonical"[^>]+href="([^"]*)"/i);
+    const ogImage = getTagContent(page.html, /<meta[^>]+property="og:image"[^>]+content="([^"]*)"/i);
+    const ogImageSecure = getTagContent(page.html, /<meta[^>]+property="og:image:secure_url"[^>]+content="([^"]*)"/i);
+    const ogImageType = getTagContent(page.html, /<meta[^>]+property="og:image:type"[^>]+content="([^"]*)"/i);
+    const ogImageWidth = getTagContent(page.html, /<meta[^>]+property="og:image:width"[^>]+content="([^"]*)"/i);
+    const ogImageHeight = getTagContent(page.html, /<meta[^>]+property="og:image:height"[^>]+content="([^"]*)"/i);
+    const ogImageAlt = getTagContent(page.html, /<meta[^>]+property="og:image:alt"[^>]+content="([^"]*)"/i);
+    const twitterImageAlt = getTagContent(page.html, /<meta[^>]+name="twitter:image:alt"[^>]+content="([^"]*)"/i);
 
     if (!title) issues.push(`Missing <title>: ${page.route}`);
     if (!description) issues.push(`Missing meta description: ${page.route}`);
     if (!canonical) issues.push(`Missing canonical: ${page.route}`);
+    if (!ogImage) issues.push(`Missing og:image: ${page.route}`);
+    if (!ogImageSecure) issues.push(`Missing og:image:secure_url: ${page.route}`);
+    if (!ogImageType) issues.push(`Missing og:image:type: ${page.route}`);
+    if (!ogImageWidth) issues.push(`Missing og:image:width: ${page.route}`);
+    if (!ogImageHeight) issues.push(`Missing og:image:height: ${page.route}`);
+    if (!ogImageAlt) issues.push(`Missing og:image:alt: ${page.route}`);
+    if (!twitterImageAlt) issues.push(`Missing twitter:image:alt: ${page.route}`);
 
     if (title) {
       const list = titleIndex.get(title) ?? [];

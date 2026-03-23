@@ -8,6 +8,8 @@ import { newsSeoDetails, serviceSeoDetails, solutionSeoDetails } from "@/data/se
 export const SITE_URL = "https://eef.rs";
 export const SITE_NAME = "Eko Elektrofrigo";
 export const DEFAULT_IMAGE = `${SITE_URL}/opengraph.jpg`;
+const DEFAULT_OG_IMAGE_WIDTH = "1200";
+const DEFAULT_OG_IMAGE_HEIGHT = "630";
 const DEFAULT_DESCRIPTION =
   "Lider u inženjeringu, projektovanju i održavanju industrijskih rashladnih sistema. Energetski efikasna rešenja, ključ u ruke projekti i 24/7 servisna podrška.";
 
@@ -314,6 +316,22 @@ function upsertMetaByProperty(property: string, content: string) {
   tag.setAttribute("content", content);
 }
 
+function removeMetaByName(name: string) {
+  document.head.querySelector<HTMLMetaElement>(`meta[name="${name}"]`)?.remove();
+}
+
+function removeMetaByProperty(property: string) {
+  document.head.querySelector<HTMLMetaElement>(`meta[property="${property}"]`)?.remove();
+}
+
+function getImageMimeType(imageUrl: string) {
+  const cleanUrl = imageUrl.split("?")[0].toLowerCase();
+  if (cleanUrl.endsWith(".jpg") || cleanUrl.endsWith(".jpeg")) return "image/jpeg";
+  if (cleanUrl.endsWith(".png")) return "image/png";
+  if (cleanUrl.endsWith(".webp")) return "image/webp";
+  return "image/jpeg";
+}
+
 function upsertCanonical(url: string) {
   let link = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
   if (!link) {
@@ -499,6 +517,9 @@ export function SeoManager() {
   useEffect(() => {
     const canonicalUrl = `${SITE_URL}${meta.canonicalPath === "/" ? "" : meta.canonicalPath}`;
     const pageImage = toAbsoluteUrl(meta.image);
+    const ogType = meta.kind === "article" ? "article" : "website";
+    const imageType = getImageMimeType(pageImage);
+    const imageAlt = `${meta.title} | ${SITE_NAME}`;
 
     document.title = meta.title;
     upsertMetaByName("description", meta.description);
@@ -506,16 +527,33 @@ export function SeoManager() {
 
     upsertMetaByProperty("og:title", meta.title);
     upsertMetaByProperty("og:description", meta.description);
-    upsertMetaByProperty("og:type", "website");
+    upsertMetaByProperty("og:type", ogType);
     upsertMetaByProperty("og:url", canonicalUrl);
     upsertMetaByProperty("og:site_name", SITE_NAME);
     upsertMetaByProperty("og:locale", "sr_RS");
     upsertMetaByProperty("og:image", pageImage);
+    upsertMetaByProperty("og:image:secure_url", pageImage);
+    upsertMetaByProperty("og:image:type", imageType);
+    upsertMetaByProperty("og:image:width", DEFAULT_OG_IMAGE_WIDTH);
+    upsertMetaByProperty("og:image:height", DEFAULT_OG_IMAGE_HEIGHT);
+    upsertMetaByProperty("og:image:alt", imageAlt);
 
     upsertMetaByName("twitter:card", "summary_large_image");
     upsertMetaByName("twitter:title", meta.title);
     upsertMetaByName("twitter:description", meta.description);
     upsertMetaByName("twitter:image", pageImage);
+    upsertMetaByName("twitter:image:alt", imageAlt);
+
+    if (meta.kind === "article") {
+      const published = meta.articleDate ?? new Date().toISOString().slice(0, 10);
+      const modified = meta.lastUpdated ?? published;
+      upsertMetaByProperty("article:published_time", published);
+      upsertMetaByProperty("article:modified_time", modified);
+    } else {
+      removeMetaByProperty("article:published_time");
+      removeMetaByProperty("article:modified_time");
+    }
+    removeMetaByName("twitter:site");
 
     upsertCanonical(canonicalUrl);
     upsertAlternateLinks(meta.canonicalPath);
