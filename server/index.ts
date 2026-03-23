@@ -6,6 +6,7 @@ import { isGonePath, normalizeQuery, resolveLegacyRedirect } from "./url-policy"
 
 const app = express();
 const httpServer = createServer(app);
+app.set("trust proxy", true);
 
 declare module "http" {
   interface IncomingMessage {
@@ -69,17 +70,18 @@ app.use((req, res, next) => {
     .split(",")[0]
     .trim();
   const forwardedProto = req.headers["x-forwarded-proto"];
-  const protocol = (Array.isArray(forwardedProto) ? forwardedProto[0] : forwardedProto || req.protocol || "http")
-    .toString()
-    .split(",")[0]
-    .trim()
-    .toLowerCase();
+  const forwardedProtoRaw = (Array.isArray(forwardedProto) ? forwardedProto.join(",") : forwardedProto || "").toString();
+  const protoCandidates = forwardedProtoRaw
+    .split(",")
+    .map((item) => item.trim().toLowerCase())
+    .filter(Boolean);
+  const protocol = protoCandidates.includes("https") ? "https" : protoCandidates[0] || req.protocol || "http";
 
   const isEefHost = /(^|\.)eef\.rs$/i.test(hostHeader);
   const enforceSiteCanonical = process.env.NODE_ENV === "production" && isEefHost;
   const targetHost = enforceSiteCanonical ? "eef.rs" : hostHeader;
   const needsHostRedirect = enforceSiteCanonical && hostHeader.toLowerCase() !== targetHost;
-  const needsProtocolRedirect = enforceSiteCanonical && protocol === "http";
+  const needsProtocolRedirect = enforceSiteCanonical && protoCandidates.length > 0 && protocol === "http";
   const needsPathRedirect = canonicalPath !== req.path;
   const needsLegacyRedirect = typeof redirectedLegacyPath === "string";
   const needsQueryRedirect = queryResult.changed;

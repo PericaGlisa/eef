@@ -81,9 +81,9 @@ export const serviceSeoDetails: Record<string, ServiceSeoDetails> = {
     ],
     faqs: [
       {
-        question: "Da li je servis dostupan 24/7?",
+        question: "Da li servis pokriva preventivno i korektivno održavanje?",
         answer:
-          "Da, naš servisni tim je dostupan 24/7 za hitne intervencije i podršku u radu rashladnih sistema.",
+          "Da, servisni obuhvat uključuje redovno preventivno održavanje, dijagnostiku kvarova i korektivne intervencije prema stanju sistema.",
       },
       {
         question: "Da li radite preventivno održavanje?",
@@ -110,9 +110,9 @@ export const serviceSeoDetails: Record<string, ServiceSeoDetails> = {
           "Energetska revizija uključuje analizu potrošnje, identifikaciju gubitaka i preporuke mera za povećanje efikasnosti sistema.",
       },
       {
-        question: "Da li dobijamo procenu povrata investicije?",
+        question: "Da li energetska revizija uključuje plan mera za optimizaciju?",
         answer:
-          "Da, pripremamo ROI analizu za svaku predloženu meru kako biste imali jasnu procenu isplativosti ulaganja.",
+          "Da, nakon analize dobijate prioritetni plan tehničkih mera za smanjenje potrošnje i povećanje efikasnosti rada sistema.",
       },
       {
         question: "Da li revizija može da se radi bez prekida proizvodnje?",
@@ -163,9 +163,9 @@ export const serviceSeoDetails: Record<string, ServiceSeoDetails> = {
           "Da, pripremamo protokole i preporuke koji smanjuju rizik od zastoja i incidentnih situacija u radu sistema.",
       },
       {
-        question: "Da li tim dobija obuku za bezbedan rad?",
+        question: "Da li bezbednosni paket uključuje procedure za incidentne situacije?",
         answer:
-          "Da, kroz primopredaju i stručnu podršku korisniku se obezbeđuju jasne smernice za bezbedan rad i održavanje.",
+          "Da, pripremamo procedure i operativne smernice za reagovanje u incidentnim situacijama, uz jasne korake za minimizaciju rizika.",
       },
     ],
   },
@@ -402,7 +402,7 @@ export const newsSeoDetails: Record<number, NewsSeoDetails> = {
       {
         question: "Kako stručni skupovi utiču na kvalitet rešenja?",
         answer:
-          "Doprinele su razmeni iskustava, boljoj optimizaciji sistema i unapređenju tehničke podrške klijentima.",
+          "Doprineli su razmeni iskustava, boljoj optimizaciji sistema i unapređenju tehničke podrške klijentima.",
       },
     ],
   },

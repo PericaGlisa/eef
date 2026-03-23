@@ -90,9 +90,6 @@ export default function NewsPost() {
               <p className="lead text-xl text-white/80 font-light mb-8 border-l-4 border-primary pl-6">
                 {post.desc}
               </p>
-              <p className="text-sm text-white/55 mb-8">
-                Poslednje ažuriranje sadržaja: {post.date}
-              </p>
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
                 Industrijsko hlađenje kroz aktuelne projekte i iskustva
               </h2>

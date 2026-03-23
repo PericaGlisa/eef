@@ -88,9 +88,6 @@ export default function SolutionDetail() {
             <p className="text-xl md:text-2xl text-white/60 max-w-3xl font-light leading-relaxed border-l-4 border-primary/50 pl-6">
               {solution.shortDesc}
             </p>
-            <p className="mt-4 text-sm text-white/45 tracking-wide">
-              Poslednje ažuriranje sadržaja: {details?.lastUpdated ?? "2026-03-23"}
-            </p>
           </motion.div>
         </div>
       </section>
@@ -386,9 +383,6 @@ export default function SolutionDetail() {
                 <p className="text-slate-500 mb-8 text-sm leading-relaxed relative z-10">
                   Naš tim inženjera je spreman da odgovori na vaše zahteve i ponudi optimalno rešenje.
                 </p>
-                <div className="text-xs text-slate-400 mb-5 relative z-10">
-                  Ažurirano: {details?.lastUpdated ?? "2026-03-23"}
-                </div>
                 
                 <div className="grid gap-3 relative z-10">
                   <Button className="w-full bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/25 h-12 text-base" asChild>
