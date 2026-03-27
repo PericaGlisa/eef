@@ -1,7 +1,7 @@
 import { Switch, Route, useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { Suspense, lazy, useEffect, useState } from "react";
+import { Component, ReactNode, Suspense, lazy, useEffect, useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useSmoothScroll } from "@/hooks/use-smooth-scroll";
@@ -24,9 +24,29 @@ const NewsPost = lazy(() => import("@/pages/news-post"));
 const Privacy = lazy(() => import("@/pages/privacy"));
 const Terms = lazy(() => import("@/pages/terms"));
 
-const ChatWidget = lazy(() =>
-  import("@/components/ChatWidget").then((m) => ({ default: m.ChatWidget })),
-);
+const NewAIChat = lazy(() => import("@/components/chat/App"));
+
+class ChatBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
+  constructor(props: { children: ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: unknown) {
+    console.error("Chat crashed:", error);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return null;
+    }
+    return this.props.children;
+  }
+}
 
 function NoiseOverlay() {
   return (
@@ -161,7 +181,7 @@ function App() {
         import("@/pages/privacy"),
         import("@/pages/terms"),
         import("@/pages/not-found"),
-        import("@/components/ChatWidget"),
+        import("@/components/chat/App"),
       ]);
     };
 
@@ -179,7 +199,9 @@ function App() {
       <TooltipProvider>
         <NoiseOverlay />
         <SeoManager />
-        <Suspense fallback={null}>{showChat ? <ChatWidget /> : null}</Suspense>
+        <ChatBoundary>
+          <Suspense fallback={null}>{showChat ? <NewAIChat /> : null}</Suspense>
+        </ChatBoundary>
         <Toaster />
         <Router />
       </TooltipProvider>

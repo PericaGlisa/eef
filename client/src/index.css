@@ -88,6 +88,53 @@
   }
 }
 
+/* Chat styles - injected to avoid breaking main layout */
+.glass-panel {
+  @apply backdrop-blur-3xl bg-white/85 border border-white/40 shadow-[0_40px_80px_-15px_rgba(0,0,0,0.4)];
+  box-shadow: 
+    0 40px 80px -15px rgba(0,0,0,0.4),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+}
+
+.glass-card {
+  @apply backdrop-blur-xl bg-white/40 border border-white/30 shadow-xl;
+  box-shadow: 
+    0 10px 30px -5px rgba(0,0,0,0.05),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+.markdown-body {
+  @apply text-[15px] leading-relaxed tracking-tight text-slate-700 font-medium;
+}
+
+.markdown-body.user {
+  @apply text-white/95;
+}
+
+.markdown-body p {
+  @apply mb-5 last:mb-0;
+}
+
+.markdown-body ul, .markdown-body ol {
+  @apply mb-5 ml-6 list-disc space-y-3;
+}
+
+.markdown-body strong {
+  @apply font-bold text-primary;
+}
+
+.markdown-body.user strong {
+  @apply text-white;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 .content-auto {
   content-visibility: auto;
   contain-intrinsic-size: 1px 1000px;
