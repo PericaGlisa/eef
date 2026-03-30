@@ -274,10 +274,10 @@ export default function Contact() {
                     const payload = raw.includes(":") ? raw.slice(raw.indexOf(":") + 1).trim() : raw;
                     try {
                       const parsed = JSON.parse(payload);
-                      if (parsed?.message) {
-                        description = String(parsed.message);
-                      } else if (parsed?.details) {
+                      if (parsed?.details) {
                         description = String(parsed.details);
+                      } else if (parsed?.message) {
+                        description = String(parsed.message);
                       }
                     } catch {
                       if (payload) description = payload;
