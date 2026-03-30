@@ -51,6 +51,8 @@ Zlatomir Damnjanović je osnivač i vizionar kompanije Eko Elektrofrigo, kao i n
 Sve specifičnosti o brendovima koje zastupaju (npr. Bitzer, Danfoss, Guntner) i projektima koje su radili crpi direktno sa eef.rs i iz BAZE ZNANJA.
 `;
 
+const MODEL_CANDIDATES = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"];
+
 function jsonResponse(statusCode: number, payload: unknown) {
   return {
     statusCode,
@@ -98,28 +100,51 @@ export async function handler(event: { httpMethod?: string; body?: string | null
       return jsonResponse(500, { message: "GEMINI_API_KEY nije definisan u Netlify Environment varijablama." });
     }
 
-    console.log("Using API key:", apiKey.substring(0, 5) + "...");
+    console.log("Gemini API key loaded.");
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash-latest",
-      systemInstruction: SYSTEM_INSTRUCTION
-    });
-    
-    const chat = model.startChat({
-      history: history.map(m => ({
-        role: m.role,
-        parts: m.parts
-      }))
-    });
+    let lastModelError: any;
 
-    const result = await chat.sendMessage(promptWithUrl);
-    const response = await result.response;
+    for (const modelName of MODEL_CANDIDATES) {
+      try {
+        const model = genAI.getGenerativeModel({
+          model: modelName,
+          systemInstruction: SYSTEM_INSTRUCTION
+        });
 
-    return jsonResponse(200, { text: response.text() });
+        const chat = model.startChat({
+          history: history.map(m => ({
+            role: m.role,
+            parts: m.parts
+          }))
+        });
+
+        const result = await chat.sendMessage(promptWithUrl);
+        const response = await result.response;
+        return jsonResponse(200, { text: response.text() });
+      } catch (modelError: any) {
+        lastModelError = modelError;
+        const message = String(modelError?.message || "").toLowerCase();
+        const isNotFound = message.includes("not found") || message.includes("unsupported");
+        const isQuotaExceeded = message.includes("429") || message.includes("quota") || message.includes("resource_exhausted");
+        if (isQuotaExceeded) {
+          throw modelError;
+        }
+        if (!isNotFound) {
+          throw modelError;
+        }
+      }
+    }
+
+    throw lastModelError;
   } catch (error: any) {
     console.error("Gemini server error full object:", error);
     console.error("Gemini server error message:", error?.message);
+    const message = String(error?.message || "").toLowerCase();
+    const isQuotaExceeded = message.includes("429") || message.includes("quota") || message.includes("resource_exhausted");
+    if (isQuotaExceeded) {
+      return jsonResponse(429, { message: "Trenutno imam previše upita. Molim vas sačekajte jedan minut pa mi pišite ponovo." });
+    }
     return jsonResponse(500, { message: "Trenutno nisam u mogućnosti da odgovorim. Molimo pokušajte ponovo za nekoliko trenutaka.", error: error?.message });
   }
 }
