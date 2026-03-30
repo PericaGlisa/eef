@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { type Server } from "http";
 import { z } from "zod";
-import { GoogleGenAI, HarmCategory, HarmBlockThreshold } from "@google/genai";
+import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
 import { KNOWLEDGE_BASE } from "./chatKnowledgeBase";
 
 const SYSTEM_INSTRUCTION = `
@@ -217,41 +217,23 @@ export async function registerRoutes(
 
       console.log("Using API key:", apiKey.substring(0, 5) + "...");
 
-      const ai = new GoogleGenAI({ apiKey });
-      const response = await ai.models.generateContent({
+      const genAI = new GoogleGenerativeAI(apiKey);
+      const model = genAI.getGenerativeModel({ 
         model: "gemini-1.5-flash",
-        contents: [
-          ...history.map(m => ({
-            role: m.role,
-            parts: m.parts
-          })),
-          { role: 'user', parts: [{ text: promptWithUrl }] }
-        ],
-        config: {
-          systemInstruction: SYSTEM_INSTRUCTION,
-          tools: [{ urlContext: {} }],
-          safetySettings: [
-            {
-              category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-              threshold: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
-            },
-            {
-              category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-              threshold: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
-            },
-            {
-              category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-              threshold: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
-            },
-            {
-              category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-              threshold: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
-            },
-          ],
-        },
+        systemInstruction: SYSTEM_INSTRUCTION
+      });
+      
+      const chat = model.startChat({
+        history: history.map(m => ({
+          role: m.role,
+          parts: m.parts
+        }))
       });
 
-      return res.json({ text: response.text });
+      const result = await chat.sendMessage(promptWithUrl);
+      const response = await result.response;
+
+      return res.json({ text: response.text() });
     } catch (error: any) {
       console.error("Gemini server error full object:", error);
       console.error("Gemini server error message:", error?.message);
