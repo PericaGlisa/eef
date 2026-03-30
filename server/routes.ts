@@ -55,7 +55,7 @@ Sve specifičnosti o brendovima koje zastupaju (npr. Bitzer, Danfoss, Guntner) i
 `;
 
 const MODEL_CANDIDATES = ["gemini-flash-latest"];
-const MODEL_TIMEOUT_MS = 20000;
+const MODEL_TIMEOUT_MS = Math.max(10000, Number(process.env.GEMINI_MODEL_TIMEOUT_MS || 45000));
 
 const contactSchema = z.object({
   topic: z.enum(["project", "service", "career", "info"]),
@@ -225,8 +225,8 @@ export async function registerRoutes(
 
       for (const modelName of MODEL_CANDIDATES) {
         try {
-          const response = await Promise.race([
-            ai.models.generateContent({
+          const stream = await Promise.race([
+            ai.models.generateContentStream({
               model: modelName,
               contents: [
                 ...history.map((m) => ({
@@ -243,7 +243,28 @@ export async function registerRoutes(
               setTimeout(() => reject(new Error("MODEL_TIMEOUT")), MODEL_TIMEOUT_MS)
             ),
           ]);
-          return res.json({ text: response.text || "Izvinite, došlo je do greške u obradi poruke." });
+          res.setHeader("Content-Type", "text/plain; charset=utf-8");
+          res.setHeader("Cache-Control", "no-cache, no-transform");
+          res.setHeader("Connection", "keep-alive");
+
+          let fullText = "";
+          for await (const chunk of stream as any) {
+            const chunkText =
+              typeof chunk?.text === "string"
+                ? chunk.text
+                : typeof chunk?.candidates?.[0]?.content?.parts?.[0]?.text === "string"
+                  ? chunk.candidates[0].content.parts[0].text
+                  : "";
+            if (chunkText) {
+              fullText += chunkText;
+              res.write(chunkText);
+            }
+          }
+          if (!fullText) {
+            res.write("Izvinite, došlo je do greške u obradi poruke.");
+          }
+          res.end();
+          return;
         } catch (modelError: any) {
           lastModelError = modelError;
           const message = String(modelError?.message || "").toLowerCase();
@@ -259,6 +280,10 @@ export async function registerRoutes(
     } catch (error: any) {
       console.error("Gemini server error full object:", error);
       console.error("Gemini server error message:", error?.message);
+      if (res.headersSent) {
+        res.end();
+        return;
+      }
       const message = String(error?.message || "").toLowerCase();
       const isQuotaExceeded = message.includes("429") || message.includes("quota") || message.includes("resource_exhausted");
       if (isQuotaExceeded) {

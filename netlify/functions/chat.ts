@@ -52,7 +52,7 @@ Sve specifičnosti o brendovima koje zastupaju (npr. Bitzer, Danfoss, Guntner) i
 `;
 
 const MODEL_CANDIDATES = ["gemini-flash-latest"];
-const MODEL_TIMEOUT_MS = 20000;
+const MODEL_TIMEOUT_MS = Math.max(10000, Number(process.env.GEMINI_MODEL_TIMEOUT_MS || 45000));
 
 function jsonResponse(statusCode: number, payload: unknown) {
   return {

@@ -158,13 +158,18 @@ export default function App() {
     const textToSend = typeof overrideText === 'string' ? overrideText : input;
     if (!textToSend.trim() || isLoading) return;
 
+    const modelTimestamp = new Date();
     const userMessage: Message = {
       role: 'user',
       text: textToSend,
       timestamp: new Date()
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    setMessages(prev => [...prev, userMessage, {
+      role: 'model',
+      text: '',
+      timestamp: modelTimestamp
+    }]);
     setInput('');
     setIsLoading(true);
 
@@ -179,23 +184,54 @@ export default function App() {
         parts: [{ text: textToSend }]
       });
 
-      const response = await getChatResponse(history);
-      
-      const aiMessage: Message = {
-        role: 'model',
-        text: response || 'Izvinite, došlo je do greške u komunikaciji.',
-        timestamp: new Date()
-      };
+      const response = await getChatResponse(history, (partialText) => {
+        setMessages(prev => {
+          const next = [...prev];
+          for (let i = next.length - 1; i >= 0; i--) {
+            const message = next[i];
+            if (message.role === 'model' && message.timestamp.getTime() === modelTimestamp.getTime()) {
+              next[i] = {
+                ...message,
+                text: partialText
+              };
+              break;
+            }
+          }
+          return next;
+        });
+      });
 
-      setMessages(prev => [...prev, aiMessage]);
+      setMessages(prev => {
+        const next = [...prev];
+        for (let i = next.length - 1; i >= 0; i--) {
+          const message = next[i];
+          if (message.role === 'model' && message.timestamp.getTime() === modelTimestamp.getTime()) {
+            next[i] = {
+              ...message,
+              text: response || 'Izvinite, došlo je do greške u komunikaciji.'
+            };
+            break;
+          }
+        }
+        return next;
+      });
       playNotification();
     } catch (error) {
       console.error('Chat error:', error);
-      setMessages(prev => [...prev, {
-        role: 'model',
-        text: 'Trenutno nisam u mogućnosti da odgovorim. Molimo pokušajte kasnije ili nas kontaktirajte direktno.',
-        timestamp: new Date()
-      }]);
+      setMessages(prev => {
+        const next = [...prev];
+        for (let i = next.length - 1; i >= 0; i--) {
+          const message = next[i];
+          if (message.role === 'model' && message.timestamp.getTime() === modelTimestamp.getTime()) {
+            next[i] = {
+              ...message,
+              text: 'Trenutno nisam u mogućnosti da odgovorim. Molimo pokušajte kasnije ili nas kontaktirajte direktno.'
+            };
+            break;
+          }
+        }
+        return next;
+      });
     } finally {
       setIsLoading(false);
     }

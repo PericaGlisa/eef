@@ -1,4 +1,7 @@
-export async function getChatResponse(messages: { role: 'user' | 'model', parts: { text: string }[] }[]) {
+export async function getChatResponse(
+  messages: { role: 'user' | 'model', parts: { text: string }[] }[],
+  onChunk?: (partialText: string) => void
+) {
   try {
     // On Netlify, we bypass the redirect rules just in case they are failing
     // and call the function directly via its full URL path.
@@ -6,7 +9,7 @@ export async function getChatResponse(messages: { role: 'user' | 'model', parts:
     const apiUrl = isProd ? "/.netlify/functions/chat" : "/api/chat";
 
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 25000);
+    const timeoutId = setTimeout(() => controller.abort(), 50000);
 
     let response: Response;
     try {
@@ -23,6 +26,9 @@ export async function getChatResponse(messages: { role: 'user' | 'model', parts:
     if (!response.ok) {
       if (response.status === 429) {
         return "Trenutno imam previše upita. Molim vas sačekajte jedan minut pa mi pišite ponovo.";
+      }
+      if (response.status === 504) {
+        return "Asistent trenutno odgovara sporije nego obično. Molimo pokušajte ponovo za nekoliko trenutaka.";
       }
 
       let errorMsg = `Greška ${response.status}`;
@@ -43,9 +49,32 @@ export async function getChatResponse(messages: { role: 'user' | 'model', parts:
 
       return `[DIJAGNOSTIKA]: ${errorMsg}`;
     }
-    
+
+    const contentType = response.headers.get("content-type") || "";
+    if (response.body && !contentType.includes("application/json")) {
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let fullText = "";
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        if (value) {
+          fullText += decoder.decode(value, { stream: true });
+          onChunk?.(fullText);
+        }
+      }
+      const tail = decoder.decode();
+      if (tail) {
+        fullText += tail;
+        onChunk?.(fullText);
+      }
+      return fullText || "Izvinite, došlo je do greške u obradi poruke.";
+    }
+
     const data = await response.json();
-    return data.text || "Izvinite, došlo je do greške u obradi poruke.";
+    const text = data.text || "Izvinite, došlo je do greške u obradi poruke.";
+    onChunk?.(text);
+    return text;
   } catch (error: any) {
     console.error("Chat API error:", error);
     if (error?.name === "AbortError") {
