@@ -27,6 +27,9 @@ export async function getChatResponse(
       if (response.status === 429) {
         return "Trenutno imam previše upita. Molim vas sačekajte jedan minut pa mi pišite ponovo.";
       }
+      if (response.status === 502) {
+        return "Servis je trenutno preopterećen. Molimo pokušajte ponovo za nekoliko trenutaka.";
+      }
       if (response.status === 504) {
         return "Asistent trenutno odgovara sporije nego obično. Molimo pokušajte ponovo za nekoliko trenutaka.";
       }

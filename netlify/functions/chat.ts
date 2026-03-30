@@ -52,9 +52,9 @@ Sve specifičnosti o brendovima koje zastupaju (npr. Bitzer, Danfoss, Guntner) i
 `;
 
 const MODEL_CANDIDATES = ["gemini-flash-latest"];
-const MODEL_TIMEOUT_MS = Math.max(10000, Number(process.env.GEMINI_MODEL_TIMEOUT_MS || 45000));
-const RETRY_MAX_ATTEMPTS = Math.max(1, Number(process.env.GEMINI_RETRY_MAX_ATTEMPTS || 3));
-const RETRY_BASE_MS = Math.max(200, Number(process.env.GEMINI_RETRY_BASE_MS || 1200));
+const MODEL_TIMEOUT_MS = Math.max(3000, Math.min(8000, Number(process.env.GEMINI_MODEL_TIMEOUT_MS || 7000)));
+const RETRY_MAX_ATTEMPTS = Math.max(1, Math.min(2, Number(process.env.GEMINI_RETRY_MAX_ATTEMPTS || 1)));
+const RETRY_BASE_MS = Math.max(200, Math.min(1500, Number(process.env.GEMINI_RETRY_BASE_MS || 700)));
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
