@@ -90,7 +90,7 @@ export async function handler(event: { httpMethod?: string; body?: string | null
     const history = filteredMessages.slice(0, -1);
 
     const promptWithUrl = history.length === 0 
-      ? \`Na osnovu sajta https://eef.rs/, odgovori na: \${lastMessage}\`
+      ? `Na osnovu sajta https://eef.rs/, odgovori na: ${lastMessage}`
       : lastMessage;
 
     const apiKey = process.env.GEMINI_API_KEY || 'AIzaSyCi5jOYRyg4V_QBc-D80tMgJCwl0ivUxac';
