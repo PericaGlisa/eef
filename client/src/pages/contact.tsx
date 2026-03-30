@@ -280,7 +280,14 @@ export default function Contact() {
                         description = String(parsed.message);
                       }
                     } catch {
-                      if (payload) description = payload;
+                      if (payload) {
+                        const looksLikeHtml = /^\s*<!doctype html/i.test(payload) || /^\s*<html/i.test(payload);
+                        if (looksLikeHtml) {
+                          description = "Greška u produkcijskom routingu API-ja. Proverite Netlify deploy i /api/contact redirekciju.";
+                        } else {
+                          description = payload;
+                        }
+                      }
                     }
                     toast({
                       title: "Slanje nije uspelo",
