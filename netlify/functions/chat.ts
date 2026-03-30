@@ -135,8 +135,9 @@ export async function handler(event: { httpMethod?: string; body?: string | null
     });
 
     return jsonResponse(200, { text: response.text });
-  } catch (error) {
-    console.error("Gemini server error:", error);
-    return jsonResponse(500, { message: "Trenutno nisam u mogućnosti da odgovorim. Molimo pokušajte ponovo za nekoliko trenutaka." });
+  } catch (error: any) {
+    console.error("Gemini server error full object:", error);
+    console.error("Gemini server error message:", error?.message);
+    return jsonResponse(500, { message: "Trenutno nisam u mogućnosti da odgovorim. Molimo pokušajte ponovo za nekoliko trenutaka.", error: error?.message });
   }
 }
