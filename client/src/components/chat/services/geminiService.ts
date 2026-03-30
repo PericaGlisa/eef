@@ -7,6 +7,9 @@ export async function getChatResponse(messages: { role: 'user' | 'model', parts:
     });
     
     if (!response.ok) {
+      console.error(`Chat API error status: ${response.status}`);
+      const text = await response.text();
+      console.error(`Chat API error text: ${text}`);
       throw new Error("Greška sa servera.");
     }
     

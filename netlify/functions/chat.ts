@@ -93,10 +93,12 @@ export async function handler(event: { httpMethod?: string; body?: string | null
       ? `Na osnovu sajta https://eef.rs/, odgovori na: ${lastMessage}`
       : lastMessage;
 
-    const apiKey = process.env.GEMINI_API_KEY || 'AIzaSyCi5jOYRyg4V_QBc-D80tMgJCwl0ivUxac';
+    const apiKey = process.env.GEMINI_API_KEY || '';
     if (!apiKey) {
       return jsonResponse(500, { message: "GEMINI_API_KEY nije definisan." });
     }
+
+    console.log("Using API key:", apiKey.substring(0, 5) + "...");
 
     const ai = new GoogleGenAI({ apiKey });
     const response = await ai.models.generateContent({

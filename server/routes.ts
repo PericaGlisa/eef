@@ -187,6 +187,7 @@ export async function registerRoutes(
 
   app.post("/api/chat", async (req, res) => {
     try {
+      console.log("Chat API hit with body:", req.body);
       const { messages } = req.body;
       if (!Array.isArray(messages)) {
         return res.status(400).json({ message: "Neispravan format poruka." });
@@ -209,10 +210,12 @@ export async function registerRoutes(
         ? `Na osnovu sajta https://eef.rs/, odgovori na: ${lastMessage}`
         : lastMessage;
 
-      const apiKey = process.env.GEMINI_API_KEY || 'AIzaSyCi5jOYRyg4V_QBc-D80tMgJCwl0ivUxac';
+      const apiKey = process.env.GEMINI_API_KEY || '';
       if (!apiKey) {
         return res.status(500).json({ message: "GEMINI_API_KEY nije definisan." });
       }
+
+      console.log("Using API key:", apiKey.substring(0, 5) + "...");
 
       const ai = new GoogleGenAI({ apiKey });
       const response = await ai.models.generateContent({
@@ -249,9 +252,10 @@ export async function registerRoutes(
       });
 
       return res.json({ text: response.text });
-    } catch (error) {
-      console.error("Gemini server error:", error);
-      return res.status(500).json({ message: "Trenutno nisam u mogućnosti da odgovorim. Molimo pokušajte ponovo za nekoliko trenutaka." });
+    } catch (error: any) {
+      console.error("Gemini server error full object:", error);
+      console.error("Gemini server error message:", error?.message);
+      return res.status(500).json({ message: "Trenutno nisam u mogućnosti da odgovorim. Molimo pokušajte ponovo za nekoliko trenutaka.", error: error?.message });
     }
   });
 
