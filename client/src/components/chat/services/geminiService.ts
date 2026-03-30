@@ -12,6 +12,10 @@ export async function getChatResponse(messages: { role: 'user' | 'model', parts:
     });
     
     if (!response.ok) {
+      if (response.status === 429) {
+        return "Trenutno imam previše upita. Molim vas sačekajte jedan minut pa mi pišite ponovo.";
+      }
+
       let errorMsg = `Greška ${response.status}`;
       const clonedResponse = response.clone();
       try {
@@ -22,6 +26,12 @@ export async function getChatResponse(messages: { role: 'user' | 'model', parts:
         errorMsg = await clonedResponse.text();
       }
       console.error(`Chat API error status: ${response.status} - ${errorMsg}`);
+      
+      // Ako u grešci iz samog API-ja piše da je kvota premašena
+      if (errorMsg.includes("429") || errorMsg.includes("Quota") || errorMsg.includes("quota") || response.status === 500 && errorMsg.includes("exceeded")) {
+         return "Trenutno imam previše upita. Molim vas sačekajte jedan minut pa mi pišite ponovo.";
+      }
+
       return `[DIJAGNOSTIKA]: ${errorMsg}`;
     }
     
