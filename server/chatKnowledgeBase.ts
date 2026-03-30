@@ -1,8 +1,3 @@
-/**
- * Baza znanja kompanije Eko Elektrofrigo (eef.rs)
- * Ovde možete dodavati specifične tehničke detalje, FAQ i referentne projekte.
- */
-
 export const KNOWLEDGE_BASE = {
   COMPANY_PROFILE: {
     name: "Eko Elektrofrigo d.o.o.",
