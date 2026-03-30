@@ -104,7 +104,7 @@ export async function handler(event: { httpMethod?: string; body?: string | null
 
   const label = topicLabels[data.topic] ?? "Kontakt"
   const to = recipients[data.topic] ?? "office@eef.rs"
-  const from = process.env.RESEND_FROM || "onboarding@resend.dev"
+  const from = process.env.RESEND_FROM || "noreply@eef.co.rs"
   const projectTypeValue =
     data.projectType === "other" ? data.projectTypeOther : data.projectType
 

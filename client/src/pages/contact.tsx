@@ -268,10 +268,23 @@ export default function Contact() {
                       projectTypeOther: "",
                     });
                     setSelectedTopic("project");
-                  } catch (error) {
+                  } catch (error: any) {
+                    let description = "Pokušajte ponovo ili nas kontaktirajte direktno.";
+                    const raw = String(error?.message || "");
+                    const payload = raw.includes(":") ? raw.slice(raw.indexOf(":") + 1).trim() : raw;
+                    try {
+                      const parsed = JSON.parse(payload);
+                      if (parsed?.message) {
+                        description = String(parsed.message);
+                      } else if (parsed?.details) {
+                        description = String(parsed.details);
+                      }
+                    } catch {
+                      if (payload) description = payload;
+                    }
                     toast({
                       title: "Slanje nije uspelo",
-                      description: "Pokušajte ponovo ili nas kontaktirajte direktno.",
+                      description,
                       variant: "destructive",
                     });
                   } finally {
