@@ -8,12 +8,13 @@ export async function getChatResponse(messages: { role: 'user' | 'model', parts:
     
     if (!response.ok) {
       let errorMsg = `Greška ${response.status}`;
+      const clonedResponse = response.clone();
       try {
         const errorData = await response.json();
         if (errorData.message) errorMsg = errorData.message;
         if (errorData.error) errorMsg += ` (${errorData.error})`;
       } catch (e) {
-        errorMsg = await response.text();
+        errorMsg = await clonedResponse.text();
       }
       console.error(`Chat API error status: ${response.status} - ${errorMsg}`);
       return `[DIJAGNOSTIKA]: ${errorMsg}`;
