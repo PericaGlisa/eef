@@ -7,16 +7,22 @@ export async function getChatResponse(messages: { role: 'user' | 'model', parts:
     });
     
     if (!response.ok) {
-      console.error(`Chat API error status: ${response.status}`);
-      const text = await response.text();
-      console.error(`Chat API error text: ${text}`);
-      throw new Error("Greška sa servera.");
+      let errorMsg = `Greška ${response.status}`;
+      try {
+        const errorData = await response.json();
+        if (errorData.message) errorMsg = errorData.message;
+        if (errorData.error) errorMsg += ` (${errorData.error})`;
+      } catch (e) {
+        errorMsg = await response.text();
+      }
+      console.error(`Chat API error status: ${response.status} - ${errorMsg}`);
+      return `[DIJAGNOSTIKA]: ${errorMsg}`;
     }
     
     const data = await response.json();
     return data.text || "Izvinite, došlo je do greške u obradi poruke.";
-  } catch (error) {
+  } catch (error: any) {
     console.error("Chat API error:", error);
-    return "Trenutno nisam u mogućnosti da odgovorim. Molimo pokušajte ponovo za nekoliko trenutaka.";
+    return `[LOKALNA GREŠKA]: ${error?.message || 'Nepoznata greška prilikom poziva servera'}`;
   }
 }

@@ -95,7 +95,7 @@ export async function handler(event: { httpMethod?: string; body?: string | null
 
     const apiKey = process.env.GEMINI_API_KEY || '';
     if (!apiKey) {
-      return jsonResponse(500, { message: "GEMINI_API_KEY nije definisan." });
+      return jsonResponse(500, { message: "GEMINI_API_KEY nije definisan u Netlify Environment varijablama." });
     }
 
     console.log("Using API key:", apiKey.substring(0, 5) + "...");
