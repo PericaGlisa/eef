@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 import { KNOWLEDGE_BASE } from "../../server/chatKnowledgeBase";
 
 const SYSTEM_INSTRUCTION = `
@@ -52,6 +52,7 @@ Sve specifičnosti o brendovima koje zastupaju (npr. Bitzer, Danfoss, Guntner) i
 `;
 
 const MODEL_CANDIDATES = ["gemini-flash-latest"];
+const MODEL_TIMEOUT_MS = 20000;
 
 function jsonResponse(statusCode: number, payload: unknown) {
   return {
@@ -102,26 +103,30 @@ export async function handler(event: { httpMethod?: string; body?: string | null
 
     console.log("Gemini API key loaded.");
 
-    const genAI = new GoogleGenerativeAI(apiKey);
+    const ai = new GoogleGenAI({ apiKey });
     let lastModelError: any;
 
     for (const modelName of MODEL_CANDIDATES) {
       try {
-        const model = genAI.getGenerativeModel({
-          model: modelName,
-          systemInstruction: SYSTEM_INSTRUCTION
-        });
-
-        const chat = model.startChat({
-          history: history.map(m => ({
-            role: m.role,
-            parts: m.parts
-          }))
-        });
-
-        const result = await chat.sendMessage(promptWithUrl);
-        const response = await result.response;
-        return jsonResponse(200, { text: response.text() });
+        const response = await Promise.race([
+          ai.models.generateContent({
+            model: modelName,
+            contents: [
+              ...history.map((m) => ({
+                role: m.role,
+                parts: m.parts,
+              })),
+              { role: "user", parts: [{ text: promptWithUrl }] },
+            ],
+            config: {
+              systemInstruction: SYSTEM_INSTRUCTION,
+            },
+          }),
+          new Promise<never>((_, reject) =>
+            setTimeout(() => reject(new Error("MODEL_TIMEOUT")), MODEL_TIMEOUT_MS)
+          ),
+        ]);
+        return jsonResponse(200, { text: response.text || "Izvinite, došlo je do greške u obradi poruke." });
       } catch (modelError: any) {
         lastModelError = modelError;
         const message = String(modelError?.message || "").toLowerCase();
@@ -141,6 +146,9 @@ export async function handler(event: { httpMethod?: string; body?: string | null
     const isQuotaExceeded = message.includes("429") || message.includes("quota") || message.includes("resource_exhausted");
     if (isQuotaExceeded) {
       return jsonResponse(429, { message: "Trenutno imam previše upita. Molim vas sačekajte jedan minut pa mi pišite ponovo." });
+    }
+    if (message.includes("model_timeout")) {
+      return jsonResponse(504, { message: "Asistent trenutno odgovara sporije nego obično. Molimo pokušajte ponovo za nekoliko trenutaka." });
     }
     return jsonResponse(500, { message: "Trenutno nisam u mogućnosti da odgovorim. Molimo pokušajte ponovo za nekoliko trenutaka.", error: error?.message });
   }

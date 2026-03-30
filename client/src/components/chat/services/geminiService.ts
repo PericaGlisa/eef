@@ -5,11 +5,20 @@ export async function getChatResponse(messages: { role: 'user' | 'model', parts:
     const isProd = import.meta.env.PROD;
     const apiUrl = isProd ? "/.netlify/functions/chat" : "/api/chat";
 
-    const response = await fetch(apiUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ messages })
-    });
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 25000);
+
+    let response: Response;
+    try {
+      response = await fetch(apiUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages }),
+        signal: controller.signal
+      });
+    } finally {
+      clearTimeout(timeoutId);
+    }
     
     if (!response.ok) {
       if (response.status === 429) {
@@ -39,6 +48,9 @@ export async function getChatResponse(messages: { role: 'user' | 'model', parts:
     return data.text || "Izvinite, došlo je do greške u obradi poruke.";
   } catch (error: any) {
     console.error("Chat API error:", error);
+    if (error?.name === "AbortError") {
+      return "Asistent trenutno odgovara sporije nego obično. Molimo pokušajte ponovo za nekoliko trenutaka.";
+    }
     return `[LOKALNA GREŠKA]: ${error?.message || 'Nepoznata greška prilikom poziva servera'}`;
   }
 }

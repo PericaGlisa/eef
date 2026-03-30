@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { type Server } from "http";
 import { z } from "zod";
-import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 import { KNOWLEDGE_BASE } from "./chatKnowledgeBase";
 
 const SYSTEM_INSTRUCTION = `
@@ -55,6 +55,7 @@ Sve specifičnosti o brendovima koje zastupaju (npr. Bitzer, Danfoss, Guntner) i
 `;
 
 const MODEL_CANDIDATES = ["gemini-flash-latest"];
+const MODEL_TIMEOUT_MS = 20000;
 
 const contactSchema = z.object({
   topic: z.enum(["project", "service", "career", "info"]),
@@ -219,26 +220,30 @@ export async function registerRoutes(
 
       console.log("Gemini API key loaded.");
 
-      const genAI = new GoogleGenerativeAI(apiKey);
+      const ai = new GoogleGenAI({ apiKey });
       let lastModelError: any;
 
       for (const modelName of MODEL_CANDIDATES) {
         try {
-          const model = genAI.getGenerativeModel({
-            model: modelName,
-            systemInstruction: SYSTEM_INSTRUCTION
-          });
-
-          const chat = model.startChat({
-            history: history.map(m => ({
-              role: m.role,
-              parts: m.parts
-            }))
-          });
-
-          const result = await chat.sendMessage(promptWithUrl);
-          const response = await result.response;
-          return res.json({ text: response.text() });
+          const response = await Promise.race([
+            ai.models.generateContent({
+              model: modelName,
+              contents: [
+                ...history.map((m) => ({
+                  role: m.role,
+                  parts: m.parts,
+                })),
+                { role: "user", parts: [{ text: promptWithUrl }] },
+              ],
+              config: {
+                systemInstruction: SYSTEM_INSTRUCTION,
+              },
+            }),
+            new Promise<never>((_, reject) =>
+              setTimeout(() => reject(new Error("MODEL_TIMEOUT")), MODEL_TIMEOUT_MS)
+            ),
+          ]);
+          return res.json({ text: response.text || "Izvinite, došlo je do greške u obradi poruke." });
         } catch (modelError: any) {
           lastModelError = modelError;
           const message = String(modelError?.message || "").toLowerCase();
@@ -258,6 +263,9 @@ export async function registerRoutes(
       const isQuotaExceeded = message.includes("429") || message.includes("quota") || message.includes("resource_exhausted");
       if (isQuotaExceeded) {
         return res.status(429).json({ message: "Trenutno imam previše upita. Molim vas sačekajte jedan minut pa mi pišite ponovo." });
+      }
+      if (message.includes("model_timeout")) {
+        return res.status(504).json({ message: "Asistent trenutno odgovara sporije nego obično. Molimo pokušajte ponovo za nekoliko trenutaka." });
       }
       return res.status(500).json({ message: "Trenutno nisam u mogućnosti da odgovorim. Molimo pokušajte ponovo za nekoliko trenutaka.", error: error?.message });
     }
