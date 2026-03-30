@@ -8,7 +8,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { MapPin, Phone, Mail, Clock, MessageSquare, ArrowRight, ShieldCheck, Zap, Users } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { apiRequest } from "@/lib/queryClient";
 
 export default function Contact() {
   const [selectedTopic, setSelectedTopic] = useState<string>("project");
@@ -66,6 +65,20 @@ export default function Contact() {
       border: "hover:border-green-500/50"
     }
   ];
+
+  const submitContactRequest = async (payload: unknown) => {
+    const isProd = import.meta.env.PROD;
+    const apiUrl = isProd ? "/.netlify/functions/contact" : "/api/contact";
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(`${response.status}: ${text || response.statusText}`);
+    }
+  };
 
   return (
     <div className="bg-background min-h-screen relative">
@@ -236,7 +249,7 @@ export default function Contact() {
                   }
                   setIsSubmitting(true);
                   try {
-                    await apiRequest("POST", "/api/contact", {
+                    await submitContactRequest({
                       topic: selectedTopic,
                       name: formData.name.trim(),
                       company: formData.company.trim(),
