@@ -1,6 +1,11 @@
 export async function getChatResponse(messages: { role: 'user' | 'model', parts: { text: string }[] }[]) {
   try {
-    const response = await fetch("/api/chat", {
+    // On Netlify, we bypass the redirect rules just in case they are failing
+    // and call the function directly via its full URL path.
+    const isProd = import.meta.env.PROD;
+    const apiUrl = isProd ? "/.netlify/functions/chat" : "/api/chat";
+
+    const response = await fetch(apiUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ messages })
