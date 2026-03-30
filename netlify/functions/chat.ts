@@ -51,7 +51,7 @@ Zlatomir Damnjanović je osnivač i vizionar kompanije Eko Elektrofrigo, kao i n
 Sve specifičnosti o brendovima koje zastupaju (npr. Bitzer, Danfoss, Guntner) i projektima koje su radili crpi direktno sa eef.rs i iz BAZE ZNANJA.
 `;
 
-const MODEL_CANDIDATES = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"];
+const MODEL_CANDIDATES = ["gemini-flash-latest"];
 
 function jsonResponse(statusCode: number, payload: unknown) {
   return {
@@ -127,10 +127,7 @@ export async function handler(event: { httpMethod?: string; body?: string | null
         const message = String(modelError?.message || "").toLowerCase();
         const isNotFound = message.includes("not found") || message.includes("unsupported");
         const isQuotaExceeded = message.includes("429") || message.includes("quota") || message.includes("resource_exhausted");
-        if (isQuotaExceeded) {
-          throw modelError;
-        }
-        if (!isNotFound) {
+        if (!isNotFound && !isQuotaExceeded) {
           throw modelError;
         }
       }
