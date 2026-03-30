@@ -53,6 +53,26 @@ Sve specifičnosti o brendovima koje zastupaju (npr. Bitzer, Danfoss, Guntner) i
 
 const MODEL_CANDIDATES = ["gemini-flash-latest"];
 const MODEL_TIMEOUT_MS = Math.max(10000, Number(process.env.GEMINI_MODEL_TIMEOUT_MS || 45000));
+const RETRY_MAX_ATTEMPTS = Math.max(1, Number(process.env.GEMINI_RETRY_MAX_ATTEMPTS || 3));
+const RETRY_BASE_MS = Math.max(200, Number(process.env.GEMINI_RETRY_BASE_MS || 1200));
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function extractRetryDelayMs(message: string) {
+  const retryInMatch = message.match(/retry in\s+([\d.]+)s/i);
+  if (retryInMatch?.[1]) {
+    const seconds = Number(retryInMatch[1]);
+    if (!Number.isNaN(seconds) && seconds > 0) return Math.round(seconds * 1000);
+  }
+  const retryDelayMatch = message.match(/retrydelay["']?\s*:\s*["']?(\d+)s/i);
+  if (retryDelayMatch?.[1]) {
+    const seconds = Number(retryDelayMatch[1]);
+    if (!Number.isNaN(seconds) && seconds > 0) return seconds * 1000;
+  }
+  return undefined;
+}
 
 function jsonResponse(statusCode: number, payload: unknown) {
   return {
@@ -107,33 +127,41 @@ export async function handler(event: { httpMethod?: string; body?: string | null
     let lastModelError: any;
 
     for (const modelName of MODEL_CANDIDATES) {
-      try {
-        const response = await Promise.race([
-          ai.models.generateContent({
-            model: modelName,
-            contents: [
-              ...history.map((m) => ({
-                role: m.role,
-                parts: m.parts,
-              })),
-              { role: "user", parts: [{ text: promptWithUrl }] },
-            ],
-            config: {
-              systemInstruction: SYSTEM_INSTRUCTION,
-            },
-          }),
-          new Promise<never>((_, reject) =>
-            setTimeout(() => reject(new Error("MODEL_TIMEOUT")), MODEL_TIMEOUT_MS)
-          ),
-        ]);
-        return jsonResponse(200, { text: response.text || "Izvinite, došlo je do greške u obradi poruke." });
-      } catch (modelError: any) {
-        lastModelError = modelError;
-        const message = String(modelError?.message || "").toLowerCase();
-        const isNotFound = message.includes("not found") || message.includes("unsupported");
-        const isQuotaExceeded = message.includes("429") || message.includes("quota") || message.includes("resource_exhausted");
-        if (!isNotFound && !isQuotaExceeded) {
-          throw modelError;
+      for (let attempt = 1; attempt <= RETRY_MAX_ATTEMPTS; attempt++) {
+        try {
+          const response = await Promise.race([
+            ai.models.generateContent({
+              model: modelName,
+              contents: [
+                ...history.map((m) => ({
+                  role: m.role,
+                  parts: m.parts,
+                })),
+                { role: "user", parts: [{ text: promptWithUrl }] },
+              ],
+              config: {
+                systemInstruction: SYSTEM_INSTRUCTION,
+              },
+            }),
+            new Promise<never>((_, reject) =>
+              setTimeout(() => reject(new Error("MODEL_TIMEOUT")), MODEL_TIMEOUT_MS)
+            ),
+          ]);
+          return jsonResponse(200, { text: response.text || "Izvinite, došlo je do greške u obradi poruke." });
+        } catch (modelError: any) {
+          lastModelError = modelError;
+          const message = String(modelError?.message || "").toLowerCase();
+          const isNotFound = message.includes("not found") || message.includes("unsupported");
+          const isQuotaExceeded = message.includes("429") || message.includes("quota") || message.includes("resource_exhausted") || message.includes("rate limit");
+          if (isQuotaExceeded && attempt < RETRY_MAX_ATTEMPTS) {
+            const retryDelayMs = extractRetryDelayMs(message) ?? RETRY_BASE_MS * Math.pow(2, attempt - 1);
+            await sleep(retryDelayMs);
+            continue;
+          }
+          if (!isNotFound && !isQuotaExceeded) {
+            throw modelError;
+          }
+          break;
         }
       }
     }
