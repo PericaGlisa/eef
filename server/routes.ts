@@ -219,7 +219,7 @@ export async function registerRoutes(
 
       const genAI = new GoogleGenerativeAI(apiKey);
       const model = genAI.getGenerativeModel({ 
-        model: "gemini-1.5-flash-8b",
+        model: "gemini-1.5-flash-latest",
         systemInstruction: SYSTEM_INSTRUCTION
       });
       
