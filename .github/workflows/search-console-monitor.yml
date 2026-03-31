@@ -17,7 +17,7 @@ on:
 
 jobs:
   monthly-report:
-    if: github.event_name == 'workflow_dispatch' && github.event.inputs.mode == 'monthly' || github.event_name == 'schedule' && github.event.schedule == '0 6 1 * *'
+    if: (github.event_name == 'workflow_dispatch' && github.event.inputs.mode == 'monthly' || github.event_name == 'schedule' && github.event.schedule == '0 6 1 * *') && (secrets.GSC_SERVICE_ACCOUNT_KEY != '' || secrets.GSC_SERVICE_ACCOUNT_KEY_B64 != '' || (secrets.GSC_SERVICE_ACCOUNT_EMAIL != '' && secrets.GSC_SERVICE_ACCOUNT_PRIVATE_KEY != ''))
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -50,7 +50,7 @@ jobs:
           if-no-files-found: error
 
   alert-check:
-    if: github.event_name == 'workflow_dispatch' && github.event.inputs.mode == 'alert' || github.event_name == 'schedule' && github.event.schedule == '0 6 * * *'
+    if: (github.event_name == 'workflow_dispatch' && github.event.inputs.mode == 'alert' || github.event_name == 'schedule' && github.event.schedule == '0 6 * * *') && (secrets.GSC_SERVICE_ACCOUNT_KEY != '' || secrets.GSC_SERVICE_ACCOUNT_KEY_B64 != '' || (secrets.GSC_SERVICE_ACCOUNT_EMAIL != '' && secrets.GSC_SERVICE_ACCOUNT_PRIVATE_KEY != ''))
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
