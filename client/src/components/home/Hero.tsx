@@ -95,7 +95,7 @@ export function Hero() {
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   return (
-    <div ref={ref} className="relative min-h-[100dvh] md:h-[100dvh] w-full overflow-hidden bg-background">
+    <div ref={ref} className="relative min-h-[100svh] lg:min-h-[100dvh] w-full overflow-hidden bg-background">
       {/* Background Image Layer with Overlay */}
       <motion.div 
         style={{ y, opacity }}
@@ -161,8 +161,8 @@ export function Hero() {
 
 
       {/* Content Layer */}
-      <div className="relative z-30 container mx-auto px-4 sm:px-6 h-full flex flex-col justify-center pt-32 pb-16 sm:pt-32 sm:pb-20 md:pt-20 md:pb-0 lg:pt-32">
-        <div className="max-w-5xl space-y-6 sm:space-y-8">
+      <div className="relative z-30 container mx-auto px-4 sm:px-6 h-full flex flex-col justify-center pt-28 pb-16 sm:pt-30 sm:pb-20 md:pt-24 md:pb-8 lg:pt-30 lg:pb-0">
+        <div className="max-w-5xl lg:max-w-6xl space-y-5 sm:space-y-7 lg:space-y-8">
           <motion.div
             initial={false}
             animate={{ opacity: 1, y: 0 }}
@@ -181,7 +181,7 @@ export function Hero() {
               initial={false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.35 }}
-              className="text-5xl sm:text-6xl md:text-8xl font-bold text-white leading-[0.9] font-heading tracking-tight drop-shadow-2xl"
+              className="text-5xl sm:text-6xl md:text-[clamp(4.2rem,7.3vw,6.6rem)] lg:text-8xl font-bold text-white leading-[0.88] font-heading tracking-tight drop-shadow-2xl"
             >
               Inženjerska <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-white to-primary/50 relative">
@@ -196,7 +196,7 @@ export function Hero() {
               initial={false}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.35 }}
-              className="text-xl sm:text-2xl md:text-3xl text-white/60 font-light max-w-2xl border-l-2 border-primary/30 pl-6 mt-6"
+              className="text-xl sm:text-2xl md:text-[clamp(1.35rem,2.2vw,1.9rem)] lg:text-3xl text-white/60 font-light max-w-2xl lg:max-w-3xl border-l-2 border-primary/30 pl-5 lg:pl-6 mt-5 lg:mt-6"
             >
               Projektovanje, izvođenje i održavanje <span className="text-white font-medium">najsavremenijih</span> rashladnih sistema.
             </motion.p>
@@ -206,7 +206,7 @@ export function Hero() {
             initial={false}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.35 }}
-            className="text-base sm:text-lg text-white/40 font-mono h-[32px] flex items-center gap-3 mt-4"
+            className="text-base sm:text-lg text-white/40 font-mono h-[30px] lg:h-[32px] flex items-center gap-3 mt-3 lg:mt-4"
           >
              <div className="w-1 h-8 bg-primary/50" />
             <TypewriterText text="30 godina tradicije. 350+ projekata." />
@@ -216,12 +216,12 @@ export function Hero() {
             initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35 }}
-            className="flex flex-col sm:flex-row gap-4 pt-8"
+            className="flex flex-col sm:flex-row gap-3 lg:gap-4 pt-6 lg:pt-8"
           >
             <Magnetic>
               <Button 
                 size="lg" 
-                className="relative bg-primary hover:bg-primary/90 text-white px-6 py-3 text-base md:px-9 md:py-6 md:text-lg overflow-hidden group border border-white/10 shadow-[0_0_30px_rgba(86,170,74,0.35)] hover:shadow-[0_0_60px_rgba(86,170,74,0.55)] transition-all duration-500 rounded-full"
+                className="relative bg-primary hover:bg-primary/90 text-white px-6 py-3 text-base md:px-8 md:py-5 md:text-base lg:px-9 lg:py-6 lg:text-lg overflow-hidden group border border-white/10 shadow-[0_0_30px_rgba(86,170,74,0.35)] hover:shadow-[0_0_60px_rgba(86,170,74,0.55)] transition-all duration-500 rounded-full"
                 onClick={() => import("@/lib/audio").then(m => m.audio.playClick())}
                 asChild
               >
@@ -235,7 +235,7 @@ export function Hero() {
               <Button 
                 size="lg" 
                 variant="ghost" 
-                className="text-white/70 hover:text-white px-6 py-3 text-base md:px-6 md:py-6 md:text-lg transition-all duration-300 rounded-full"
+                className="text-white/70 hover:text-white px-6 py-3 text-base md:px-6 md:py-5 md:text-base lg:py-6 lg:text-lg transition-all duration-300 rounded-full"
                 onClick={() => import("@/lib/audio").then(m => m.audio.playClick())}
                 asChild
               >
@@ -257,7 +257,7 @@ export function Hero() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 2, duration: 1 }}
-            className="mt-6 flex md:hidden flex-col items-center gap-2 text-white/50"
+            className="mt-5 lg:mt-6 flex md:hidden flex-col items-center gap-2 text-white/50"
           >
             <span className="text-[10px] uppercase tracking-[0.2em] font-mono text-primary/80">Skrolujte dalje</span>
             <motion.div

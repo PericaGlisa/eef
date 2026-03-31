@@ -46,6 +46,11 @@ export async function getChatResponse(
           ? "Servis je trenutno preopterećen. Molimo pokušajte ponovo za nekoliko trenutaka."
           : safeErrorMessage;
       }
+      if (response.status === 503) {
+        return safeErrorMessage.includes("Greška")
+          ? "Model je trenutno pod velikim opterećenjem. Molimo pokušajte ponovo za nekoliko trenutaka."
+          : safeErrorMessage;
+      }
       if (response.status === 504) {
         return safeErrorMessage.includes("Greška")
           ? "Asistent trenutno odgovara sporije nego obično. Molimo pokušajte ponovo za nekoliko trenutaka."
@@ -55,6 +60,9 @@ export async function getChatResponse(
       // Ako u grešci iz samog API-ja piše da je kvota premašena
       if (errorMsg.includes("429") || errorMsg.includes("Quota") || errorMsg.includes("quota") || errorMsg.includes("resource_exhausted") || errorMsg.includes("rate limit")) {
          return "Trenutno imam previše upita. Molim vas sačekajte jedan minut pa mi pišite ponovo.";
+      }
+      if (errorMsg.includes("503") || errorMsg.includes("unavailable") || errorMsg.includes("high demand")) {
+         return "Model je trenutno pod velikim opterećenjem. Molimo pokušajte ponovo za nekoliko trenutaka.";
       }
 
       return `[DIJAGNOSTIKA]: ${errorMsg}`;

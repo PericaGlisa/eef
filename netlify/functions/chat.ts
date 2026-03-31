@@ -154,8 +154,9 @@ export async function handler(event: { httpMethod?: string; body?: string | null
           const message = String(modelError?.message || "").toLowerCase();
           const isNotFound = message.includes("not found") || message.includes("unsupported");
           const isQuotaExceeded = message.includes("429") || message.includes("quota") || message.includes("resource_exhausted") || message.includes("rate limit");
+          const isServiceUnavailable = message.includes("503") || message.includes("unavailable") || message.includes("high demand");
           const isTransientTimeout = message.includes("model_timeout") || message.includes("deadline") || message.includes("timed out") || message.includes("etimedout");
-          if ((isQuotaExceeded || isTransientTimeout) && attempt < RETRY_MAX_ATTEMPTS) {
+          if ((isQuotaExceeded || isServiceUnavailable || isTransientTimeout) && attempt < RETRY_MAX_ATTEMPTS) {
             const calculatedDelay = RETRY_BASE_MS * Math.pow(2, attempt - 1) + attempt * 150;
             const retryDelayMs = Math.min(RETRY_MAX_DELAY_MS, extractRetryDelayMs(message) ?? calculatedDelay);
             await sleep(retryDelayMs);
@@ -175,8 +176,12 @@ export async function handler(event: { httpMethod?: string; body?: string | null
     console.error("Gemini server error message:", error?.message);
     const message = String(error?.message || "").toLowerCase();
     const isQuotaExceeded = message.includes("429") || message.includes("quota") || message.includes("resource_exhausted");
+    const isServiceUnavailable = message.includes("503") || message.includes("unavailable") || message.includes("high demand");
     if (isQuotaExceeded) {
       return jsonResponse(429, { message: "Trenutno imam previše upita. Molim vas sačekajte jedan minut pa mi pišite ponovo." });
+    }
+    if (isServiceUnavailable) {
+      return jsonResponse(503, { message: "Model je trenutno pod velikim opterećenjem. Molimo pokušajte ponovo za nekoliko trenutaka." });
     }
     if (message.includes("model_timeout")) {
       return jsonResponse(504, { message: "Asistent trenutno odgovara sporije nego obično. Molimo pokušajte ponovo za nekoliko trenutaka." });
