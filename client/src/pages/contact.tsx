@@ -415,9 +415,9 @@ export default function Contact() {
                                     <SelectValue placeholder="Nivo hitnosti..." />
                                 </SelectTrigger>
                                 <SelectContent className="bg-white text-[#171A54] border-slate-200">
-                                    <SelectItem value="low">Redovno Održavanje</SelectItem>
-                                    <SelectItem value="medium">Manji Kvar (48h)</SelectItem>
-                                    <SelectItem value="high" className="text-red-600 font-bold">Urgentno (4h odziv)</SelectItem>
+                                    <SelectItem value="low">Planirani servis (7-10 radnih dana)</SelectItem>
+                                    <SelectItem value="medium">Prioritetna obrada (5-7 radnih dana)</SelectItem>
+                                    <SelectItem value="high" className="text-red-600 font-bold">Visok prioritet uz pripremu (3-5 radnih dana)</SelectItem>
                                 </SelectContent>
                               </Select>
                           </div>
