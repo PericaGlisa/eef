@@ -116,6 +116,14 @@ function buildFieldRows(fields: readonly (readonly [string, string])[]) {
     .join("");
 }
 
+function renderHeaderLogo() {
+  const safeLogo = escapeHtml(CONTACT_LOGO_DARK_URL);
+  if (!CONTACT_LOGO_USE_BADGE) {
+    return `<img src="${safeLogo}" alt="EEF Logo" width="142" height="40" style="display:block;max-width:142px;height:auto;margin:0 0 12px;" />`;
+  }
+  return `<div style="display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.96);padding:8px 12px;border-radius:12px;border:1px solid rgba(15,23,42,0.08);box-shadow:0 4px 14px rgba(15,23,42,0.12);margin:0 0 12px;"><img src="${safeLogo}" alt="EEF Logo" width="142" height="40" style="display:block;max-width:142px;height:auto;" /></div>`;
+}
+
 const rateLimitWindowMs = 10 * 60 * 1000;
 const rateLimitMax = 5;
 const rateLimits = new Map<string, { count: number; resetAt: number }>();
@@ -124,6 +132,8 @@ const CONTACT_RETRY_BASE_MS = Math.max(250, Math.min(4000, Number(process.env.CO
 const CONTACT_RETRY_MAX_DELAY_MS = Math.max(700, Math.min(9000, Number(process.env.CONTACT_RETRY_MAX_DELAY_MS || 4500)));
 const CONTACT_SPAM_THRESHOLD = Math.max(4, Math.min(12, Number(process.env.CONTACT_SPAM_THRESHOLD || 6)));
 const CONTACT_LOGO_URL = process.env.CONTACT_EMAIL_LOGO_URL || "https://eef.rs/assets/logo.png";
+const CONTACT_LOGO_DARK_URL = process.env.CONTACT_EMAIL_LOGO_DARK_URL || CONTACT_LOGO_URL;
+const CONTACT_LOGO_USE_BADGE = String(process.env.CONTACT_EMAIL_LOGO_USE_BADGE || "true").toLowerCase() === "true";
 const CONTACT_SLA_TEXT = process.env.CONTACT_SLA_TEXT || "odgovor u roku od 1 radnog dana";
 const CONTACT_BLOCKLIST = (process.env.CONTACT_SPAM_BLOCKLIST || "viagra,casino,crypto giveaway,loan,escort,porn,betting")
   .split(",")
@@ -307,7 +317,7 @@ export async function registerRoutes(
         <div style="max-width:760px;margin:0 auto;padding:24px;">
           <div style="border-radius:16px;overflow:hidden;border:1px solid #cbd5e1;background:#ffffff;">
             <div style="padding:20px 24px;background:linear-gradient(135deg,#171A54 0%,#2f3f8f 65%,#56AA4A 100%);color:#ffffff;">
-              <img src="${escapeHtml(CONTACT_LOGO_URL)}" alt="EEF Logo" width="142" height="40" style="display:block;max-width:142px;height:auto;margin:0 0 12px;" />
+              ${renderHeaderLogo()}
               <div style="font-size:12px;letter-spacing:0.14em;text-transform:uppercase;opacity:.9;font-weight:700;">Eko Elektrofrigo</div>
               <div style="font-size:24px;font-weight:800;line-height:1.2;margin-top:6px;">Novi lead sa kontakt forme</div>
               <div style="margin-top:8px;font-size:14px;opacity:.92;">Tema: ${escapeHtml(label)} • Primalac: ${escapeHtml(to)}</div>
@@ -341,7 +351,7 @@ export async function registerRoutes(
         <div style="max-width:720px;margin:0 auto;padding:24px;">
           <div style="border-radius:16px;overflow:hidden;border:1px solid #cbd5e1;background:#ffffff;">
             <div style="padding:22px 24px;background:linear-gradient(135deg,#171A54 0%,#2f3f8f 70%,#56AA4A 100%);color:#ffffff;">
-              <img src="${escapeHtml(CONTACT_LOGO_URL)}" alt="EEF Logo" width="142" height="40" style="display:block;max-width:142px;height:auto;margin:0 0 12px;" />
+              ${renderHeaderLogo()}
               <div style="font-size:12px;letter-spacing:0.14em;text-transform:uppercase;opacity:.9;font-weight:700;">Eko Elektrofrigo</div>
               <div style="font-size:24px;font-weight:800;line-height:1.2;margin-top:6px;">Potvrda prijema upita</div>
             </div>
