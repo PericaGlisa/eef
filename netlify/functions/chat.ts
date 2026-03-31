@@ -52,9 +52,10 @@ Sve specifičnosti o brendovima koje zastupaju (npr. Bitzer, Danfoss, Guntner) i
 `;
 
 const MODEL_CANDIDATES = ["gemini-flash-latest"];
-const MODEL_TIMEOUT_MS = Math.max(3000, Math.min(8000, Number(process.env.GEMINI_MODEL_TIMEOUT_MS || 7000)));
-const RETRY_MAX_ATTEMPTS = Math.max(1, Math.min(2, Number(process.env.GEMINI_RETRY_MAX_ATTEMPTS || 1)));
-const RETRY_BASE_MS = Math.max(200, Math.min(1500, Number(process.env.GEMINI_RETRY_BASE_MS || 700)));
+const MODEL_TIMEOUT_MS = Math.max(6000, Math.min(20000, Number(process.env.GEMINI_MODEL_TIMEOUT_MS || 14000)));
+const RETRY_MAX_ATTEMPTS = Math.max(1, Math.min(3, Number(process.env.GEMINI_RETRY_MAX_ATTEMPTS || 2)));
+const RETRY_BASE_MS = Math.max(300, Math.min(3000, Number(process.env.GEMINI_RETRY_BASE_MS || 900)));
+const RETRY_MAX_DELAY_MS = Math.max(1000, Math.min(8000, Number(process.env.GEMINI_RETRY_MAX_DELAY_MS || 5000)));
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -153,8 +154,10 @@ export async function handler(event: { httpMethod?: string; body?: string | null
           const message = String(modelError?.message || "").toLowerCase();
           const isNotFound = message.includes("not found") || message.includes("unsupported");
           const isQuotaExceeded = message.includes("429") || message.includes("quota") || message.includes("resource_exhausted") || message.includes("rate limit");
-          if (isQuotaExceeded && attempt < RETRY_MAX_ATTEMPTS) {
-            const retryDelayMs = extractRetryDelayMs(message) ?? RETRY_BASE_MS * Math.pow(2, attempt - 1);
+          const isTransientTimeout = message.includes("model_timeout") || message.includes("deadline") || message.includes("timed out") || message.includes("etimedout");
+          if ((isQuotaExceeded || isTransientTimeout) && attempt < RETRY_MAX_ATTEMPTS) {
+            const calculatedDelay = RETRY_BASE_MS * Math.pow(2, attempt - 1) + attempt * 150;
+            const retryDelayMs = Math.min(RETRY_MAX_DELAY_MS, extractRetryDelayMs(message) ?? calculatedDelay);
             await sleep(retryDelayMs);
             continue;
           }

@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
@@ -47,6 +48,19 @@ app.use((req, res, next) => {
 
 app.use((req, res, next) => {
   if (req.method !== "GET" && req.method !== "HEAD") {
+    next();
+    return;
+  }
+  if (
+    process.env.NODE_ENV !== "production" &&
+    (
+      req.path.startsWith("/@vite") ||
+      req.path.startsWith("/@fs/") ||
+      req.path.startsWith("/vite-hmr") ||
+      req.path.startsWith("/src/") ||
+      req.path.startsWith("/node_modules/")
+    )
+  ) {
     next();
     return;
   }

@@ -185,6 +185,9 @@ export default function App() {
       });
 
       const response = await getChatResponse(history, (partialText) => {
+        if (partialText.trim().length > 0) {
+          setIsLoading(false);
+        }
         setMessages(prev => {
           const next = [...prev];
           for (let i = next.length - 1; i >= 0; i--) {
@@ -496,6 +499,9 @@ export default function App() {
           
           <AnimatePresence initial={false}>
             {messages.map((msg, idx) => (
+              msg.role === 'model' && !msg.text.trim()
+                ? null
+                : (
               <motion.div
                 key={idx}
                 initial={{ opacity: 0, y: 20, scale: 0.98 }}
@@ -546,6 +552,7 @@ export default function App() {
                   </div>
                 </div>
               </motion.div>
+                )
             ))}
           </AnimatePresence>
           

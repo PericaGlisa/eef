@@ -24,16 +24,6 @@ export async function getChatResponse(
     }
     
     if (!response.ok) {
-      if (response.status === 429) {
-        return "Trenutno imam previše upita. Molim vas sačekajte jedan minut pa mi pišite ponovo.";
-      }
-      if (response.status === 502) {
-        return "Servis je trenutno preopterećen. Molimo pokušajte ponovo za nekoliko trenutaka.";
-      }
-      if (response.status === 504) {
-        return "Asistent trenutno odgovara sporije nego obično. Molimo pokušajte ponovo za nekoliko trenutaka.";
-      }
-
       let errorMsg = `Greška ${response.status}`;
       const clonedResponse = response.clone();
       try {
@@ -44,9 +34,26 @@ export async function getChatResponse(
         errorMsg = await clonedResponse.text();
       }
       console.error(`Chat API error status: ${response.status} - ${errorMsg}`);
+      const looksLikeHtml = /^\s*<!doctype html/i.test(errorMsg) || /^\s*<html/i.test(errorMsg);
+      const safeErrorMessage = looksLikeHtml ? `Greška ${response.status}` : errorMsg;
+      if (response.status === 429) {
+        return safeErrorMessage.includes("Greška")
+          ? "Trenutno imam previše upita. Molim vas sačekajte jedan minut pa mi pišite ponovo."
+          : safeErrorMessage;
+      }
+      if (response.status === 502) {
+        return safeErrorMessage.includes("Greška")
+          ? "Servis je trenutno preopterećen. Molimo pokušajte ponovo za nekoliko trenutaka."
+          : safeErrorMessage;
+      }
+      if (response.status === 504) {
+        return safeErrorMessage.includes("Greška")
+          ? "Asistent trenutno odgovara sporije nego obično. Molimo pokušajte ponovo za nekoliko trenutaka."
+          : safeErrorMessage;
+      }
       
       // Ako u grešci iz samog API-ja piše da je kvota premašena
-      if (errorMsg.includes("429") || errorMsg.includes("Quota") || errorMsg.includes("quota") || response.status === 500 && errorMsg.includes("exceeded")) {
+      if (errorMsg.includes("429") || errorMsg.includes("Quota") || errorMsg.includes("quota") || errorMsg.includes("resource_exhausted") || errorMsg.includes("rate limit")) {
          return "Trenutno imam previše upita. Molim vas sačekajte jedan minut pa mi pišite ponovo.";
       }
 
