@@ -23,6 +23,7 @@ const Blog = lazy(() => import("@/pages/blog"));
 const NewsPost = lazy(() => import("@/pages/news-post"));
 const Privacy = lazy(() => import("@/pages/privacy"));
 const Terms = lazy(() => import("@/pages/terms"));
+const GroqDiagnostic = lazy(() => import("@/pages/groq-diagnostic"));
 
 const NewAIChat = lazy(() => import("@/components/chat/App"));
 
@@ -149,6 +150,7 @@ function Router() {
         <Route path="/vesti/:id" component={NewsPost} />
         <Route path="/politika-privatnosti" component={Privacy} />
         <Route path="/uslovi-koriscenja" component={Terms} />
+        <Route path="/groq-dijagnostika" component={GroqDiagnostic} />
         <Route component={NotFound} />
       </Switch>
     </Suspense>

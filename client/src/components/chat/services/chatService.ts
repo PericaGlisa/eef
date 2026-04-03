@@ -1,5 +1,5 @@
 export async function getChatResponse(
-  messages: { role: 'user' | 'model', parts: { text: string }[] }[],
+  messages: { role: 'user' | 'assistant', content: string }[],
   onChunk?: (partialText: string) => void
 ) {
   try {
@@ -57,7 +57,6 @@ export async function getChatResponse(
           : safeErrorMessage;
       }
       
-      // Ako u grešci iz samog API-ja piše da je kvota premašena
       if (errorMsg.includes("429") || errorMsg.includes("Quota") || errorMsg.includes("quota") || errorMsg.includes("resource_exhausted") || errorMsg.includes("rate limit")) {
          return "Trenutno imam previše upita. Molim vas sačekajte jedan minut pa mi pišite ponovo.";
       }

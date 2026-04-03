@@ -24,10 +24,10 @@ import {
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { cn } from './lib/utils';
-import { getChatResponse } from './services/geminiService';
+import { getChatResponse } from './services/chatService';
 
 interface Message {
-  role: 'user' | 'model';
+  role: 'user' | 'assistant';
   text: string;
   timestamp: Date;
 }
@@ -40,6 +40,7 @@ export default function App() {
         const parsed = JSON.parse(saved);
         return parsed.map((m: any) => ({
           ...m,
+          role: m.role === 'model' ? 'assistant' : m.role,
           timestamp: new Date(m.timestamp)
         }));
       } catch (e) {
@@ -48,7 +49,7 @@ export default function App() {
     }
     return [
       {
-        role: 'model',
+        role: 'assistant',
         text: 'Dobar dan! Ja sam AI asistent kompanije Eko Elektrofrigo. Specijalizovan sam za B2B HVAC rešenja i industrijsko hlađenje. Kako Vam mogu pomoći danas?',
         timestamp: new Date()
       }
@@ -89,7 +90,7 @@ export default function App() {
       if (!isLastMessageAuto) {
         idleMessageTimer.current = setTimeout(() => {
           setMessages(prev => [...prev, {
-            role: 'model',
+            role: 'assistant',
             text: idleMsgText,
             timestamp: new Date()
           }]);
@@ -103,7 +104,7 @@ export default function App() {
         
         // "Close" session - reset to initial state
         const initialMessage: Message = {
-          role: 'model',
+          role: 'assistant',
           text: 'Dobar dan! Ja sam AI asistent kompanije Eko Elektrofrigo. Specijalizovan sam za B2B HVAC rešenja i industrijsko hlađenje. Kako Vam mogu pomoći danas?',
           timestamp: new Date()
         };
@@ -166,7 +167,7 @@ export default function App() {
     };
 
     setMessages(prev => [...prev, userMessage, {
-      role: 'model',
+      role: 'assistant',
       text: '',
       timestamp: modelTimestamp
     }]);
@@ -176,12 +177,12 @@ export default function App() {
     try {
       const history = messages.map(m => ({
         role: m.role,
-        parts: [{ text: m.text }]
+        content: m.text
       }));
       
       history.push({
         role: 'user',
-        parts: [{ text: textToSend }]
+        content: textToSend
       });
 
       const response = await getChatResponse(history, (partialText) => {
@@ -192,7 +193,7 @@ export default function App() {
           const next = [...prev];
           for (let i = next.length - 1; i >= 0; i--) {
             const message = next[i];
-            if (message.role === 'model' && message.timestamp.getTime() === modelTimestamp.getTime()) {
+            if (message.role === 'assistant' && message.timestamp.getTime() === modelTimestamp.getTime()) {
               next[i] = {
                 ...message,
                 text: partialText
@@ -208,7 +209,7 @@ export default function App() {
         const next = [...prev];
         for (let i = next.length - 1; i >= 0; i--) {
           const message = next[i];
-          if (message.role === 'model' && message.timestamp.getTime() === modelTimestamp.getTime()) {
+          if (message.role === 'assistant' && message.timestamp.getTime() === modelTimestamp.getTime()) {
             next[i] = {
               ...message,
               text: response || 'Izvinite, došlo je do greške u komunikaciji.'
@@ -225,7 +226,7 @@ export default function App() {
         const next = [...prev];
         for (let i = next.length - 1; i >= 0; i--) {
           const message = next[i];
-          if (message.role === 'model' && message.timestamp.getTime() === modelTimestamp.getTime()) {
+          if (message.role === 'assistant' && message.timestamp.getTime() === modelTimestamp.getTime()) {
             next[i] = {
               ...message,
               text: 'Trenutno nisam u mogućnosti da odgovorim. Molimo pokušajte kasnije ili nas kontaktirajte direktno.'
@@ -280,7 +281,7 @@ export default function App() {
     }
 
     const initialMessage: Message = {
-      role: 'model',
+      role: 'assistant',
       text: 'Dobar dan! Ja sam AI asistent kompanije Eko Elektrofrigo. Specijalizovan sam za B2B HVAC rešenja i industrijsko hlađenje. Kako Vam mogu pomoći danas?',
       timestamp: new Date()
     };
@@ -499,7 +500,7 @@ export default function App() {
           
           <AnimatePresence initial={false}>
             {messages.map((msg, idx) => (
-              msg.role === 'model' && !msg.text.trim()
+              msg.role === 'assistant' && !msg.text.trim()
                 ? null
                 : (
               <motion.div

@@ -1,7 +1,6 @@
 import type { Express } from "express";
 import { type Server } from "http";
 import { z } from "zod";
-import { GoogleGenAI } from "@google/genai";
 import { KNOWLEDGE_BASE } from "./chatKnowledgeBase";
 import { randomUUID } from "crypto";
 import { appendFile, mkdir } from "fs/promises";
@@ -12,7 +11,7 @@ Ti si vrhunski komercijalno-mašinski inženjer i asistent kompanije Eko Elektro
 Tvoja specijalnost su B2B HVAC rešenja (grejanje, ventilacija, klimatizacija) i industrijsko hlađenje.
 
 INTERNA BAZA ZNANJA (KNOWLEDGE BASE):
-${JSON.stringify(KNOWLEDGE_BASE, null, 2)}
+${JSON.stringify(KNOWLEDGE_BASE)}
 
 IZVOR INFORMACIJA:
 Imaš pristup sajtu https://eef.rs/ putem URL Context alata. Koristi informacije sa tog sajta kao primarni izvor istine, a INTERNU BAZU ZNANJA kao dopunu za specifične detalje.
@@ -57,11 +56,12 @@ Zlatomir Damnjanović je osnivač i vizionar kompanije Eko Elektrofrigo, kao i n
 Sve specifičnosti o brendovima koje zastupaju (npr. Bitzer, Danfoss, Guntner) i projektima koje su radili crpi direktno sa eef.rs i iz BAZE ZNANJA.
 `;
 
-const MODEL_CANDIDATES = ["gemini-flash-latest"];
-const MODEL_TIMEOUT_MS = Math.max(12000, Math.min(60000, Number(process.env.GEMINI_MODEL_TIMEOUT_MS || 30000)));
-const RETRY_MAX_ATTEMPTS = Math.max(1, Math.min(4, Number(process.env.GEMINI_RETRY_MAX_ATTEMPTS || 2)));
-const RETRY_BASE_MS = Math.max(300, Math.min(5000, Number(process.env.GEMINI_RETRY_BASE_MS || 900)));
-const RETRY_MAX_DELAY_MS = Math.max(1000, Math.min(12000, Number(process.env.GEMINI_RETRY_MAX_DELAY_MS || 8000)));
+const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
+const MODEL_CANDIDATES = ["llama-3.1-8b-instant", "llama-3.3-70b-versatile"];
+const MODEL_TIMEOUT_MS = Math.max(12000, Math.min(60000, Number(process.env.GROQ_MODEL_TIMEOUT_MS || 30000)));
+const RETRY_MAX_ATTEMPTS = Math.max(1, Math.min(4, Number(process.env.GROQ_RETRY_MAX_ATTEMPTS || 2)));
+const RETRY_BASE_MS = Math.max(300, Math.min(5000, Number(process.env.GROQ_RETRY_BASE_MS || 900)));
+const RETRY_MAX_DELAY_MS = Math.max(1000, Math.min(12000, Number(process.env.GROQ_RETRY_MAX_DELAY_MS || 8000)));
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -428,6 +428,7 @@ export async function registerRoutes(
     return res.status(200).json({ ok: true, requestId });
   });
 
+  // POST /api/chat - Streamed chat endpoint
   app.post("/api/chat", async (req, res) => {
     try {
       console.log("Chat API hit with body:", req.body);
@@ -436,88 +437,147 @@ export async function registerRoutes(
         return res.status(400).json({ message: "Neispravan format poruka." });
       }
 
-      // Gemini requires the first message in a multi-turn conversation to be from the 'user'.
-      const filteredMessages = messages.filter((m, index) => {
-        if (index === 0 && m.role === 'model') return false;
-        return true;
-      });
+      // Normalize messages: support both old Gemini format (parts) and new OpenAI format (content)
+      const normalized = messages
+        .map((m: any) => {
+          const role = m.role === 'model' ? 'assistant' : m.role;
+          const content = m.content || m.parts?.[0]?.text || '';
+          return { role, content };
+        })
+        .filter((m: any) => m.content);
 
-      if (filteredMessages.length === 0) {
+      // Remove leading assistant messages (first message must be user)
+      while (normalized.length > 0 && normalized[0].role === 'assistant') {
+        normalized.shift();
+      }
+
+      if (normalized.length === 0) {
         return res.json({ text: "Izvinite, došlo je do greške u obradi poruke." });
       }
 
-      const lastMessage = filteredMessages[filteredMessages.length - 1].parts[0].text;
-      const history = filteredMessages.slice(0, -1);
+      const lastMessage = normalized[normalized.length - 1].content;
+      const history = normalized.slice(0, -1);
 
-      const promptWithUrl = history.length === 0 
+      const promptWithUrl = history.length === 0
         ? `Na osnovu sajta https://eef.rs/, odgovori na: ${lastMessage}`
         : lastMessage;
 
-      const apiKey = process.env.GEMINI_API_KEY || '';
+      const apiKey = process.env.GROQ_API_KEY || '';
       if (!apiKey) {
-        return res.status(500).json({ message: "GEMINI_API_KEY nije definisan." });
+        return res.status(500).json({ message: "GROQ_API_KEY nije definisan." });
       }
 
-      console.log("Gemini API key loaded.");
+      console.log("Groq API key loaded.");
 
-      const ai = new GoogleGenAI({ apiKey });
+      const groqMessages = [
+        { role: "system", content: SYSTEM_INSTRUCTION },
+        ...history,
+        { role: "user", content: promptWithUrl },
+      ];
+
       let lastModelError: any;
 
       for (const modelName of MODEL_CANDIDATES) {
         for (let attempt = 1; attempt <= RETRY_MAX_ATTEMPTS; attempt++) {
           let startedStreaming = false;
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), MODEL_TIMEOUT_MS);
           try {
-            const stream = await Promise.race([
-              ai.models.generateContentStream({
+            const groqResponse = await fetch(GROQ_API_URL, {
+              method: "POST",
+              headers: {
+                "Authorization": `Bearer ${apiKey}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
                 model: modelName,
-                contents: [
-                  ...history.map((m) => ({
-                    role: m.role,
-                    parts: m.parts,
-                  })),
-                  { role: "user", parts: [{ text: promptWithUrl }] },
-                ],
-                config: {
-                  systemInstruction: SYSTEM_INSTRUCTION,
-                },
+                messages: groqMessages,
+                stream: true,
+                max_tokens: 1024,
+                temperature: 0.7,
               }),
-              new Promise<never>((_, reject) =>
-                setTimeout(() => reject(new Error("MODEL_TIMEOUT")), MODEL_TIMEOUT_MS)
-              ),
-            ]);
+              signal: controller.signal,
+            });
+            clearTimeout(timeoutId);
+
+            if (!groqResponse.ok) {
+              const errorBody = await groqResponse.text();
+              const err = new Error(`Groq API error ${groqResponse.status}: ${errorBody}`);
+              (err as any).status = groqResponse.status;
+              throw err;
+            }
+
             res.setHeader("Content-Type", "text/plain; charset=utf-8");
             res.setHeader("Cache-Control", "no-cache, no-transform");
             res.setHeader("Connection", "keep-alive");
 
             let fullText = "";
-            for await (const chunk of stream as any) {
-              const chunkText =
-                typeof chunk?.text === "string"
-                  ? chunk.text
-                  : typeof chunk?.candidates?.[0]?.content?.parts?.[0]?.text === "string"
-                    ? chunk.candidates[0].content.parts[0].text
-                    : "";
-              if (chunkText) {
-                startedStreaming = true;
-                fullText += chunkText;
-                res.write(chunkText);
+            const body = groqResponse.body;
+            if (!body) {
+              res.write("Izvinite, došlo je do greške u obradi poruke.");
+              res.end();
+              return;
+            }
+
+            const reader = body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = "";
+
+            while (true) {
+              const { value, done } = await reader.read();
+              if (done) break;
+              buffer += decoder.decode(value, { stream: true });
+              const lines = buffer.split("\n");
+              buffer = lines.pop() || "";
+              for (const line of lines) {
+                const trimmed = line.trim();
+                if (!trimmed || !trimmed.startsWith("data: ")) continue;
+                const payload = trimmed.slice(6);
+                if (payload === "[DONE]") break;
+                try {
+                  const parsed = JSON.parse(payload);
+                  const chunkText = parsed.choices?.[0]?.delta?.content || "";
+                  if (chunkText) {
+                    startedStreaming = true;
+                    fullText += chunkText;
+                    res.write(chunkText);
+                  }
+                } catch {}
               }
             }
+            // Process remaining buffer
+            if (buffer.trim()) {
+              const trimmed = buffer.trim();
+              if (trimmed.startsWith("data: ") && trimmed.slice(6) !== "[DONE]") {
+                try {
+                  const parsed = JSON.parse(trimmed.slice(6));
+                  const chunkText = parsed.choices?.[0]?.delta?.content || "";
+                  if (chunkText) {
+                    startedStreaming = true;
+                    fullText += chunkText;
+                    res.write(chunkText);
+                  }
+                } catch {}
+              }
+            }
+
             if (!fullText) {
               res.write("Izvinite, došlo je do greške u obradi poruke.");
             }
             res.end();
             return;
           } catch (modelError: any) {
+            clearTimeout(timeoutId);
             if (startedStreaming) {
               throw modelError;
             }
             lastModelError = modelError;
             const message = String(modelError?.message || "").toLowerCase();
-            const isNotFound = message.includes("not found") || message.includes("unsupported");
-            const isQuotaExceeded = message.includes("429") || message.includes("quota") || message.includes("resource_exhausted") || message.includes("rate limit");
-            const isServiceUnavailable = message.includes("503") || message.includes("unavailable") || message.includes("high demand");
-            const isTransientTimeout = message.includes("model_timeout") || message.includes("deadline") || message.includes("timed out") || message.includes("etimedout");
+            const status = modelError?.status || 0;
+            const isNotFound = status === 404 || message.includes("not found") || message.includes("unsupported");
+            const isQuotaExceeded = status === 429 || status === 413 || message.includes("429") || message.includes("quota") || message.includes("resource_exhausted") || message.includes("rate limit") || message.includes("rate_limit");
+            const isServiceUnavailable = status === 503 || message.includes("503") || message.includes("unavailable") || message.includes("high demand");
+            const isTransientTimeout = modelError?.name === "AbortError" || message.includes("model_timeout") || message.includes("deadline") || message.includes("timed out") || message.includes("etimedout");
             if ((isQuotaExceeded || isServiceUnavailable || isTransientTimeout) && attempt < RETRY_MAX_ATTEMPTS) {
               const calculatedDelay = RETRY_BASE_MS * Math.pow(2, attempt - 1) + attempt * 150;
               const retryDelayMs = Math.min(RETRY_MAX_DELAY_MS, extractRetryDelayMs(message) ?? calculatedDelay);
@@ -534,8 +594,8 @@ export async function registerRoutes(
 
       throw lastModelError;
     } catch (error: any) {
-      console.error("Gemini server error full object:", error);
-      console.error("Gemini server error message:", error?.message);
+      console.error("Groq server error full object:", error);
+      console.error("Groq server error message:", error?.message);
       if (res.headersSent) {
         res.end();
         return;
@@ -549,10 +609,102 @@ export async function registerRoutes(
       if (isServiceUnavailable) {
         return res.status(503).json({ message: "Model je trenutno pod velikim opterećenjem. Molimo pokušajte ponovo za nekoliko trenutaka." });
       }
-      if (message.includes("model_timeout")) {
+      if (message.includes("model_timeout") || error?.name === "AbortError") {
         return res.status(504).json({ message: "Asistent trenutno odgovara sporije nego obično. Molimo pokušajte ponovo za nekoliko trenutaka." });
       }
       return res.status(500).json({ message: "Trenutno nisam u mogućnosti da odgovorim. Molimo pokušajte ponovo za nekoliko trenutaka.", error: error?.message });
+    }
+  });
+
+  // GET /api/groq-diagnostic - Test Groq API connection
+  app.get("/api/groq-diagnostic", async (req, res) => {
+    console.log("🔍 [DIAGNOSTIC] Request received");
+    
+    const apiKey = process.env.GROQ_API_KEY || '';
+    
+    const diagnosticResult = {
+      timestamp: new Date().toISOString(),
+      apiKeyConfigured: !!apiKey,
+      apiKeyPreview: apiKey ? `${apiKey.substring(0, 8)}...${apiKey.substring(apiKey.length - 4)}` : 'NOT_SET',
+      connectionTest: {
+        success: false,
+        responseTime: null as number | null,
+        statusCode: null as number | null,
+        error: null as string | null,
+        model: null as string | null
+      },
+      environment: {
+        nodeEnv: process.env.NODE_ENV || 'development',
+        groqTimeout: MODEL_TIMEOUT_MS,
+        retryAttempts: RETRY_MAX_ATTEMPTS
+      }
+    };
+
+    if (!apiKey) {
+      console.error("❌ [DIAGNOSTIC] API key not configured");
+      diagnosticResult.connectionTest.error = "GROQ_API_KEY nije definisan u .env fajlu";
+      return res.status(500).json(diagnosticResult);
+    }
+
+    try {
+      const startTime = Date.now();
+      const testModel = MODEL_CANDIDATES[0];
+      
+      console.log(`📡 [DIAGNOSTIC] Testing connection with model: ${testModel}`);
+      
+      const response = await fetch(GROQ_API_URL, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: testModel,
+          messages: [
+            { role: "system", content: "You are a helpful assistant." },
+            { role: "user", content: "Respond with just the word OK in English." }
+          ],
+          max_tokens: 10,
+          temperature: 0,
+        }),
+      });
+      
+      const responseTime = Date.now() - startTime;
+      diagnosticResult.connectionTest.responseTime = responseTime;
+      diagnosticResult.connectionTest.statusCode = response.status;
+      diagnosticResult.connectionTest.model = testModel;
+
+      console.log(`📊 [DIAGNOSTIC] Response status: ${response.status}, time: ${responseTime}ms`);
+
+      if (!response.ok) {
+        const errorBody = await response.text();
+        console.error(`❌ [DIAGNOSTIC] API error: ${response.status} - ${errorBody}`);
+        diagnosticResult.connectionTest.error = `Groq API error ${response.status}: ${errorBody}`;
+        return res.status(response.status).json(diagnosticResult);
+      }
+
+      const data = await response.json();
+      console.log("✅ [DIAGNOSTIC] Got successful response from Groq");
+      
+      const reply = data.choices?.[0]?.message?.content || '';
+      
+      diagnosticResult.connectionTest.success = true;
+      diagnosticResult.connectionTest.error = null;
+      diagnosticResult.testResponse = reply.trim();
+
+      console.log("✓ Groq API diagnostic test passed", {
+        status: response.status,
+        responseTime,
+        model: testModel,
+        reply: reply.trim()
+      });
+
+      return res.status(200).json(diagnosticResult);
+    } catch (error: any) {
+      console.error("✗ [DIAGNOSTIC] Error during test:", error);
+      console.error("✗ [DIAGNOSTIC] Error stack:", error?.stack);
+      diagnosticResult.connectionTest.error = error?.message || "Unknown error";
+      return res.status(500).json(diagnosticResult);
     }
   });
 
