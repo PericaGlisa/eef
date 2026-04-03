@@ -12,6 +12,7 @@ export type ServiceSeoDetails = {
   lastUpdated: string;
   faqs: FaqItem[];
   relatedReferences: InternalLinkItem[];
+  internalLinks: InternalLinkItem[]; // Dodato za internal linking
 };
 
 export type SolutionSeoDetails = {
@@ -30,6 +31,11 @@ export const serviceSeoDetails: Record<string, ServiceSeoDetails> = {
     relatedReferences: [
       { label: "Reference Agrounija", path: "/reference/agrounija" },
       { label: "Sve reference", path: "/reference" },
+    ],
+    internalLinks: [
+      { label: "Eko Rashlada - ULO Komore", path: "/eko-rashlada/ulo-komore" },
+      { label: "Konsalting", path: "/usluge/konsalting" },
+      { label: "Energetska Revizija", path: "/usluge/energetska-revizija" }
     ],
     faqs: [
       {
@@ -55,6 +61,10 @@ export const serviceSeoDetails: Record<string, ServiceSeoDetails> = {
       { label: "Reference Agrounija", path: "/reference/agrounija" },
       { label: "Sve reference", path: "/reference" },
     ],
+    internalLinks: [
+      { label: "Inženjering", path: "/usluge/inzenjering" },
+      { label: "Servis", path: "/usluge/servis" }
+    ],
     faqs: [
       {
         question: "Da li nudite izvođenje po principu ključ u ruke?",
@@ -78,6 +88,10 @@ export const serviceSeoDetails: Record<string, ServiceSeoDetails> = {
     relatedReferences: [
       { label: "Reference Agrounija", path: "/reference/agrounija" },
       { label: "Sve reference", path: "/reference" },
+    ],
+    internalLinks: [
+      { label: "Izvođenje Radova", path: "/usluge/izvodjenje" },
+      { label: "Energetska Revizija", path: "/usluge/energetska-revizija" }
     ],
     faqs: [
       {
@@ -103,6 +117,10 @@ export const serviceSeoDetails: Record<string, ServiceSeoDetails> = {
       { label: "Reference Agrounija", path: "/reference/agrounija" },
       { label: "Sve reference", path: "/reference" },
     ],
+    internalLinks: [
+      { label: "Servis", path: "/usluge/servis" },
+      { label: "Konsalting", path: "/usluge/konsalting" }
+    ],
     faqs: [
       {
         question: "Šta obuhvata energetska revizija rashladnog sistema?",
@@ -127,6 +145,10 @@ export const serviceSeoDetails: Record<string, ServiceSeoDetails> = {
       { label: "Reference Agrounija", path: "/reference/agrounija" },
       { label: "Sve reference", path: "/reference" },
     ],
+    internalLinks: [
+      { label: "Inženjering", path: "/usluge/inzenjering" },
+      { label: "Eko Rashlada", path: "/eko-rashlada" }
+    ],
     faqs: [
       {
         question: "Kada je najbolje uključiti konsalting tim?",
@@ -150,6 +172,10 @@ export const serviceSeoDetails: Record<string, ServiceSeoDetails> = {
     relatedReferences: [
       { label: "Reference Agrounija", path: "/reference/agrounija" },
       { label: "Sve reference", path: "/reference" },
+    ],
+    internalLinks: [
+      { label: "Dokumentacija - Sertifikati", path: "/dokumentacija/sertifikati" },
+      { label: "O Nama", path: "/o-nama" }
     ],
     faqs: [
       {

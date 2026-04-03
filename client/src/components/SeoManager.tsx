@@ -345,21 +345,80 @@ function upsertCanonical(url: string) {
 function getOrganizationJsonLd() {
   return {
     "@context": "https://schema.org",
-    "@type": ["Organization", "LocalBusiness"],
+    "@type": ["Organization", "LocalBusiness", "ProfessionalService"],
     name: "Eko Elektrofrigo d.o.o.",
+    alternateName: "EEF",
     url: SITE_URL,
     logo: `${SITE_URL}/assets/logo.png`,
     image: DEFAULT_IMAGE,
     telephone: "+381113757287",
+    faxNumber: "+381113757288",
     email: "office@eef.rs",
     address: {
       "@type": "PostalAddress",
       streetAddress: "Svetolika Nikačevića 11",
       addressLocality: "Beograd",
+      postalCode: "11000",
       addressCountry: "RS",
     },
-    areaServed: "RS",
-    sameAs: ["https://www.linkedin.com/feed/update/urn:li:activity:6899988285712596994"],
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 44.7866,
+      longitude: 20.4489,
+    },
+    areaServed: [
+      { "@type": "Country", name: "Serbia" },
+      { "@type": "Country", name: "Bosnia and Herzegovina" },
+      { "@type": "Country", name: "Montenegro" },
+      { "@type": "Country", name: "North Macedonia" },
+      { "@type": "Country", name: "Croatia" }
+    ],
+    sameAs: [
+      "https://www.linkedin.com/feed/update/urn:li:activity:6899988285712596994",
+      // Dodaj druge društvene mreže ako postoje
+    ],
+    openingHoursSpecification: {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday"
+      ],
+      opens: "07:30",
+      closes: "15:30",
+      validFrom: new Date().toISOString().split('-')[0] // Current year
+    },
+    priceRange: "$$$",
+    paymentAccepted: ["Cash", "Credit Card", "Bank Transfer"],
+    makesOffer: {
+      "@type": "OfferCatalog",
+      name: "HVAC & Industrial Cooling Services",
+      itemListElement: [
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Industrial Refrigeration Systems"
+          }
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Cold Storage Solutions"
+          }
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "HVAC Engineering"
+          }
+        }
+      ]
+    }
   };
 }
 
