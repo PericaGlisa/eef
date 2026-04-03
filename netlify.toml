@@ -17,6 +17,11 @@
   status = 200
 
 [[redirects]]
+  from = "/api/groq-diagnostic"
+  to = "/.netlify/functions/chat-diagnostic"
+  status = 200
+
+[[redirects]]
   from = "/about"
   to = "/o-nama"
   status = 301
