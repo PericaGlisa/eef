@@ -306,29 +306,31 @@ export function Navbar() {
                   <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px]" />
                 </div>
                 
-                {/* Custom Close Button - positioned at top (replaces default) */}
-                <button
-                  onClick={() => setIsOpen(false)}
-                  className="absolute top-6 right-6 z-50 w-10 h-10 rounded-full flex items-center justify-center text-white hover:bg-white/10 transition-all"
-                  aria-label="Zatvori meni"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-                
-                {/* Logo - positioned at top left */}
-                <Link href="/" onClick={() => setIsOpen(false)} className="absolute top-6 left-6 z-50">
-                  <img 
-                    src="/assets/logo.png" 
-                    alt="Eko Elektrofrigo Logo"
-                    className="h-10 w-auto object-contain brightness-0 invert"
-                  />
-                </Link>
-                
                 <div 
-                  className="flex-1 overflow-y-auto custom-scrollbar px-8 py-12 relative z-10 min-h-0 pt-24" 
+                  className="flex-1 overflow-y-auto custom-scrollbar px-8 py-12 relative z-10 min-h-0" 
                   style={{ overscrollBehavior: 'contain', touchAction: 'pan-y' }}
                   onWheel={(e) => e.stopPropagation()}
                 >
+                  {/* Header with Logo and Close Button */}
+                  <div className="flex items-center justify-between mb-8">
+                    {/* Logo */}
+                    <Link href="/" onClick={() => setIsOpen(false)}>
+                      <img 
+                        src="/assets/logo.png" 
+                        alt="Eko Elektrofrigo Logo"
+                        className="h-10 w-auto object-contain brightness-0 invert"
+                      />
+                    </Link>
+                    
+                    {/* Close Button */}
+                    <button
+                      onClick={() => setIsOpen(false)}
+                      className="w-10 h-10 rounded-full flex items-center justify-center text-white hover:bg-white/10 transition-all"
+                      aria-label="Zatvori meni"
+                    >
+                      <X className="w-6 h-6" />
+                    </button>
+                  </div>
                   {/* Breadcrumb Trail */}
                   {location !== "/" && (
                     <motion.div 
