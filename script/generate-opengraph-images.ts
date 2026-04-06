@@ -82,6 +82,30 @@ const IMAGES_TO_CREATE = [
     title: "Sigurnost Postrojenja",
     subtitle: "Usklađenost sa propisima",
     description: "Atestiranje • Revizija • Sertifikacija"
+  },
+  {
+    filename: "og-sertifikati.jpg",
+    title: "Sertifikati",
+    subtitle: "ISO sertifikati kvaliteta",
+    description: "ISO 9001 • ISO 14001 • ISO 45001"
+  },
+  {
+    filename: "og-diplome.jpg",
+    title: "Diplome",
+    subtitle: "Stručne diplome i priznanja",
+    description: "Danfoss Partner • Bitzer Certifikat • Ostale diplome"
+  },
+  {
+    filename: "og-privacy.jpg",
+    title: "Politika Privatnosti",
+    subtitle: "Zaštita podataka o ličnosti",
+    description: "GDPR usklađenost • Bezbednost podataka"
+  },
+  {
+    filename: "og-terms.jpg",
+    title: "Uslovi Korišćenja",
+    subtitle: "Pravila korišćenja sajta",
+    description: "Uslovi • Odricanja • Prava"
   }
 ];
 

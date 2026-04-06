@@ -154,7 +154,7 @@ export function getSeoMeta(pathname: string): SeoMeta {
         { name: "Dokumentacija", path: "/dokumentacija" },
         { name: "Sertifikati", path: "/dokumentacija/sertifikati" },
       ],
-      image: "/og-sigurnost.jpg",
+      image: "/og-sertifikati.jpg",
     },
     "/dokumentacija/diplome": {
       title: "Diplome | Eko Elektrofrigo",
@@ -167,7 +167,7 @@ export function getSeoMeta(pathname: string): SeoMeta {
         { name: "Dokumentacija", path: "/dokumentacija" },
         { name: "Diplome", path: "/dokumentacija/diplome" },
       ],
-      image: "/og-dokumentacija.jpg",
+      image: "/og-diplome.jpg",
     },
     "/reference": {
       title: "Reference | Eko Elektrofrigo",
@@ -216,7 +216,7 @@ export function getSeoMeta(pathname: string): SeoMeta {
         { name: "Početna", path: "/" },
         { name: "Politika privatnosti", path: "/politika-privatnosti" },
       ],
-      image: "/opengraph.jpg",
+      image: "/og-privacy.jpg",
     },
     "/uslovi-koriscenja": {
       title: "Uslovi korišćenja | Eko Elektrofrigo",
@@ -228,7 +228,7 @@ export function getSeoMeta(pathname: string): SeoMeta {
         { name: "Početna", path: "/" },
         { name: "Uslovi korišćenja", path: "/uslovi-koriscenja" },
       ],
-      image: "/opengraph.jpg",
+      image: "/og-terms.jpg",
     },
   };
 
@@ -279,9 +279,14 @@ export function getSeoMeta(pathname: string): SeoMeta {
   }
 
   if (normalizedPath.startsWith("/vesti/")) {
-    const id = Number(normalizedPath.replace("/vesti/", ""));
-    const post = newsItems.find((item) => item.id === id);
-    const newsSeo = newsSeoDetails[id];
+    const slug = normalizedPath.replace("/vesti/", "");
+    // Try to find by slug first
+    let post = newsItems.find((item) => item.slug === slug);
+    // Fallback: try to find by ID if slug is a number
+    if (!post && !isNaN(Number(slug))) {
+      post = newsItems.find((item) => item.id === Number(slug));
+    }
+    const newsSeo = post ? newsSeoDetails[post.id] : undefined;
     if (post) {
       return {
         title: `${post.title} | Vesti | Eko Elektrofrigo`,
