@@ -1,5 +1,6 @@
 export interface NewsItem {
   id: number;
+  slug: string;
   date: string;
   category: string;
   title: string;
@@ -12,6 +13,7 @@ export interface NewsItem {
 export const newsItems: NewsItem[] = [
   {
     id: 1,
+    slug: "svecana-sednica-masinskog-fakulteta",
     date: "28. JAN 2026",
     category: "Događaji",
     title: "Svečana sednica Saveta Mašinskog fakulteta, Univerziteta u Beogradu",
@@ -26,6 +28,7 @@ Zahvaljujemo se i radujemo ponovnoj saradnji!`,
   },
   {
     id: 2,
+    slug: "zavrseni-radovi-zitostok-velika-plana",
     date: "25. JAN 2026",
     category: "Projekti",
     title: "Završeni radovi na novom objektu investitora Žitostok d.o.o. u Velikoj Plani",
@@ -42,6 +45,7 @@ Svi kompresori su proizvođača BITZER, a automatika Danfoss. Isparivači i kond
   },
   {
     id: 3,
+    slug: "modifikacija-masine-sortiranje-treanja-delta-agrar-zajecar",
     date: "01. JUN 2026",
     category: "Modernizacija",
     title: "Modifikacija mašine za sortiranje trešnje u hladnjači kompanije Delta Agrar u Zaječaru",
@@ -56,6 +60,7 @@ Medijum za hlađenje je etilen glikol, koji se obezbeđuje iz postojećeg sistem
   },
   {
     id: 4,
+    slug: "minusna-komora-arhiv-rgz-zemun",
     date: "18. FEB 2026",
     category: "Projekti",
     title: "Minusna komora za arhivsku građu u novoj zgradi Arhiva Republičkog geodetskog zavoda",
@@ -66,6 +71,7 @@ Medijum za hlađenje je etilen glikol, koji se obezbeđuje iz postojećeg sistem
   },
   {
     id: 5,
+    slug: "maf-roda-agrobotic-poljoprivredni-sajam-novi-sad",
     date: "18. FEB 2026",
     category: "Događaji",
     title: "Zajedno sa kompanijom MAF RODA AGROBOTIC na 89. Međunarodnom poljoprivrednom sajmu u Novom Sadu",
@@ -78,6 +84,7 @@ Medijum za hlađenje je etilen glikol, koji se obezbeđuje iz postojećeg sistem
   },
   {
     id: 6,
+    slug: "ralu-logistika-srbija-minusna-komora",
     date: "18. FEB 2026",
     category: "Projekti",
     title: "RALU Logistika Srbija - Nova minusna komora",
@@ -90,9 +97,10 @@ Medijum za hlađenje je etilen glikol, koji se obezbeđuje iz postojećeg sistem
   },
   {
     id: 7,
+    slug: "danfoss-eer-summit-industrijsko-hladjenje-2022",
     date: "18. FEB 2026",
     category: "Događaji",
-    title: 'Učesnici internacionalnog samita "EER Summit for Industrial Refrigeration’s Distributors 2022"',
+    title: "Učesnici internacionalnog samita \"EER Summit for Industrial Refrigeration's Distributors 2022\"",
     desc: 'Predstavnici Eko Elektrofrigo d.o.o. bili su učesnici internacionalnog samita "EER Summit for Industrial Refrigeration\'s Distributors 2022", čiji domaćin je bila kompanija Danfoss.',
     content: `Predstavnici Eko Elektrofrigo d.o.o. bili su učesnici internacionalnog samita "EER Summit for Industrial Refrigeration's Distributors 2022", čiji domaćin je bila kompanija Danfoss. Povodom otvaranja nove fabrike u Poljskoj, kompanija Danfoss organizovala je dvodnevni događaj, koji je obuhvatao predavanja i treninge iz oblasti industrijskog hlađenja, kao i posetu samoj fabrici i obilazak proizvodnje. 
     
@@ -104,6 +112,7 @@ Medijum za hlađenje je etilen glikol, koji se obezbeđuje iz postojećeg sistem
   },
   {
     id: 8,
+    slug: "sirogojno-company-isporuka-opreme-bajina-basta",
     date: "18. FEB 2026",
     category: "Projekti",
     title: 'Isporuka opreme za "Sirogojno Company" d.o.o. i početak izvođačkih radova',

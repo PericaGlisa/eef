@@ -79,26 +79,33 @@ function RelatedPostCard({ post, delay }: { post: NewsItem; delay: number }) {
 }
 
 export default function NewsPost() {
-  const [match, params] = useRoute("/vesti/:id");
+  const [match, params] = useRoute("/vesti/:slug");
   const { toast } = useToast();
   
   if (!match || !params) return <NotFound />;
   
-  const id = parseInt(params.id);
-  const post = newsItems.find(item => item.id === id);
-  const newsSeo = newsSeoDetails[id];
+  const slug = params.slug;
+  const post = newsItems.find(item => item.slug === slug);
+  
+  // Fallback: try to find by ID if slug is a number (for backward compatibility)
+  const postById = !post && !isNaN(Number(slug)) 
+    ? newsItems.find(item => item.id === Number(slug)) 
+    : null;
+  
+  const finalPost = post || postById;
+  const newsSeo = finalPost ? newsSeoDetails[finalPost.id] : undefined;
 
-  if (!post) return <NotFound />;
+  if (!finalPost) return <NotFound />;
 
   // Find related posts (same category, excluding current post)
   const relatedPosts = newsItems
-    .filter(item => item.id !== post.id && item.category === post.category)
+    .filter(item => item.id !== finalPost.id && item.category === finalPost.category)
     .slice(0, 3);
 
   // If not enough related posts by category, add recent posts
   if (relatedPosts.length < 3) {
     const recentPosts = newsItems
-      .filter(item => item.id !== post.id && !relatedPosts.find(rp => rp.id === item.id))
+      .filter(item => item.id !== finalPost.id && !relatedPosts.find(rp => rp.id === item.id))
       .slice(0, 3 - relatedPosts.length);
     relatedPosts.push(...recentPosts);
   }
@@ -107,8 +114,8 @@ export default function NewsPost() {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: post.title,
-          text: post.desc,
+          title: finalPost.title,
+          text: finalPost.desc,
           url: window.location.href,
         });
       } catch (err) {
@@ -147,19 +154,19 @@ export default function NewsPost() {
             <div className="flex items-center gap-4 mb-6">
               <span className="flex items-center text-white/50 text-sm bg-white/5 px-3 py-1 rounded-full border border-white/10">
                 <Tag className="w-3 h-3 mr-2" />
-                {post.category}
+                {finalPost.category}
               </span>
             </div>
 
             <h1 className="text-3xl md:text-5xl font-heading font-bold text-white mb-8 leading-tight">
-              {post.title}
+              {finalPost.title}
             </h1>
 
-            {post.image && (
+            {finalPost.image && (
               <div className="relative aspect-video w-full rounded-2xl overflow-hidden mb-12 border border-white/10 shadow-2xl">
                 <img 
-                  src={post.image} 
-                  alt={post.title}
+                  src={finalPost.image} 
+                  alt={finalPost.title}
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a0c29] via-transparent to-transparent opacity-50" />
@@ -168,7 +175,7 @@ export default function NewsPost() {
 
             <div className="prose prose-lg prose-invert max-w-none">
               <p className="lead text-xl text-white/80 font-light mb-8 border-l-4 border-primary pl-6">
-                {post.desc}
+                {finalPost.desc}
               </p>
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
                 Industrijsko hlađenje kroz aktuelne projekte i iskustva
@@ -178,7 +185,7 @@ export default function NewsPost() {
               </p>
               
               <div className="space-y-6 text-white/70">
-                {post.content.split('\n\n').map((paragraph, idx) => (
+                {finalPost.content.split('\n\n').map((paragraph, idx) => (
                   <p key={idx}>{paragraph}</p>
                 ))}
               </div>
@@ -219,7 +226,7 @@ export default function NewsPost() {
             ) : null}
 
             {/* Gallery Section - Only for Masinski Fakultet post (id: 1) */}
-            {post.id === 1 && (
+            {finalPost.id === 1 && (
               <div className="mt-12">
                 <Gallery 
                   title="Galerija" 
@@ -237,7 +244,7 @@ export default function NewsPost() {
             )}
 
             {/* Gallery Section - Only for Zitostok post (id: 2) */}
-            {post.id === 2 && (
+            {finalPost.id === 2 && (
               <div className="mt-12">
                 <Gallery 
                   title="Galerija" 
@@ -259,7 +266,7 @@ export default function NewsPost() {
             )}
 
             {/* Gallery Section - Only for Delta Agrar Zajecar post (id: 3) */}
-            {post.id === 3 && (
+            {finalPost.id === 3 && (
               <div className="mt-12">
                 <Gallery 
                   title="Galerija" 
@@ -275,7 +282,7 @@ export default function NewsPost() {
             )}
 
             {/* Gallery Section - Only for Archiv RGZ post (id: 4) */}
-            {post.id === 4 && (
+            {finalPost.id === 4 && (
               <div className="mt-12">
                 <Gallery 
                   title="Galerija" 
@@ -291,7 +298,7 @@ export default function NewsPost() {
             )}
 
             {/* Gallery Section - Only for MAF RODA Sajam post (id: 5) */}
-            {post.id === 5 && (
+            {finalPost.id === 5 && (
               <div className="mt-12">
                 <Gallery 
                   title="Galerija" 
@@ -306,7 +313,7 @@ export default function NewsPost() {
             )}
 
             {/* Gallery Section - Only for RALU Logistika post (id: 6) */}
-            {post.id === 6 && (
+            {finalPost.id === 6 && (
               <div className="mt-12">
                 <Gallery 
                   title="Galerija" 
@@ -322,7 +329,7 @@ export default function NewsPost() {
             )}
 
             {/* Gallery Section - Only for Danfoss Summit post (id: 7) */}
-            {post.id === 7 && (
+            {finalPost.id === 7 && (
               <div className="mt-12">
                 <Gallery 
                   title="Galerija" 
@@ -338,7 +345,7 @@ export default function NewsPost() {
             )}
 
             {/* Gallery Section - Only for Sirogojno Company post (id: 8) */}
-            {post.id === 8 && (
+            {finalPost.id === 8 && (
               <div className="mt-12">
                 <Gallery 
                   title="Galerija" 
@@ -354,7 +361,7 @@ export default function NewsPost() {
             )}
 
             <div className="mt-12 pt-8 border-t border-white/10 flex flex-wrap gap-3">
-              {post.tags?.map(tag => (
+              {finalPost.tags?.map(tag => (
                 <span key={tag} className="text-sm text-primary/70 hover:text-primary cursor-pointer transition-colors">
                   {tag}
                 </span>

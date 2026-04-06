@@ -63,7 +63,7 @@ export function NewsTicker() {
           <CarouselContent className="-ml-8">
             {newsItems.map((item, i) => (
               <CarouselItem key={item.id} className="pl-8 md:basis-1/2 lg:basis-1/3 h-auto">
-                <Link href={`/vesti/${item.id}`} className="h-full block">
+                <Link href={`/vesti/${item.slug}`} className="h-full block">
                   <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}

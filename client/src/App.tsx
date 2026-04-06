@@ -125,8 +125,11 @@ function Router() {
         <Route path="/blog">
           <RedirectTo to="/vesti" />
         </Route>
-        <Route path="/news/:id">
-          {(params) => <RedirectTo to={`/vesti/${params.id}`} />}
+        <Route path="/news/:slug">
+          {(params) => {
+            // Map English slugs to Serbian /vesti/ routes
+            return <RedirectTo to={`/vesti/${params.slug}`} />;
+          }}
         </Route>
         <Route path="/privacy">
           <RedirectTo to="/politika-privatnosti" />
@@ -147,7 +150,7 @@ function Router() {
         <Route path="/reference" component={References} />
         <Route path="/reference/agrounija" component={ProjectAgrounija} />
         <Route path="/vesti" component={Blog} />
-        <Route path="/vesti/:id" component={NewsPost} />
+        <Route path="/vesti/:slug" component={NewsPost} />
         <Route path="/politika-privatnosti" component={Privacy} />
         <Route path="/uslovi-koriscenja" component={Terms} />
         <Route path="/groq-dijagnostika" component={GroqDiagnostic} />
