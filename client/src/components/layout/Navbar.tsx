@@ -315,8 +315,17 @@ export function Navbar() {
                   <X className="w-6 h-6" />
                 </button>
                 
+                {/* Logo - positioned at top left */}
+                <Link href="/" onClick={() => setIsOpen(false)} className="absolute top-6 left-6 z-50">
+                  <img 
+                    src="/assets/logo.png" 
+                    alt="Eko Elektrofrigo Logo"
+                    className="h-10 w-auto object-contain"
+                  />
+                </Link>
+                
                 <div 
-                  className="flex-1 overflow-y-auto custom-scrollbar px-8 py-12 relative z-10 min-h-0 pt-20" 
+                  className="flex-1 overflow-y-auto custom-scrollbar px-8 py-12 relative z-10 min-h-0 pt-24" 
                   style={{ overscrollBehavior: 'contain', touchAction: 'pan-y' }}
                   onWheel={(e) => e.stopPropagation()}
                 >
