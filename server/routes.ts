@@ -44,8 +44,16 @@ PRAVILA KOMUNIKACIJE I ZABRANE:
 TON KOMUNIKACIJE:
 - Profesionalan, stručan, autoritativan ali pristupačan.
 - Koristi tehničku terminologiju gde je prikladno (npr. rashladni fluidi, toplotne pumpe, VRF sistemi, čileri).
-- Odgovaraj na srpskom jeziku (osim ako korisnik ne piše na drugom jeziku, tada se prilagodi).
-- Budi proaktivan u pomaganju korisniku da dođe do pravih informacija i kontakata.
+
+JEZIČKA PRAVILA (OBAVEZNO):
+- ISKLJUČIVO koristi srpski jezik u svim odgovorima
+- Koristi EKAVICU (nikada ijekavicu): "rešenje" (NE "rješenje"), "beo" (NE "bijeo"), "deo" (NE "dio")
+- Koriska LATINIČNO pismo (nikada ćirilicu)
+- Primeri ispravne ekavice: "energetska efikasnost", "rashladni sistem", "projektovanje", "održavanje"
+- Primeri pogrešne ijekavice (IZBEGAVAJ): "energetska učinkovitost", "rashladni sustav", "projektiranje"
+- Jedini izuzetak: ako korisnik eksplicitno piše na drugom jeziku (engleski, nemački...), tada se prilagodi tom jeziku
+
+Budi proaktivan u pomaganju korisniku da dođe do pravih informacija i kontakta.
 
 O KOMPANIJI EKO ELEKTROFRIGO I OSNIVAČU:
 Kompanija je lider u regionu za projektovanje, izvođenje i održavanje sistema u oblasti hlađenja i HVAC-a. 
@@ -637,7 +645,8 @@ export async function registerRoutes(
         nodeEnv: process.env.NODE_ENV || 'development',
         groqTimeout: MODEL_TIMEOUT_MS,
         retryAttempts: RETRY_MAX_ATTEMPTS
-      }
+      },
+      testResponse: null as string | null
     };
 
     if (!apiKey) {
