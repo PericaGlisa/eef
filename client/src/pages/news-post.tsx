@@ -1,15 +1,73 @@
 import { useRoute, Link } from "wouter";
-import { newsItems } from "@/data/news";
+import { newsItems, NewsItem } from "@/data/news";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Tag, Share2 } from "lucide-react";
+import { ArrowLeft, Tag, Share2, ChevronRight, Calendar } from "lucide-react";
 import NotFound from "@/pages/not-found";
 import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 
 import { Gallery } from "@/components/Gallery";
 import { newsSeoDetails } from "@/data/seo-enhancements";
+
+// Related Post Card Component
+function RelatedPostCard({ post, delay }: { post: NewsItem; delay: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay }}
+      whileHover={{ y: -4 }}
+    >
+      <Link href={`/vesti/${post.id}`}>
+        <article className="group h-full bg-white/5 border border-white/10 rounded-xl overflow-hidden hover:border-primary/30 hover:bg-white/10 transition-all duration-300 cursor-pointer">
+          {/* Image */}
+          {post.image && (
+            <div className="relative aspect-video overflow-hidden">
+              <img 
+                src={post.image} 
+                alt={post.title}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0c29] via-transparent to-transparent opacity-60" />
+            </div>
+          )}
+
+          {/* Content */}
+          <div className="p-5">
+            {/* Category Badge */}
+            <span className="inline-block text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full mb-3">
+              {post.category}
+            </span>
+
+            {/* Title */}
+            <h3 className="text-lg font-semibold text-white mb-2 line-clamp-2 group-hover:text-primary transition-colors duration-300">
+              {post.title}
+            </h3>
+
+            {/* Description */}
+            <p className="text-sm text-white/60 line-clamp-2 mb-4">
+              {post.desc}
+            </p>
+
+            {/* Footer */}
+            <div className="flex items-center justify-between pt-4 border-t border-white/5">
+              <div className="flex items-center gap-2 text-xs text-white/40">
+                <Calendar className="w-3 h-3" />
+                <span>{post.date}</span>
+              </div>
+              <span className="text-sm text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-1">
+                Pročitaj <ChevronRight className="w-4 h-4" />
+              </span>
+            </div>
+          </div>
+        </article>
+      </Link>
+    </motion.div>
+  );
+}
 
 export default function NewsPost() {
   const [match, params] = useRoute("/vesti/:id");
@@ -22,6 +80,19 @@ export default function NewsPost() {
   const newsSeo = newsSeoDetails[id];
 
   if (!post) return <NotFound />;
+
+  // Find related posts (same category, excluding current post)
+  const relatedPosts = newsItems
+    .filter(item => item.id !== post.id && item.category === post.category)
+    .slice(0, 3);
+
+  // If not enough related posts by category, add recent posts
+  if (relatedPosts.length < 3) {
+    const recentPosts = newsItems
+      .filter(item => item.id !== post.id && !relatedPosts.find(rp => rp.id === item.id))
+      .slice(0, 3 - relatedPosts.length);
+    relatedPosts.push(...recentPosts);
+  }
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -291,6 +362,32 @@ export default function NewsPost() {
                   <Share2 className="w-4 h-4 mr-2" /> Podeli vest
                </Button>
             </div>
+
+            {/* Related Posts Section */}
+            {relatedPosts.length > 0 && (
+              <section className="mt-16 md:mt-20 border-t border-white/10 pt-12">
+                <div className="flex items-center justify-between mb-8">
+                  <h2 className="text-2xl md:text-3xl font-heading font-bold text-white">
+                    Slične Objave
+                  </h2>
+                  <Link href="/vesti">
+                    <Button variant="ghost" className="text-primary hover:text-primary/80 hover:bg-primary/10 gap-2">
+                      Pogledaj sve <ChevronRight className="w-4 h-4" />
+                    </Button>
+                  </Link>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {relatedPosts.map((relatedPost, index) => (
+                    <RelatedPostCard 
+                      key={relatedPost.id} 
+                      post={relatedPost} 
+                      delay={index * 0.1} 
+                    />
+                  ))}
+                </div>
+              </section>
+            )}
           </motion.div>
         </div>
       </main>
