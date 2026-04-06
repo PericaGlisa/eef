@@ -296,7 +296,7 @@ export function Navbar() {
                   </div>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="bg-[#0a0c29] border-l border-white/10 w-full md:w-[450px] p-0 h-full max-h-screen flex flex-col z-[100] overflow-hidden">
+              <SheetContent side="right" className="bg-[#0a0c29] border-l border-white/10 w-full md:w-[450px] p-0 h-full max-h-screen flex flex-col z-[100] overflow-hidden [&>button]:hidden">
                 {/* Enhanced gradient background with animated elements */}
                 <div className="absolute inset-0 pointer-events-none">
                   <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] animate-pulse" />
@@ -306,10 +306,14 @@ export function Navbar() {
                   <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px]" />
                 </div>
                 
-                {/* Close Button - positioned at top */}
-                <SheetClose className="absolute top-6 right-6 z-50 w-10 h-10 rounded-full bg-transparent hover:bg-white/10 flex items-center justify-center text-white transition-all border-none shadow-none">
+                {/* Custom Close Button - positioned at top (replaces default) */}
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="absolute top-6 right-6 z-50 w-10 h-10 rounded-full flex items-center justify-center text-white hover:bg-white/10 transition-all"
+                  aria-label="Zatvori meni"
+                >
                   <X className="w-6 h-6" />
-                </SheetClose>
+                </button>
                 
                 <div 
                   className="flex-1 overflow-y-auto custom-scrollbar px-8 py-12 relative z-10 min-h-0 pt-20" 
