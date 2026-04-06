@@ -30,6 +30,18 @@ const IMAGES_TO_CREATE = [
     description: "Inženjering • Projektovanje • Održavanje"
   },
   {
+    filename: "og-partneri.jpg",
+    title: "Naši Partneri",
+    subtitle: "Strateške tehnološke saradnje",
+    description: "Danfoss • Bitzer • Embraco • I mnogi drugi"
+  },
+  {
+    filename: "og-dokumentacija.jpg",
+    title: "Dokumentacija",
+    subtitle: "Sertifikati i diplome kvaliteta",
+    description: "ISO sertifikati • Stručne diplome • Licence"
+  },
+  {
     filename: "og-usluge.jpg",
     title: "Naše Usluge",
     subtitle: "Kompletna rešenja za industriju",

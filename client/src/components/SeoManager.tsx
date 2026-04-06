@@ -129,7 +129,7 @@ export function getSeoMeta(pathname: string): SeoMeta {
         { name: "Početna", path: "/" },
         { name: "Partneri", path: "/partneri" },
       ],
-      image: "/opengraph.jpg", // TODO: Create /og-partneri.jpg
+      image: "/og-partneri.jpg",
     },
     "/dokumentacija": {
       title: "Dokumentacija | Eko Elektrofrigo",
@@ -141,7 +141,7 @@ export function getSeoMeta(pathname: string): SeoMeta {
         { name: "Početna", path: "/" },
         { name: "Dokumentacija", path: "/dokumentacija" },
       ],
-      image: "/opengraph.jpg", // TODO: Create /og-dokumentacija.jpg
+      image: "/og-dokumentacija.jpg",
     },
     "/dokumentacija/sertifikati": {
       title: "Sertifikati | Eko Elektrofrigo",
@@ -167,7 +167,7 @@ export function getSeoMeta(pathname: string): SeoMeta {
         { name: "Dokumentacija", path: "/dokumentacija" },
         { name: "Diplome", path: "/dokumentacija/diplome" },
       ],
-      image: "/opengraph.jpg", // TODO: Create /og-dokumentacija.jpg
+      image: "/og-dokumentacija.jpg",
     },
     "/reference": {
       title: "Reference | Eko Elektrofrigo",
