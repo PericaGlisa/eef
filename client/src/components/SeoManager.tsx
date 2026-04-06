@@ -288,14 +288,12 @@ export function getSeoMeta(pathname: string): SeoMeta {
     }
     const newsSeo = post ? newsSeoDetails[post.id] : undefined;
     if (post) {
-      // Use dedicated OG image for each blog post
-      const ogImage = `/og-blog-${post.id}.jpg`;
       return {
         title: `${post.title} | Vesti | Eko Elektrofrigo`,
         description: post.desc,
         canonicalPath: normalizedPath,
         kind: "article",
-        image: ogImage,
+        image: post.image, // Use post's featured image
         articleDate: parseNewsDate(post.date),
         lastUpdated: parseNewsDate(post.date),
         faq: newsSeo?.faqs ?? [],
