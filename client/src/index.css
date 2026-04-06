@@ -219,7 +219,7 @@
   box-shadow: 0 0 20px rgba(86, 170, 74, 0.2);
 }
 
-/* Custom Scrollbar - Matching Site Branding */
+/* Custom Scrollbar - Matching Site Branding (TopBar Green) */
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px !important;
   height: 6px !important;
@@ -229,26 +229,26 @@
   border-radius: 10px !important;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #10b981 !important;  /* green-500 - primary brand color */
+  background: #56AA4A !important;  /* Exact TopBar green color */
   border-radius: 10px !important;
   border: 1px solid rgba(255, 255, 255, 0.2) !important;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #34d399 !important;  /* green-400 - lighter on hover */
+  background: #6BC25E !important;  /* Lighter variant on hover */
   border: 1px solid rgba(255, 255, 255, 0.4) !important;
-  box-shadow: 0 0 8px rgba(16, 185, 129, 0.5) !important;
+  box-shadow: 0 0 8px rgba(86, 170, 74, 0.6) !important;
 }
 
 /* Firefox Scrollbar Styling */
 .custom-scrollbar {
   scrollbar-width: thin !important;
-  scrollbar-color: #10b981 rgba(255, 255, 255, 0.03) !important;
+  scrollbar-color: #56AA4A rgba(255, 255, 255, 0.03) !important;
 }
 
 /* Global scrollbar styling for all scrollable elements */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #10b981 rgba(255, 255, 255, 0.03);
+  scrollbar-color: #56AA4A rgba(255, 255, 255, 0.03);
 }
 
 *::-webkit-scrollbar {
@@ -262,13 +262,13 @@
 }
 
 *::-webkit-scrollbar-thumb {
-  background: #10b981;  /* green-500 - bright brand green */
+  background: #56AA4A;  /* TopBar green - exact match */
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 *::-webkit-scrollbar-thumb:hover {
-  background: #34d399;  /* green-400 - lighter, glowing */
+  background: #6BC25E;  /* Lighter on hover with glow */
   border: 1px solid rgba(255, 255, 255, 0.4);
-  box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+  box-shadow: 0 0 8px rgba(86, 170, 74, 0.6);
 }
