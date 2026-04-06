@@ -2,7 +2,7 @@ import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { 
-  Phone, Mail, Linkedin, Clock, X,
+  Phone, Mail, Linkedin, Search, Clock, X,
   Snowflake, Wind, Box, Server, Droplets, Zap, Thermometer,
   DraftingCompass, Factory, Wrench, BarChart3, Lightbulb, ShieldCheck,
   BookOpen, ChevronRight, Home, Star
@@ -32,6 +32,7 @@ export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [navVisible, setNavVisible] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -306,8 +307,8 @@ export function Navbar() {
                 </div>
                 
                 {/* Close Button - positioned at top */}
-                <SheetClose className="absolute top-6 right-6 z-50 w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-white/70 hover:text-white transition-all">
-                  <X className="w-5 h-5" />
+                <SheetClose className="absolute top-6 right-6 z-50 w-10 h-10 rounded-full bg-transparent hover:bg-white/10 flex items-center justify-center text-white transition-all border-none shadow-none">
+                  <X className="w-6 h-6" />
                 </SheetClose>
                 
                 <div 
@@ -328,6 +329,25 @@ export function Navbar() {
                     </motion.div>
                   )}
 
+                  {/* Search Bar - Filters menu items */}
+                  <motion.div 
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 }}
+                    className="mb-6"
+                  >
+                    <div className="relative">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                      <input 
+                        type="text" 
+                        placeholder="Pretraži usluge..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-white placeholder:text-white/30 focus:outline-none focus:border-primary/50 transition-colors"
+                      />
+                    </div>
+                  </motion.div>
+
                   {/* Quick Access Links */}
                   <motion.div
                     initial={{ opacity: 0, x: -20 }}
@@ -346,7 +366,19 @@ export function Navbar() {
                   </motion.div>
                   <div className="flex flex-col gap-6 mt-8">
                     <Accordion type="single" collapsible className="w-full space-y-4">
-                      {navLinks.map((link, i) => (
+                      {navLinks
+                        .filter(link => {
+                          if (!searchQuery) return true;
+                          const query = searchQuery.toLowerCase();
+                          return (
+                            link.name.toLowerCase().includes(query) ||
+                            link.items?.some(item => 
+                              item.name.toLowerCase().includes(query) ||
+                              item.desc?.toLowerCase().includes(query)
+                            )
+                          );
+                        })
+                        .map((link, i) => (
                         <motion.div
                           key={link.name}
                           initial={{ opacity: 0, x: 20 }}
@@ -445,7 +477,7 @@ export function Navbar() {
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4, duration: 0.5 }}
                     viewport={{ once: true }}
-                    className="mt-auto pt-12 border-t border-white/10 grid grid-cols-1 gap-8"
+                    className="mt-auto pt-12 border-t border-white/5 grid grid-cols-1 gap-8"
                   >
                      {/* Working Hours Widget */}
                      <div className="bg-white/5 rounded-xl p-4 border border-white/10">
@@ -489,6 +521,14 @@ export function Navbar() {
                           <a href="mailto:office@eef.rs" className="text-xl text-white hover:text-primary transition-colors block font-light">office@eef.rs</a>
                           <a href="tel:+381113757287" className="text-xl text-white hover:text-primary transition-colors block font-light">+381 11 375 72 87</a>
                         </div>
+                     </div>
+
+                     {/* LinkedIn Social Link */}
+                     <div className="flex gap-4 pt-4 border-t border-white/5">
+                        <a href="https://www.linkedin.com/feed/update/urn:li:activity:6899988285712596994" target="_blank" rel="noopener noreferrer" 
+                           className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/60 hover:bg-primary/20 hover:text-primary transition-all">
+                          <Linkedin className="w-5 h-5" />
+                        </a>
                      </div>
                   </motion.div>
                 </div>
