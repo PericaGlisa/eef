@@ -186,7 +186,17 @@ export const KNOWLEDGE_BASE = {
       "Ako je tema van HVAC/hlađenja, ljubazno odbij odgovor",
       "Za svaki upit o kupovini ili kvaru, obavezno daj e-mail odgovarajućeg departmana",
       "Naglašavaj energetsku efikasnost i ekološku održivost (CO2, Amonijak)"
-    ]
+    ],
+    LANGUAGE_RULES: {
+      primaryLanguage: "Serbian",
+      dialect: "Ekavian (NOT Ijekavian)",
+      script: "Latin (NOT Cyrillic)",
+      examples: {
+        correct: ["rešenje", "beo", "deo", "energetska efikasnost", "rashladni sistem", "projektovanje"],
+        incorrect: ["rješenje", "bijelo", "dio", "energetska učinkovitost", "rashladni sustav", "projektiranje"]
+      },
+      exception: "Adapt to user's language only if they write in English, German, or other non-Serbian language"
+    }
   },
 
   FAQ: [
