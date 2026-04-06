@@ -53,8 +53,21 @@ function RelatedPostCard({ post, delay }: { post: NewsItem; delay: number }) {
             </p>
 
             {/* Footer */}
-            <div className="flex items-center justify-between pt-4 border-t border-white/5">
-              <span className="text-sm text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-1 ml-auto">
+            <div className="flex items-center justify-between pt-4 border-t border-white/5 gap-2">
+              {/* Tags */}
+              <div className="flex items-center gap-2 flex-wrap">
+                {post.tags?.slice(0, 2).map(tag => (
+                  <span key={tag} className="text-xs text-white/40 font-mono">
+                    {tag}
+                  </span>
+                ))}
+                {post.tags && post.tags.length > 2 && (
+                  <span className="text-xs text-white/30">+{post.tags.length - 2}</span>
+                )}
+              </div>
+              
+              {/* CTA */}
+              <span className="text-sm text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-1 shrink-0">
                 Pročitaj <ChevronRight className="w-4 h-4" />
               </span>
             </div>
