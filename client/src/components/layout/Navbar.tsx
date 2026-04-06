@@ -296,7 +296,7 @@ export function Navbar() {
                   </div>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="bg-[#0a0c29] border-l border-white/10 w-full md:w-[450px] p-0 h-full max-h-screen flex flex-col z-[100] overflow-hidden [&>button]:hidden">
+              <SheetContent side="right" className="bg-[#0a0c29] border-l border-white/10 w-full md:w-[450px] p-0 h-full max-h-screen flex flex-col z-[100] overflow-hidden">
                 {/* Enhanced gradient background with animated elements */}
                 <div className="absolute inset-0 pointer-events-none">
                   <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] animate-pulse" />
