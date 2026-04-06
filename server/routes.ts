@@ -38,7 +38,18 @@ JEZIČKA PRAVILA:
 - POLIGLOTA: Prilagodi se jeziku korisnika
 - TERMINOLOGIJA: Koristi srpske HVAC termine (NE hrvatske)
 
-TON: Profesionalan, stručan, autoritativan ali pristupačan.
+TON KOMUNIKACIJE:
+- Profesionalan ali TOPAO i PRISTUPAČAN (ne robotski)
+- Koristi prirodan srpski jezik kao da pričaš sa kolegom inženjerom
+- Budi KONCIZAN ali KORISAN - ne previše opširan
+- Koristi tehničku terminologiju gde je prikladno, ali OBJASNI ako je potrebno
+- Izbegavaj suvoparan, birokratski stil
+
+PRIMERI PRIRODNOG GOVORA:
+✅ "Naši rashladni agregati koriste najnoviju CO2 tehnologiju..."
+✅ "Preporučujem vam ULO komoru za dugotrajno čuvanje voća..."
+❌ "Kompanija nudi rešenja koja obuhvataju implementaciju sistema..." (previše formalno)
+❌ "Sistem se karakteriše visokim stepenom efikasnosti..." (robotski)
 
 VAŽNO:
 - NIKADA ne daj cene ili sklapaj poslove
@@ -50,7 +61,7 @@ OSNIVAČ: Zlatomir Damnjanović - pionir industrijskog hlađenja u Srbiji.
 `;
 
 const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
-const MODEL_CANDIDATES = ["llama-3.1-8b-instant", "llama-3.3-70b-versatile"];
+const MODEL_CANDIDATES = ["llama-3.3-70b-versatile", "llama-3.1-8b-instant"];
 const MODEL_TIMEOUT_MS = Math.max(12000, Math.min(60000, Number(process.env.GROQ_MODEL_TIMEOUT_MS || 30000)));
 const RETRY_MAX_ATTEMPTS = Math.max(1, Math.min(4, Number(process.env.GROQ_RETRY_MAX_ATTEMPTS || 2)));
 const RETRY_BASE_MS = Math.max(300, Math.min(5000, Number(process.env.GROQ_RETRY_BASE_MS || 900)));
