@@ -45,7 +45,7 @@ Svi kompresori su proizvođača BITZER, a automatika Danfoss. Isparivači i kond
   },
   {
     id: 3,
-    slug: "modifikacija-masine-sortiranje-treanja-delta-agrar-zajecar",
+    slug: "modifikacija-masine-sortiranje-tresnja-delta-agrar-zajecar",
     date: "01. JUN 2026",
     category: "Modernizacija",
     title: "Modifikacija mašine za sortiranje trešnje u hladnjači kompanije Delta Agrar u Zaječaru",

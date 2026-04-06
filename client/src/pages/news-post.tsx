@@ -20,7 +20,7 @@ function RelatedPostCard({ post, delay }: { post: NewsItem; delay: number }) {
       transition={{ duration: 0.4, delay }}
       whileHover={{ y: -4 }}
     >
-      <Link href={`/vesti/${post.id}`}>
+      <Link href={`/vesti/${post.slug}`}>
         <article className="group h-full bg-white/5 border border-white/10 rounded-xl overflow-hidden hover:border-primary/30 hover:bg-white/10 transition-all duration-300 cursor-pointer">
           {/* Image */}
           {post.image && (
