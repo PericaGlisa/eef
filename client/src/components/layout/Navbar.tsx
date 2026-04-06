@@ -1,11 +1,11 @@
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { 
-  Phone, Mail, Linkedin, Search, Clock,
+  Phone, Mail, Linkedin, Clock, X,
   Snowflake, Wind, Box, Server, Droplets, Zap, Thermometer,
   DraftingCompass, Factory, Wrench, BarChart3, Lightbulb, ShieldCheck,
-  BookOpen, ChevronRight, Home, Star, Facebook, Instagram
+  BookOpen, ChevronRight, Home, Star
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -32,7 +32,6 @@ export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [navVisible, setNavVisible] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -306,8 +305,13 @@ export function Navbar() {
                   <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px]" />
                 </div>
                 
+                {/* Close Button - positioned at top */}
+                <SheetClose className="absolute top-6 right-6 z-50 w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-white/70 hover:text-white transition-all">
+                  <X className="w-5 h-5" />
+                </SheetClose>
+                
                 <div 
-                  className="flex-1 overflow-y-auto custom-scrollbar px-8 py-12 relative z-10 min-h-0" 
+                  className="flex-1 overflow-y-auto custom-scrollbar px-8 py-12 relative z-10 min-h-0 pt-20" 
                   style={{ overscrollBehavior: 'contain', touchAction: 'pan-y' }}
                   onWheel={(e) => e.stopPropagation()}
                 >
@@ -323,25 +327,6 @@ export function Navbar() {
                       <span className="text-white/70">{getCurrentPageName()}</span>
                     </motion.div>
                   )}
-
-                  {/* Search Bar */}
-                  <motion.div 
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 }}
-                    className="mb-6"
-                  >
-                    <div className="relative">
-                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
-                      <input 
-                        type="text" 
-                        placeholder="Pretraži usluge..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-white placeholder:text-white/30 focus:outline-none focus:border-primary/50 transition-colors"
-                      />
-                    </div>
-                  </motion.div>
 
                   {/* Quick Access Links */}
                   <motion.div
@@ -468,8 +453,7 @@ export function Navbar() {
                           <Clock className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                           <div>
                             <p className="text-xs uppercase tracking-wider text-white/50 mb-1">Radno Vreme</p>
-                            <p className="text-sm text-white">Pon - Pet: 08:00 - 16:00</p>
-                            <p className="text-xs text-white/60 mt-1">Hitne intervencije 24/7</p>
+                            <p className="text-sm text-white">Pon - Pet: 07:30 - 15:30</p>
                           </div>
                         </div>
                       </div>
@@ -505,22 +489,6 @@ export function Navbar() {
                           <a href="mailto:office@eef.rs" className="text-xl text-white hover:text-primary transition-colors block font-light">office@eef.rs</a>
                           <a href="tel:+381113757287" className="text-xl text-white hover:text-primary transition-colors block font-light">+381 11 375 72 87</a>
                         </div>
-                     </div>
-
-                     {/* Social Media Links */}
-                     <div className="flex gap-4 pt-4 border-t border-white/10">
-                        <a href="https://www.linkedin.com/feed/update/urn:li:activity:6899988285712596994" target="_blank" rel="noopener noreferrer" 
-                           className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/60 hover:bg-primary/20 hover:text-primary transition-all">
-                          <Linkedin className="w-5 h-5" />
-                        </a>
-                        <a href="#" target="_blank" rel="noopener noreferrer"
-                           className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/60 hover:bg-primary/20 hover:text-primary transition-all">
-                          <Facebook className="w-5 h-5" />
-                        </a>
-                        <a href="#" target="_blank" rel="noopener noreferrer"
-                           className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/60 hover:bg-primary/20 hover:text-primary transition-all">
-                          <Instagram className="w-5 h-5" />
-                        </a>
                      </div>
                   </motion.div>
                 </div>
