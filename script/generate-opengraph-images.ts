@@ -1,6 +1,7 @@
 import fs from "fs/promises";
 import path from "path";
 import sharp from "sharp";
+import { newsItems } from "../client/src/data/news.js";
 
 const SITE_CONFIG = {
   name: "Eko Elektrofrigo",
@@ -106,6 +107,20 @@ const IMAGES_TO_CREATE = [
     title: "Uslovi Korišćenja",
     subtitle: "Pravila korišćenja sajta",
     description: "Uslovi • Odricanja • Prava"
+  },
+  // Blog posts - dynamic OG images
+  ...newsItems.map(post => ({
+    filename: `og-blog-${post.id}.jpg`,
+    title: post.title,
+    subtitle: post.category,
+    description: post.desc.substring(0, 80) + "..."
+  })),
+  // Agrounija reference
+  {
+    filename: "og-agrounija.jpg",
+    title: "Projekat Agrounija",
+    subtitle: "Reference - Kompletna rashladna rešenja",
+    description: "Agrounija • Industrijsko hlađenje • Ključ u ruke"
   }
 ];
 

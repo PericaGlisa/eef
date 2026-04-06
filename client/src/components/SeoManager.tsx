@@ -192,7 +192,7 @@ export function getSeoMeta(pathname: string): SeoMeta {
         { name: "Reference", path: "/reference" },
         { name: "Agrounija", path: "/reference/agrounija" },
       ],
-      image: "/og-reference.jpg",
+      image: "/og-agrounija.jpg",
     },
     "/vesti": {
       title: "Vesti | Eko Elektrofrigo",
@@ -288,12 +288,14 @@ export function getSeoMeta(pathname: string): SeoMeta {
     }
     const newsSeo = post ? newsSeoDetails[post.id] : undefined;
     if (post) {
+      // Use dedicated OG image for each blog post
+      const ogImage = `/og-blog-${post.id}.jpg`;
       return {
         title: `${post.title} | Vesti | Eko Elektrofrigo`,
         description: post.desc,
         canonicalPath: normalizedPath,
         kind: "article",
-        image: post.image,
+        image: ogImage,
         articleDate: parseNewsDate(post.date),
         lastUpdated: parseNewsDate(post.date),
         faq: newsSeo?.faqs ?? [],
