@@ -44,7 +44,7 @@ export function getSeoRouteEntries() {
   }));
 
   const dynamicNews = newsItems.map((item) => ({
-    loc: `/vesti/${item.id}`,
+    loc: `/vesti/${item.slug}`,
     changefreq: "monthly" as const,
     priority: "0.6",
   }));
@@ -81,7 +81,7 @@ export function getSeoImageEntries(): SeoImageEntry[] {
     images: item.image ? [item.image] : [],
   }));
   const newsImages: SeoImageEntry[] = newsItems.map((item) => ({
-    loc: `/vesti/${item.id}`,
+    loc: `/vesti/${item.slug}`,
     images: item.image ? [item.image] : [],
   }));
 
