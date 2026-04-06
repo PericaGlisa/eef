@@ -3,7 +3,7 @@ import { newsItems, NewsItem } from "@/data/news";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Tag, Share2, ChevronRight, Calendar } from "lucide-react";
+import { ArrowLeft, Tag, Share2, ChevronRight } from "lucide-react";
 import NotFound from "@/pages/not-found";
 import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
@@ -54,11 +54,7 @@ function RelatedPostCard({ post, delay }: { post: NewsItem; delay: number }) {
 
             {/* Footer */}
             <div className="flex items-center justify-between pt-4 border-t border-white/5">
-              <div className="flex items-center gap-2 text-xs text-white/40">
-                <Calendar className="w-3 h-3" />
-                <span>{post.date}</span>
-              </div>
-              <span className="text-sm text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-1">
+              <span className="text-sm text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-1 ml-auto">
                 Pročitaj <ChevronRight className="w-4 h-4" />
               </span>
             </div>
