@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: false }));
     await registerRoutes(httpServer, app);
     await setupVite(httpServer, app);
 
-    const port = parseInt(process.env.PORT || "5174", 10);
+    const port = parseInt(process.env.PORT || "5173", 10);
     httpServer.listen(
       {
         port,
