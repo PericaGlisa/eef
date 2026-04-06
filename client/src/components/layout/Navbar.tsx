@@ -1,11 +1,11 @@
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { 
-  AlignRight, Phone, Mail, Linkedin, 
+  Phone, Mail, Linkedin, Search, Clock,
   Snowflake, Wind, Box, Server, Droplets, Zap, Thermometer,
   DraftingCompass, Factory, Wrench, BarChart3, Lightbulb, ShieldCheck,
-  BookOpen, ChevronRight
+  BookOpen, ChevronRight, Home, Star, Facebook, Instagram
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -27,14 +27,31 @@ import {
 import { cn } from "@/lib/utils";
 
 export function Navbar() {
+  const [location] = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [navVisible, setNavVisible] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      setScrolled(currentScrollY > 50);
+      
+      // Hide/show navbar on scroll
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setNavVisible(false);
+      } else {
+        setNavVisible(true);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+    
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [lastScrollY]);
 
   useEffect(() => {
     if (isOpen) {
@@ -46,6 +63,18 @@ export function Navbar() {
       document.body.style.overflow = "unset";
     };
   }, [isOpen]);
+
+  const quickAccessLinks = [
+    { name: "Početna", href: "/", icon: Home },
+    { name: "Kontakt", href: "/kontakt", icon: Phone },
+    { name: "Reference", href: "/reference", icon: Star },
+    { name: "Blog", href: "/blog", icon: BookOpen },
+  ];
+
+  const getCurrentPageName = () => {
+    const page = navLinks.find(link => link.href === location);
+    return page?.name || "Stranica";
+  };
 
   const navLinks = [
     {
@@ -128,7 +157,7 @@ export function Navbar() {
       <header
         className={`fixed left-0 right-0 z-40 transition-all duration-300 border-b border-white/5 ${
           scrolled ? "top-0 bg-[#0a0c29]/90 backdrop-blur-md py-2 shadow-lg" : "top-[72px] sm:top-8 bg-transparent py-4"
-        }`}
+        } ${navVisible ? 'translate-y-0' : '-translate-y-full'}`}
       >
         <div className="container mx-auto px-6 flex items-center justify-between">
           {/* Logo */}
@@ -239,26 +268,97 @@ export function Navbar() {
                </a>
              </Button>
 
-            {/* Hamburger Menu (Mobile) */}
+            {/* Hamburger Menu (Mobile) - Animated */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
                 <Button 
                   variant="ghost" 
                   size="icon" 
-                  className="xl:hidden text-white hover:bg-white/10 hover:text-primary transition-all duration-300 rounded-full w-12 h-12"
+                  className="xl:hidden text-white hover:bg-white/10 hover:text-primary transition-all duration-300 rounded-full w-12 h-12 relative"
                   onClick={() => import("@/lib/audio").then(m => m.audio.playClick())}
                 >
-                  <AlignRight className="w-7 h-7" />
+                  <div className="relative w-6 h-5 flex flex-col justify-between">
+                    <motion.span 
+                      animate={isOpen ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="w-full h-0.5 bg-current rounded-full origin-center"
+                    />
+                    <motion.span 
+                      animate={isOpen ? { opacity: 0, x: -10 } : { opacity: 1, x: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="w-full h-0.5 bg-current rounded-full"
+                    />
+                    <motion.span 
+                      animate={isOpen ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="w-full h-0.5 bg-current rounded-full origin-center"
+                    />
+                  </div>
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="bg-[#0a0c29] border-l border-white/10 w-full md:w-[450px] p-0 h-full max-h-screen flex flex-col z-[100] overflow-hidden">
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent pointer-events-none" />
+                {/* Enhanced gradient background with animated elements */}
+                <div className="absolute inset-0 pointer-events-none">
+                  <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] animate-pulse" />
+                  <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-[100px]" />
+                  <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent" />
+                  {/* Grid pattern overlay */}
+                  <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px]" />
+                </div>
                 
                 <div 
                   className="flex-1 overflow-y-auto custom-scrollbar px-8 py-12 relative z-10 min-h-0" 
                   style={{ overscrollBehavior: 'contain', touchAction: 'pan-y' }}
                   onWheel={(e) => e.stopPropagation()}
                 >
+                  {/* Breadcrumb Trail */}
+                  {location !== "/" && (
+                    <motion.div 
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="flex items-center gap-2 text-xs text-white/40 mb-6"
+                    >
+                      <Link href="/" className="hover:text-primary transition-colors">Početna</Link>
+                      <ChevronRight className="w-3 h-3" />
+                      <span className="text-white/70">{getCurrentPageName()}</span>
+                    </motion.div>
+                  )}
+
+                  {/* Search Bar */}
+                  <motion.div 
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 }}
+                    className="mb-6"
+                  >
+                    <div className="relative">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                      <input 
+                        type="text" 
+                        placeholder="Pretraži usluge..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-white placeholder:text-white/30 focus:outline-none focus:border-primary/50 transition-colors"
+                      />
+                    </div>
+                  </motion.div>
+
+                  {/* Quick Access Links */}
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.15 }}
+                    className="flex gap-3 overflow-x-auto pb-4 mb-4 custom-scrollbar"
+                  >
+                    {quickAccessLinks.map((item) => (
+                      <Link key={item.name} href={item.href} onClick={() => setIsOpen(false)}>
+                        <Button variant="outline" size="sm" className="shrink-0 border-white/10 text-white hover:bg-primary/20 hover:border-primary/50 whitespace-nowrap transition-all">
+                          <item.icon className="w-4 h-4 mr-2" />
+                          {item.name}
+                        </Button>
+                      </Link>
+                    ))}
+                  </motion.div>
                   <div className="flex flex-col gap-6 mt-8">
                     <Accordion type="single" collapsible className="w-full space-y-4">
                       {navLinks.map((link, i) => (
@@ -275,9 +375,20 @@ export function Navbar() {
                               <div className="flex items-center">
                                 <Link 
                                   href={link.href}
-                                  className="flex-1 text-2xl font-light text-white hover:text-primary transition-colors py-4 group flex items-center gap-4"
+                                  className={cn(
+                                    "flex-1 text-2xl font-light transition-colors py-4 group flex items-center gap-4",
+                                    location === link.href 
+                                      ? "text-primary font-normal" 
+                                      : "text-white hover:text-primary"
+                                  )}
                                   onClick={() => setIsOpen(false)}
                                 >
+                                  {location === link.href && (
+                                    <motion.div 
+                                      layoutId="activeIndicator"
+                                      className="w-1 h-8 bg-primary rounded-full shrink-0"
+                                    />
+                                  )}
                                   <span className="text-xs font-mono text-primary/40 group-hover:text-primary transition-colors">0{i + 1}</span>
                                   {link.name}
                                 </Link>
@@ -285,31 +396,56 @@ export function Navbar() {
                                   <span className="sr-only">Toggle</span>
                                 </AccordionTrigger>
                               </div>
-                              <AccordionContent>
-                                <div className="flex flex-col gap-3 pl-10 pb-4">
+                              <AccordionContent className="overflow-hidden data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down">
+                                <motion.div
+                                  initial={{ opacity: 0, y: -10 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  exit={{ opacity: 0, y: -10 }}
+                                  transition={{ duration: 0.2 }}
+                                  className="flex flex-col gap-3 pl-10 pb-4"
+                                >
                                   {link.items.map((item, j) => (
                                     <Link 
                                       key={item.name} 
                                       href={item.href}
-                                      className="text-white/60 hover:text-white hover:pl-2 transition-all duration-300 py-2 text-base flex items-center gap-3 group/item"
+                                      className={cn(
+                                        "hover:pl-2 transition-all duration-300 py-2 text-base flex items-center gap-3 group/item",
+                                        location === item.href
+                                          ? "text-primary"
+                                          : "text-white/60 hover:text-white"
+                                      )}
                                       onClick={() => setIsOpen(false)}
                                     >
-                                      <div className="w-1.5 h-1.5 rounded-full bg-white/10 group-hover/item:bg-primary transition-colors" />
+                                      <div className={cn(
+                                        "w-1.5 h-1.5 rounded-full transition-colors",
+                                        location === item.href ? "bg-primary" : "bg-white/10 group-hover/item:bg-primary"
+                                      )} />
                                       {item.name}
                                     </Link>
                                   ))}
-                                </div>
+                                </motion.div>
                               </AccordionContent>
                             </AccordionItem>
                           ) : (
                             <Link 
                               href={link.href} 
-                              className="text-2xl font-light text-white hover:text-primary transition-colors block group py-4 flex items-center gap-4 w-full"
+                              className={cn(
+                                "text-2xl font-light transition-colors block group py-4 flex items-center gap-4 w-full",
+                                location === link.href 
+                                  ? "text-primary font-normal" 
+                                  : "text-white hover:text-primary"
+                              )}
                               onClick={() => {
                                 import("@/lib/audio").then(m => m.audio.playHover());
                                 setIsOpen(false);
                               }}
                             >
+                              {location === link.href && (
+                                <motion.div 
+                                  layoutId="activeIndicator"
+                                  className="w-1 h-8 bg-primary rounded-full shrink-0"
+                                />
+                              )}
                               <span className="text-xs font-mono text-primary/40 group-hover:text-primary transition-colors">0{i + 1}</span>
                               {link.name}
                             </Link>
@@ -326,6 +462,18 @@ export function Navbar() {
                     viewport={{ once: true }}
                     className="mt-auto pt-12 border-t border-white/10 grid grid-cols-1 gap-8"
                   >
+                     {/* Working Hours Widget */}
+                     <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+                        <div className="flex items-start gap-3">
+                          <Clock className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                          <div>
+                            <p className="text-xs uppercase tracking-wider text-white/50 mb-1">Radno Vreme</p>
+                            <p className="text-sm text-white">Pon - Pet: 08:00 - 16:00</p>
+                            <p className="text-xs text-white/60 mt-1">Hitne intervencije 24/7</p>
+                          </div>
+                        </div>
+                      </div>
+
                      <Button 
                         variant="default"
                         size="lg"
@@ -357,6 +505,22 @@ export function Navbar() {
                           <a href="mailto:office@eef.rs" className="text-xl text-white hover:text-primary transition-colors block font-light">office@eef.rs</a>
                           <a href="tel:+381113757287" className="text-xl text-white hover:text-primary transition-colors block font-light">+381 11 375 72 87</a>
                         </div>
+                     </div>
+
+                     {/* Social Media Links */}
+                     <div className="flex gap-4 pt-4 border-t border-white/10">
+                        <a href="https://www.linkedin.com/feed/update/urn:li:activity:6899988285712596994" target="_blank" rel="noopener noreferrer" 
+                           className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/60 hover:bg-primary/20 hover:text-primary transition-all">
+                          <Linkedin className="w-5 h-5" />
+                        </a>
+                        <a href="#" target="_blank" rel="noopener noreferrer"
+                           className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/60 hover:bg-primary/20 hover:text-primary transition-all">
+                          <Facebook className="w-5 h-5" />
+                        </a>
+                        <a href="#" target="_blank" rel="noopener noreferrer"
+                           className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/60 hover:bg-primary/20 hover:text-primary transition-all">
+                          <Instagram className="w-5 h-5" />
+                        </a>
                      </div>
                   </motion.div>
                 </div>
