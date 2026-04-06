@@ -320,7 +320,7 @@ export function Navbar() {
                   <img 
                     src="/assets/logo.png" 
                     alt="Eko Elektrofrigo Logo"
-                    className="h-10 w-auto object-contain"
+                    className="h-10 w-auto object-contain brightness-0 invert"
                   />
                 </Link>
                 
