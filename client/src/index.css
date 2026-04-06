@@ -219,17 +219,26 @@
   box-shadow: 0 0 20px rgba(86, 170, 74, 0.2);
 }
 
-/* Custom Scrollbar */
+/* Custom Scrollbar - Matching Site Branding */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(86, 170, 74, 0.5);
+  background: rgba(255, 255, 255, 0.03);
   border-radius: 10px;
 }
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(5, 150, 105, 0.6) 0%, rgba(16, 185, 129, 0.6) 100%);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(86, 170, 74, 0.8);
+  background: linear-gradient(180deg, rgba(5, 150, 105, 0.9) 0%, rgba(16, 185, 129, 0.9) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Firefox Scrollbar Styling */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(5, 150, 105, 0.6) rgba(255, 255, 255, 0.03);
 }
