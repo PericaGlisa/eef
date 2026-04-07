@@ -6,6 +6,12 @@ import { randomUUID } from "crypto";
 import { appendFile, mkdir } from "fs/promises";
 import path from "path";
 
+interface ChatMessage {
+  role: 'user' | 'assistant';
+  text: string;
+  timestamp: Date;
+}
+
 const SYSTEM_INSTRUCTION = `
 Ti si vrhunski komercijalno-mašinski inženjer i asistent kompanije Eko Elektrofrigo (eef.rs).
 Tvoja specijalnost su B2B HVAC rešenja (grejanje, ventilacija, klimatizacija) i industrijsko hlađenje.
@@ -222,6 +228,92 @@ async function queueContactFallback(entry: Record<string, unknown>) {
   const queueFile = path.join(queueDir, "contact-fallback-queue.ndjson");
   await mkdir(queueDir, { recursive: true });
   await appendFile(queueFile, `${JSON.stringify({ ...entry, queuedAt: new Date().toISOString() })}\n`, "utf8");
+}
+
+async function sendChatTranscript(messages: ChatMessage[]): Promise<{ ok: boolean }> {
+  try {
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey) {
+      console.error("[chat-transcript] RESEND_API_KEY not configured");
+      return { ok: false };
+    }
+
+    const adminEmail = process.env.ADMIN_EMAIL || "office@eef.rs";
+    const from = process.env.RESEND_FROM || "noreply@eef.co.rs";
+
+    // Format messages into HTML
+    const messagesHtml = messages
+      .map((msg) => {
+        const role = msg.role === "user" ? "Korisnik" : "AI Asistent";
+        const bgColor = msg.role === "user" ? "#f0f9ff" : "#f0fdf4";
+        const borderColor = msg.role === "user" ? "#3b82f6" : "#10b981";
+        const time = new Date(msg.timestamp).toLocaleTimeString("sr-RS", {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+
+        return `
+          <div style="margin-bottom: 16px; padding: 12px; background: ${bgColor}; border-left: 3px solid ${borderColor}; border-radius: 4px;">
+            <div style="font-size: 11px; font-weight: bold; color: ${borderColor}; margin-bottom: 4px; text-transform: uppercase;">
+              ${role} • ${time}
+            </div>
+            <div style="font-size: 14px; color: #1f2937; line-height: 1.5;">
+              ${msg.text.replace(/\n/g, "<br>")}
+            </div>
+          </div>
+        `;
+      })
+      .join("");
+
+    const html = `
+      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="background: linear-gradient(135deg, #171A54 0%, #56AA4A 100%); padding: 24px; text-align: center;">
+          <h1 style="color: #ffffff; margin: 0; font-size: 24px;">💬 Chat Transkript</h1>
+          <p style="color: rgba(255,255,255,0.9); margin: 8px 0 0 0; font-size: 14px;">Nova prepiska sa AI asistentom</p>
+        </div>
+        
+        <div style="padding: 24px; background: #ffffff;">
+          <div style="background: #f3f4f6; padding: 12px; border-radius: 6px; margin-bottom: 24px; font-size: 13px; color: #6b7280;">
+            <div><strong>Datum:</strong> ${new Date().toLocaleDateString("sr-RS")}</div>
+            <div><strong>Ukupan poruka:</strong> ${messages.length}</div>
+            <div><strong>Trajanje:</strong> ${Math.round((new Date(messages[messages.length - 1].timestamp).getTime() - new Date(messages[0].timestamp).getTime()) / 60000)} min</div>
+          </div>
+          
+          ${messagesHtml}
+          
+          <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #e5e7eb; font-size: 12px; color: #9ca3af; text-align: center;">
+            <p>Ovaj email je automatski generisan sa eef.rs</p>
+          </div>
+        </div>
+      </div>
+    `;
+
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: `Eko Elektrofrigo Chat <${from}>`,
+        to: [adminEmail],
+        subject: `💬 Chat Transkript - ${new Date().toLocaleDateString("sr-RS")}`,
+        html,
+      }),
+    });
+
+    if (response.ok) {
+      console.log("[chat-transcript] Email sent successfully");
+      return { ok: true };
+    } else {
+      const error = await response.json();
+      console.error("[chat-transcript] Failed to send email:", error);
+      return { ok: false };
+    }
+  } catch (error) {
+    console.error("[chat-transcript] Error:", error);
+    return { ok: false };
+  }
 }
 
 export async function registerRoutes(
@@ -710,6 +802,28 @@ export async function registerRoutes(
       console.error("✗ [DIAGNOSTIC] Error stack:", error?.stack);
       diagnosticResult.connectionTest.error = error?.message || "Unknown error";
       return res.status(500).json(diagnosticResult);
+    }
+  });
+
+  // POST /api/send-transcript - Send chat transcript to admin email
+  app.post("/api/send-transcript", async (req, res) => {
+    try {
+      const { messages } = req.body;
+      
+      if (!Array.isArray(messages) || messages.length === 0) {
+        return res.status(400).json({ error: "Invalid messages" });
+      }
+
+      const result = await sendChatTranscript(messages);
+      
+      if (result.ok) {
+        return res.status(200).json({ success: true });
+      } else {
+        return res.status(500).json({ error: "Failed to send transcript" });
+      }
+    } catch (error) {
+      console.error("[send-transcript] Error:", error);
+      return res.status(500).json({ error: "Internal server error" });
     }
   });
 

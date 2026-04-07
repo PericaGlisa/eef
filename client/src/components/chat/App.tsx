@@ -66,7 +66,7 @@ export default function App() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const notificationAudio = useRef<HTMLAudioElement | null>(null);
   const idleMessageTimer = useRef<NodeJS.Timeout | null>(null);
-  const transcriptTimer = useRef<NodeJS.Timeout | null>(null);
+  const inactivityTimer = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     notificationAudio.current = new Audio('https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3');
@@ -78,7 +78,7 @@ export default function App() {
     
     // Clear existing timers
     if (idleMessageTimer.current) clearTimeout(idleMessageTimer.current);
-    if (transcriptTimer.current) clearTimeout(transcriptTimer.current);
+    if (inactivityTimer.current) clearTimeout(inactivityTimer.current);
     
     // Only start timers if there's actual conversation (more than initial greeting)
     if (messages.length > 1) {
@@ -98,31 +98,23 @@ export default function App() {
         }, 5 * 60 * 1000); // 5 minutes
       }
 
-      // 15 minute timer for transcript and session close
-      transcriptTimer.current = setTimeout(() => {
-        sendTranscript(messages);
-        
-        // "Close" session - reset to initial state
-        const initialMessage: Message = {
-          role: 'assistant',
-          text: 'Dobar dan! Ja sam AI asistent kompanije Eko Elektrofrigo. Specijalizovan sam za B2B HVAC rešenja i industrijsko hlađenje. Kako Vam mogu pomoći danas?',
-          timestamp: new Date()
-        };
-        setMessages([initialMessage]);
-        localStorage.removeItem('eef_chat_history');
-        setLastSentCount(0);
-      }, 15 * 60 * 1000); // 15 minutes
+      // 30 minute inactivity timer - sends transcript if user forgets to close chat
+      inactivityTimer.current = setTimeout(() => {
+        if (messages.length >= 3 && messages.length > lastSentCount) {
+          sendTranscript(messages);
+        }
+      }, 30 * 60 * 1000); // 30 minutes
     }
 
     return () => {
       if (idleMessageTimer.current) clearTimeout(idleMessageTimer.current);
-      if (transcriptTimer.current) clearTimeout(transcriptTimer.current);
+      if (inactivityTimer.current) clearTimeout(inactivityTimer.current);
     };
   }, [messages]);
 
-  // Trigger send when chat is closed
+  // Trigger send ONLY when chat is closed
   useEffect(() => {
-    if (!isOpen && messages.length > 1) {
+    if (!isOpen && messages.length >= 3) {
       sendTranscript(messages);
     }
     
@@ -275,11 +267,6 @@ export default function App() {
       return;
     }
     
-    // Send final transcript before clearing
-    if (messages.length > 1) {
-      sendTranscript(messages);
-    }
-
     const initialMessage: Message = {
       role: 'assistant',
       text: 'Dobar dan! Ja sam AI asistent kompanije Eko Elektrofrigo. Specijalizovan sam za B2B HVAC rešenja i industrijsko hlađenje. Kako Vam mogu pomoći danas?',
@@ -294,6 +281,9 @@ export default function App() {
   const sendTranscript = async (currentMessages: Message[]) => {
     // Only send if there are new messages since the last send
     if (currentMessages.length <= 1 || currentMessages.length <= lastSentCount || isSendingEmail) return;
+    
+    // Only send if conversation is meaningful (at least 3 messages)
+    if (currentMessages.length < 3) return;
     
     setIsSendingEmail(true);
     try {
