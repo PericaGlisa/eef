@@ -1,19 +1,23 @@
 name: Search Console Monitor
 
-on:
-  schedule:
-    - cron: "0 6 1 * *"
-    - cron: "0 6 * * *"
-  workflow_dispatch:
-    inputs:
-      mode:
-        description: "monthly ili alert"
-        required: true
-        default: "monthly"
-        type: choice
-        options:
-          - monthly
-          - alert
+# DEACTIVATED - No jobs run
+on: []
+
+# Original configuration (commented out):
+# on:
+#   schedule:
+#     - cron: "0 6 1 * *"
+#     - cron: "0 6 * * *"
+#   workflow_dispatch:
+#     inputs:
+#       mode:
+#         description: "monthly ili alert"
+#         required: true
+#         default: "monthly"
+#         type: choice
+#         options:
+#           - monthly
+#           - alert
 
 jobs:
   monthly-report:
