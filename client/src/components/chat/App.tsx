@@ -312,7 +312,7 @@ export default function App() {
 
   if (!isOpen) {
     return (
-      <div className="fixed bottom-0 right-0 md:bottom-6 md:right-6 z-50 pointer-events-none flex items-end justify-end">
+      <div className="fixed bottom-0 right-0 md:bottom-6 md:right-6 z-[60] pointer-events-none flex items-end justify-end">
         <motion.button
           initial={{ scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -329,7 +329,7 @@ export default function App() {
 
   return (
     <div className={cn(
-      "fixed bottom-0 right-0 md:bottom-6 md:right-6 z-50 pointer-events-none flex items-end justify-end",
+      "fixed bottom-0 right-0 md:bottom-6 md:right-6 z-[60] pointer-events-none flex items-end justify-end",
       isOpen ? "w-full md:w-auto h-[100dvh] md:h-auto" : "w-auto h-auto"
     )}>
       <motion.div 
