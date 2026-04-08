@@ -33,7 +33,29 @@
     <meta name="twitter:image" content="https://eef.rs/opengraph.jpg" />
     <meta name="twitter:image:alt" content="Eko Elektrofrigo | Industrijska Rashladna Tehnika" />
 
-    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="icon" type="image/png" href="/favicon.png" id="favicon-light" />
+    <link rel="icon" type="image/png" href="/favicon-white.png" id="favicon-dark" media="(prefers-color-scheme: dark)" />
+    <script>
+      // Dynamic favicon based on browser theme
+      (function() {
+        const lightFavicon = '/favicon.png';
+        const darkFavicon = '/favicon-white.png';
+        
+        function updateFavicon() {
+          const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const favicon = document.querySelector('link[rel="icon"]');
+          if (favicon) {
+            favicon.href = isDark ? darkFavicon : lightFavicon;
+          }
+        }
+        
+        // Initial check
+        updateFavicon();
+        
+        // Listen for theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateFavicon);
+      })();
+    </script>
     <link rel="preload" as="image" href="/assets/hero-slide-1.webp" fetchpriority="high" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
