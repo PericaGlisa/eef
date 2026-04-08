@@ -33,23 +33,27 @@
     <meta name="twitter:image" content="https://eef.rs/opengraph.jpg" />
     <meta name="twitter:image:alt" content="Eko Elektrofrigo | Industrijska Rashladna Tehnika" />
 
-    <link rel="icon" type="image/png" href="/favicon.png" id="dynamic-favicon" />
+    <link rel="icon" type="image/png" href="/favicon.png?v=2" id="dynamic-favicon" />
     <script>
       // Dynamic favicon based on browser theme
       (function() {
-        const lightFavicon = '/favicon.png';
-        const darkFavicon = '/favicon-white.png';
+        const lightFavicon = '/favicon.png?v=2';
+        const darkFavicon = '/favicon-white.png?v=2';
         
         function updateFavicon() {
           const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
           const favicon = document.getElementById('dynamic-favicon');
           if (favicon) {
-            favicon.href = isDark ? darkFavicon : lightFavicon;
+            const newHref = isDark ? darkFavicon : lightFavicon;
+            if (favicon.href !== newHref) {
+              favicon.href = newHref;
+              console.log('[Favicon] Changed to:', isDark ? 'dark' : 'light', 'mode');
+            }
           }
         }
         
-        // Initial check
-        updateFavicon();
+        // Initial check with small delay to ensure DOM is ready
+        setTimeout(updateFavicon, 100);
         
         // Listen for theme changes
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateFavicon);
