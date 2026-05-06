@@ -233,6 +233,7 @@ async function queueContactFallback(entry: Record<string, unknown>) {
 async function sendChatTranscript(messages: ChatMessage[]): Promise<{ ok: boolean }> {
   try {
     const apiKey = process.env.RESEND_API_KEY;
+    console.log("[chat-transcript] Starting send. RESEND_API_KEY present:", !!apiKey, "| ADMIN_EMAIL:", process.env.ADMIN_EMAIL);
     if (!apiKey) {
       console.error("[chat-transcript] RESEND_API_KEY not configured");
       return { ok: false };
@@ -240,6 +241,7 @@ async function sendChatTranscript(messages: ChatMessage[]): Promise<{ ok: boolea
 
     const adminEmail = process.env.ADMIN_EMAIL || "office@eef.rs";
     const from = process.env.RESEND_FROM || "noreply@eef.co.rs";
+    console.log("[chat-transcript] Sending to:", adminEmail, "| From:", from, "| Messages:", messages.length);
 
     // Format messages into HTML
     const messagesHtml = messages
@@ -303,11 +305,12 @@ async function sendChatTranscript(messages: ChatMessage[]): Promise<{ ok: boolea
     });
 
     if (response.ok) {
-      console.log("[chat-transcript] Email sent successfully");
+      const data = await response.json();
+      console.log("[chat-transcript] Email sent successfully. Resend ID:", data?.id);
       return { ok: true };
     } else {
-      const error = await response.json();
-      console.error("[chat-transcript] Failed to send email:", error);
+      const errorText = await response.text();
+      console.error("[chat-transcript] Resend API error:", response.status, errorText);
       return { ok: false };
     }
   } catch (error) {
@@ -807,22 +810,26 @@ export async function registerRoutes(
 
   // POST /api/send-transcript - Send chat transcript to admin email
   app.post("/api/send-transcript", async (req, res) => {
+    console.log("[API /send-transcript] Endpoint hit. Message count:", Array.isArray(req.body?.messages) ? req.body.messages.length : "invalid");
     try {
       const { messages } = req.body;
       
       if (!Array.isArray(messages) || messages.length === 0) {
+        console.log("[API /send-transcript] Rejected: invalid messages array");
         return res.status(400).json({ error: "Invalid messages" });
       }
 
       const result = await sendChatTranscript(messages);
       
       if (result.ok) {
+        console.log("[API /send-transcript] Success: email sent to admin");
         return res.status(200).json({ success: true });
       } else {
+        console.error("[API /send-transcript] Failed: sendChatTranscript returned ok=false");
         return res.status(500).json({ error: "Failed to send transcript" });
       }
     } catch (error) {
-      console.error("[send-transcript] Error:", error);
+      console.error("[API /send-transcript] Exception:", error);
       return res.status(500).json({ error: "Internal server error" });
     }
   });

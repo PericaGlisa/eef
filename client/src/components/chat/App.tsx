@@ -280,21 +280,37 @@ export default function App() {
 
   const sendTranscript = async (currentMessages: Message[]) => {
     // Only send if there are new messages since the last send
-    if (currentMessages.length <= 1 || currentMessages.length <= lastSentCount || isSendingEmail) return;
+    if (currentMessages.length <= 1 || currentMessages.length <= lastSentCount || isSendingEmail) {
+      console.log('[Chat Transcript] Skipped:', { reason: 'already sent or sending', msgCount: currentMessages.length, lastSentCount, isSendingEmail });
+      return;
+    }
     
     // Only send if conversation is meaningful (at least 3 messages)
-    if (currentMessages.length < 3) return;
+    if (currentMessages.length < 3) {
+      console.log('[Chat Transcript] Skipped: not enough messages', currentMessages.length);
+      return;
+    }
     
+    console.log('[Chat Transcript] Sending transcript with', currentMessages.length, 'messages...');
     setIsSendingEmail(true);
     try {
-      await fetch('/api/send-transcript', {
+      const response = await fetch('/api/send-transcript', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: currentMessages })
       });
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('[Chat Transcript] Server returned error:', response.status, errorText);
+        return;
+      }
+      
+      const result = await response.json();
+      console.log('[Chat Transcript] Successfully sent!', result);
       setLastSentCount(currentMessages.length);
     } catch (error) {
-      console.error("Error sending transcript to admin:", error);
+      console.error("[Chat Transcript] Network or fetch error:", error);
     } finally {
       setIsSendingEmail(false);
     }
