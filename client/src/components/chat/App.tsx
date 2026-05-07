@@ -342,7 +342,8 @@ export default function App() {
     console.log('[Chat Transcript] Sending transcript with', currentMessages.length, 'messages...');
     setIsSendingEmail(true);
     try {
-      const response = await fetch('/api/send-transcript', {
+      const endpoint = window.location.hostname === 'localhost' ? '/api/send-transcript' : '/.netlify/functions/send-transcript';
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: currentMessages })

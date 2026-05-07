@@ -201,8 +201,8 @@ export function getLocations(isEnglish: boolean): Location[] {
     {
       "id": "novi-sad",
       "city": "Novi Sad",
-      "x": 25.258308115543322,
-      "y": 26.926220729366584,
+      "x": 25.0, // Blago pomereno levo sa 25.25
+      "y": 26.0, // Blago pomereno gore sa 26.92
       "projects": [
         {
           "title": "INDUSTRIJA MESA MATIJEVIĆ",
@@ -264,7 +264,7 @@ export function getLocations(isEnglish: boolean): Location[] {
     {
       "id": "irig",
       "city": "Irig",
-      "x": 25.875928473177495,
+      "x": 24.5, // Pomereno levo sa 25.8
       "y": 30.66335892514388,
       "projects": [
         {
@@ -288,8 +288,8 @@ export function getLocations(isEnglish: boolean): Location[] {
       "id": "dobrodol",
       "isPremium": true,
       "city": "Dobrodol",
-      "x": 27.93466299862449,
-      "y": 30.88449136276389,
+      "x": 27.5, // Pomereno levo sa 27.9
+      "y": 32.5, // Pomereno dole sa 30.8
       "projects": [
         {
           "title": "BERRY ICE FRUITS",
@@ -335,8 +335,8 @@ export function getLocations(isEnglish: boolean): Location[] {
       "id": "krcedin",
       "isPremium": true,
       "city": "Krčedin",
-      "x": 32.0521320495186,
-      "y": 29.77882917466402,
+      "x": 32.8, // Blago desno sa 32.05
+      "y": 28.5, // Blago gore sa 29.77
       "projects": [
         {
           "title": "AGROUNIJA",

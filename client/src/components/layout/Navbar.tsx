@@ -162,10 +162,9 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Main Nav */}
       <header
         className={`fixed left-0 right-0 z-40 transition-all duration-300 border-b border-white/5 ${
-          scrolled ? "top-0 bg-[#0a0c29]/90 backdrop-blur-md py-2 shadow-lg" : "top-[72px] sm:top-8 bg-transparent py-4"
+          scrolled ? "top-0 bg-[#0a0c29]/90 backdrop-blur-md py-2 shadow-lg" : "top-[72px] sm:top-8 bg-transparent py-6"
         } ${navVisible ? 'translate-y-0' : '-translate-y-full'}`}
       >
         <div className="container mx-auto px-6 flex items-center justify-between">
