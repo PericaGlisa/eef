@@ -1,5 +1,5 @@
 import { useRoute, Link } from "wouter";
-import { newsItems, NewsItem } from "@/data/news";
+import { getNewsItems, NewsItem } from "@/data/news";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
@@ -7,12 +7,17 @@ import { ArrowLeft, Tag, Share2, ChevronRight } from "lucide-react";
 import NotFound from "@/pages/not-found";
 import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
+import { useRef, useMemo } from "react";
 
 import { Gallery } from "@/components/Gallery";
-import { newsSeoDetails } from "@/data/seo-enhancements";
+import { getNewsSeoDetails } from "@/data/seo-enhancements";
+import { useLang } from "@/contexts/LanguageContext";
+import { useTranslation } from "@/lib/i18n";
+import { getCounterpartPath } from "@/lib/route-map";
 
 // Related Post Card Component
-function RelatedPostCard({ post, delay }: { post: NewsItem; delay: number }) {
+function RelatedPostCard({ post, delay, isEnglish }: { post: NewsItem; delay: number; isEnglish: boolean }) {
+  const l = (srHref: string) => isEnglish ? getCounterpartPath(srHref, "en") : srHref;
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -20,7 +25,7 @@ function RelatedPostCard({ post, delay }: { post: NewsItem; delay: number }) {
       transition={{ duration: 0.4, delay }}
       whileHover={{ y: -4 }}
     >
-      <Link href={`/vesti/${post.slug}`}>
+      <Link href={l(`/vesti/${post.slug}`)}>
         <article className="group h-full bg-white/5 border border-white/10 rounded-xl overflow-hidden hover:border-primary/30 hover:bg-white/10 transition-all duration-300 cursor-pointer">
           {/* Image */}
           {post.image && (
@@ -68,7 +73,7 @@ function RelatedPostCard({ post, delay }: { post: NewsItem; delay: number }) {
               
               {/* CTA */}
               <span className="text-sm text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-1 shrink-0">
-                Pročitaj <ChevronRight className="w-4 h-4" />
+                {isEnglish ? "Read" : "Pročitaj"} <ChevronRight className="w-4 h-4" />
               </span>
             </div>
           </div>
@@ -79,8 +84,17 @@ function RelatedPostCard({ post, delay }: { post: NewsItem; delay: number }) {
 }
 
 export default function NewsPost() {
-  const [match, params] = useRoute("/vesti/:slug");
+  const [srMatch, srParams] = useRoute("/vesti/:slug");
+  const [enMatch, enParams] = useRoute("/en/news/:slug");
+  const match = srMatch || enMatch;
+  const params = srParams || enParams;
   const { toast } = useToast();
+  const { isEnglish } = useLang();
+  const { t } = useTranslation();
+  const l = (srHref: string) => isEnglish ? getCounterpartPath(srHref, "en") : srHref;
+
+  const newsItems = useMemo(() => getNewsItems(isEnglish), [isEnglish]);
+  const newsSeoDetails = useMemo(() => getNewsSeoDetails(isEnglish), [isEnglish]);
   
   if (!match || !params) return <NotFound />;
   
@@ -124,8 +138,8 @@ export default function NewsPost() {
     } else {
       navigator.clipboard.writeText(window.location.href);
       toast({
-        title: "Link kopiran!",
-        description: "Link vesti je kopiran u privremenu memoriju.",
+        title: isEnglish ? "Link copied!" : "Link kopiran!",
+        description: isEnglish ? "News link copied to clipboard." : "Link vesti je kopiran u privremenu memoriju.",
       });
     }
   };
@@ -140,9 +154,9 @@ export default function NewsPost() {
         <div className="absolute -top-[20%] -right-[10%] w-[50vw] h-[50vw] bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="container mx-auto px-6 relative z-10 max-w-4xl">
-          <Link href="/vesti">
+          <Link href={l("/vesti")}>
             <Button variant="ghost" className="mb-8 text-white/50 hover:text-white hover:bg-white/5 -ml-4">
-              <ArrowLeft className="w-4 h-4 mr-2" /> Nazad na arhivnu stranicu
+              <ArrowLeft className="w-4 h-4 mr-2" /> {isEnglish ? "Back to archive" : "Nazad na arhivnu stranicu"}
             </Button>
           </Link>
 
@@ -178,10 +192,14 @@ export default function NewsPost() {
                 {finalPost.desc}
               </p>
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
-                Industrijsko hlađenje kroz aktuelne projekte i iskustva
+                {isEnglish
+                  ? "Industrial refrigeration through current projects and experiences"
+                  : "Industrijsko hlađenje kroz aktuelne projekte i iskustva"}
               </h2>
               <p className="text-white/70 mb-8">
-                Kroz ovu vest donosimo praktične uvide iz oblasti industrijskog hlađenja, sa fokusom na tehnološka rešenja, izvođenje i rezultate na terenu.
+                {isEnglish
+                  ? "Through this article we bring practical insights from the field of industrial refrigeration, with a focus on technological solutions, implementation and results in the field."
+                  : "Kroz ovu vest donosimo praktične uvide iz oblasti industrijskog hlađenja, sa fokusom na tehnološka rešenja, izvođenje i rezultate na terenu."}
               </p>
               
               <div className="space-y-6 text-white/70">
@@ -193,15 +211,17 @@ export default function NewsPost() {
 
             {newsSeo?.relatedLinks?.length ? (
               <section className="mt-14 border-t border-white/10 pt-10">
-                <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">Povezane usluge i rešenja</h2>
+                <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">{isEnglish ? "Related services and solutions" : "Povezane usluge i rešenja"}</h2>
                 <p className="text-white/70 mb-6">
-                  Ako vas zanima ova tema, pogledajte i povezane stranice sa tehničkim detaljima.
+                  {isEnglish
+                    ? "If you are interested in this topic, also check out the related pages with technical details."
+                    : "Ako vas zanima ova tema, pogledajte i povezane stranice sa tehničkim detaljima."}
                 </p>
                 <div className="flex flex-wrap gap-3">
                   {newsSeo.relatedLinks.map((item) => (
                     <Link
                       key={item.path}
-                      href={item.path}
+                      href={l(item.path)}
                       className="inline-flex items-center rounded-full border border-white/20 px-4 py-2 text-sm font-semibold text-white/80 hover:bg-white/10 hover:text-white transition-colors"
                     >
                       {item.label}
@@ -213,7 +233,7 @@ export default function NewsPost() {
 
             {newsSeo?.faqs?.length ? (
               <section className="mt-14 border-t border-white/10 pt-10">
-                <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">Često postavljana pitanja</h2>
+                <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">{isEnglish ? "Frequently Asked Questions" : "Često postavljana pitanja"}</h2>
                 <div className="space-y-6">
                   {newsSeo.faqs.map((item) => (
                     <article key={item.question} className="rounded-2xl border border-white/15 bg-white/5 p-5">
@@ -229,7 +249,7 @@ export default function NewsPost() {
             {finalPost.id === 1 && (
               <div className="mt-12">
                 <Gallery 
-                  title="Galerija" 
+                  title={isEnglish ? "Gallery" : "Galerija"} 
                   images={[
                     "/assets/blog/masinski-fakultet/gallery-1.webp",
                     "/assets/blog/masinski-fakultet/gallery-2.webp",
@@ -247,7 +267,7 @@ export default function NewsPost() {
             {finalPost.id === 2 && (
               <div className="mt-12">
                 <Gallery 
-                  title="Galerija" 
+                  title={isEnglish ? "Gallery" : "Galerija"} 
                   images={[
                     "/assets/blog/zitostok/gallery-1.webp",
                     "/assets/blog/zitostok/gallery-2.webp",
@@ -269,7 +289,7 @@ export default function NewsPost() {
             {finalPost.id === 3 && (
               <div className="mt-12">
                 <Gallery 
-                  title="Galerija" 
+                  title={isEnglish ? "Gallery" : "Galerija"} 
                   images={[
                     "/assets/blog/delta-agrar-zajecar/gallery-1.webp",
                     "/assets/blog/delta-agrar-zajecar/gallery-2.webp",
@@ -285,7 +305,7 @@ export default function NewsPost() {
             {finalPost.id === 4 && (
               <div className="mt-12">
                 <Gallery 
-                  title="Galerija" 
+                  title={isEnglish ? "Gallery" : "Galerija"} 
                   images={[
                     "/assets/blog/archiv-rgz/gallery-1.webp",
                     "/assets/blog/archiv-rgz/gallery-2.webp",
@@ -301,7 +321,7 @@ export default function NewsPost() {
             {finalPost.id === 5 && (
               <div className="mt-12">
                 <Gallery 
-                  title="Galerija" 
+                  title={isEnglish ? "Gallery" : "Galerija"} 
                   images={[
                     "/assets/blog/maf-roda-sajam/gallery-1.webp",
                     "/assets/blog/maf-roda-sajam/gallery-2.webp",
@@ -316,7 +336,7 @@ export default function NewsPost() {
             {finalPost.id === 6 && (
               <div className="mt-12">
                 <Gallery 
-                  title="Galerija" 
+                  title={isEnglish ? "Gallery" : "Galerija"} 
                   images={[
                     "/assets/blog/ralu-logistika/gallery-1.webp",
                     "/assets/blog/ralu-logistika/gallery-2.webp",
@@ -332,7 +352,7 @@ export default function NewsPost() {
             {finalPost.id === 7 && (
               <div className="mt-12">
                 <Gallery 
-                  title="Galerija" 
+                  title={isEnglish ? "Gallery" : "Galerija"} 
                   images={[
                     "/assets/blog/danfoss-summit/gallery-1.webp",
                     "/assets/blog/danfoss-summit/gallery-2.webp",
@@ -348,7 +368,7 @@ export default function NewsPost() {
             {finalPost.id === 8 && (
               <div className="mt-12">
                 <Gallery 
-                  title="Galerija" 
+                  title={isEnglish ? "Gallery" : "Galerija"} 
                   images={[
                     "/assets/blog/sirogojno-company/gallery-1.webp",
                     "/assets/blog/sirogojno-company/gallery-2.webp",
@@ -375,7 +395,7 @@ export default function NewsPost() {
                 className="border-white/10 hover:bg-white/5 text-white/70"
                 onClick={handleShare}
               >
-                  <Share2 className="w-4 h-4 mr-2" /> Podeli vest
+                  <Share2 className="w-4 h-4 mr-2" /> {isEnglish ? "Share article" : "Podeli vest"}
                </Button>
             </div>
 
@@ -384,11 +404,11 @@ export default function NewsPost() {
               <section className="mt-16 md:mt-20 border-t border-white/10 pt-12">
                 <div className="flex items-center justify-between mb-8">
                   <h2 className="text-2xl md:text-3xl font-heading font-bold text-white">
-                    Slične Objave
+                    {isEnglish ? "Related Articles" : "Slične Objave"}
                   </h2>
-                  <Link href="/vesti">
+                  <Link href={l("/vesti")}>
                     <Button variant="ghost" className="text-primary hover:text-primary/80 hover:bg-primary/10 gap-2">
-                      Pogledaj sve <ChevronRight className="w-4 h-4" />
+                      {isEnglish ? "View all" : "Pogledaj sve"} <ChevronRight className="w-4 h-4" />
                     </Button>
                   </Link>
                 </div>
@@ -398,7 +418,8 @@ export default function NewsPost() {
                     <RelatedPostCard 
                       key={relatedPost.id} 
                       post={relatedPost} 
-                      delay={index * 0.1} 
+                      delay={index * 0.1}
+                      isEnglish={isEnglish}
                     />
                   ))}
                 </div>

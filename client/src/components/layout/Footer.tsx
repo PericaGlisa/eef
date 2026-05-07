@@ -1,7 +1,15 @@
 import { Link } from "wouter";
 import { FileText, ArrowRight, Linkedin, MapPin, Phone, Mail, ChevronUp } from "lucide-react";
+import { useTranslation } from "@/lib/i18n";
+import { getCounterpartPath } from "@/lib/route-map";
+import { useLang } from "@/contexts/LanguageContext";
 
 export function Footer() {
+  const { t } = useTranslation();
+  const { lang } = useLang();
+  const isEnglish = lang === "en";
+  const l = (srHref: string) => isEnglish ? getCounterpartPath(srHref, "en") : srHref;
+
   return (
     <footer className="bg-[#0B0F19] text-white pt-20 pb-24 md:pb-28 lg:pb-12 relative overflow-hidden">
       {/* Vibrant Background Gradients - "Veseliji" vibe */}
@@ -15,7 +23,7 @@ export function Footer() {
           
           {/* Column 1: Brand & Identity */}
           <div className="space-y-8">
-            <Link href="/" className="inline-block group">
+            <Link href={l("/")} className="inline-block group">
               <img 
                 src="/assets/logo.png" 
                 alt="EEF" 
@@ -23,8 +31,8 @@ export function Footer() {
               />
             </Link>
             <p className="text-slate-400 text-base leading-relaxed max-w-sm">
-              Porodično preduzeće osnovano 1996. godine. Lider u industrijskoj rashladi i energetskoj efikasnosti. 
-              <span className="block mt-2 text-primary font-medium">Gradimo finansijske tvrđave kroz inženjering.</span>
+              {t("footer.brandDesc")}
+              <span className="block mt-2 text-primary font-medium">{t("footer.brandTagline")}</span>
             </p>
             <div className="flex gap-4">
                <a href="https://www.linkedin.com/feed/update/urn:li:activity:6899988285712596994" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-all duration-300 group">
@@ -37,18 +45,18 @@ export function Footer() {
           <div className="space-y-8">
             <h4 className="text-lg font-bold text-white flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-primary" />
-              Istraži
+              {t("common.explore")}
             </h4>
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {[
-                { name: 'Eko Rashlada', href: '/eko-rashlada' },
-                { name: 'Usluge', href: '/usluge' },
-                { name: 'Kompanija', href: '/o-nama' },
-                { name: 'Partneri', href: '/partneri' },
-                { name: 'Reference', href: '/reference' },
-                { name: 'Vesti', href: '/vesti' },
-                { name: 'Dokumentacija', href: '/dokumentacija' },
-                { name: 'Kontakt', href: '/kontakt' }
+                { name: t("nav.ecoCooling"), href: l("/eko-rashlada") },
+                { name: t("nav.services"), href: l("/usluge") },
+                { name: t("nav.company"), href: l("/o-nama") },
+                { name: t("nav.partners"), href: l("/partneri") },
+                { name: t("nav.references"), href: l("/reference") },
+                { name: "Blog", href: l("/vesti") },
+                { name: t("nav.documentation"), href: l("/dokumentacija") },
+                { name: t("nav.contact"), href: l("/kontakt") }
               ].map((item) => (
                 <li key={item.name}>
                   <Link href={item.href} className="text-slate-400 hover:text-primary transition-colors text-sm flex items-center gap-2 group">
@@ -64,9 +72,9 @@ export function Footer() {
           <div className="space-y-8 md:col-span-2 lg:col-span-1">
             <h4 className="text-lg font-bold text-white flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-primary" />
-              Kvalitet
+              {t("common.quality")}
             </h4>
-            <Link href="/dokumentacija/sertifikati">
+            <Link href={l("/dokumentacija/sertifikati")}>
               <div className="group cursor-pointer p-8 border border-white/10 hover:border-primary/50 bg-gradient-to-br from-white/5 to-transparent hover:from-primary/10 hover:to-primary/5 transition-all duration-500 rounded-2xl relative overflow-hidden shadow-2xl hover:shadow-primary/20">
                 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                    <FileText className="w-24 h-24" />
@@ -74,12 +82,12 @@ export function Footer() {
                 
                 <div className="relative z-10">
                    <div className="px-3 py-1 inline-block bg-primary/20 rounded-full text-xs font-bold text-primary border border-primary/30 mb-4">
-                      ISO STANDARDI
+                      {t("common.isoStandards")}
                    </div>
                    <h5 className="font-heading font-bold text-2xl mb-2 text-white group-hover:text-primary transition-colors">9001 • 14001 • 45001</h5>
-                   <p className="text-sm text-slate-400 mb-6">Integrisani sistem menadžmenta kvaliteta</p>
+                   <p className="text-sm text-slate-400 mb-6">{t("common.integratedManagement")}</p>
                    <div className="flex items-center text-white text-sm font-bold group-hover:gap-4 transition-all duration-300">
-                     Pogledaj sertifikate <ArrowRight className="w-4 h-4 ml-2 text-primary" />
+                     {t("common.viewCertificates")} <ArrowRight className="w-4 h-4 ml-2 text-primary" />
                    </div>
                 </div>
               </div>
@@ -95,9 +103,9 @@ export function Footer() {
                     <MapPin className="w-6 h-6" />
                 </div>
                 <div>
-                    <h4 className="font-bold text-white text-sm mb-1">Lokacija</h4>
-                    <p className="text-slate-400 text-sm">Svetolika Nikačevića 11</p>
-                    <p className="text-slate-400 text-sm">Beograd, Srbija</p>
+                    <h4 className="font-bold text-white text-sm mb-1">{t("common.location")}</h4>
+                    <p className="text-slate-400 text-sm">{t("common.address")}</p>
+                    <p className="text-slate-400 text-sm">{t("common.city")}</p>
                 </div>
             </div>
 
@@ -106,7 +114,7 @@ export function Footer() {
                     <Phone className="w-6 h-6" />
                 </div>
                 <div>
-                    <h4 className="font-bold text-white text-sm mb-1">Pozovite nas</h4>
+                    <h4 className="font-bold text-white text-sm mb-1">{t("common.callUs")}</h4>
                     <a href="tel:+381113757287" className="text-slate-400 text-sm block hover:text-primary transition-colors">+381 11 375 72 87</a>
                     <a href="tel:+381113757288" className="text-slate-400 text-sm block hover:text-primary transition-colors">+381 11 375 72 88</a>
                 </div>
@@ -117,7 +125,7 @@ export function Footer() {
                     <Mail className="w-6 h-6" />
                 </div>
                 <div className="w-full">
-                    <h4 className="font-bold text-white text-sm mb-1">Email Kontakti</h4>
+                    <h4 className="font-bold text-white text-sm mb-1">{t("common.emailContacts")}</h4>
                     <div className="grid grid-cols-2 gap-x-4 gap-y-1">
                       <a href="mailto:office@eef.rs" className="text-slate-400 text-sm hover:text-primary transition-colors block">office@eef.rs</a>
                       <a href="mailto:prodaja@eef.rs" className="text-slate-400 text-sm hover:text-primary transition-colors block">prodaja@eef.rs</a>
@@ -131,20 +139,20 @@ export function Footer() {
         {/* Copyright */}
         <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row md:flex-wrap md:justify-start items-center gap-6 md:gap-12">
           <p className="order-2 md:order-1 text-slate-500 text-xs text-center md:text-left">
-            © {new Date().getFullYear()} Eko Elektrofrigo. Sva prava zadržana.
+            © {new Date().getFullYear()} Eko Elektrofrigo. {t("common.allRightsReserved")}
           </p>
           <div className="order-1 md:order-2 flex gap-4 text-xs text-slate-500 flex-wrap justify-center">
-             <Link href="/politika-privatnosti" className="hover:text-white transition-colors">Politika privatnosti</Link>
-             <Link href="/uslovi-koriscenja" className="hover:text-white transition-colors">Uslovi korišćenja</Link>
+             <Link href={l("/politika-privatnosti")} className="hover:text-white transition-colors">{t("common.privacyPolicy")}</Link>
+             <Link href={l("/uslovi-koriscenja")} className="hover:text-white transition-colors">{t("common.termsOfUse")}</Link>
           </div>
           <button
             type="button"
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             className="order-3 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs font-semibold text-white/90 hover:bg-primary hover:text-white transition-all md:mx-auto lg:mx-0"
-            aria-label="Nazad na vrh"
+            aria-label={t("common.backToTop")}
           >
             <ChevronUp className="h-4 w-4" />
-            Nazad na vrh
+            {t("common.backToTop")}
           </button>
         </div>
       </div>

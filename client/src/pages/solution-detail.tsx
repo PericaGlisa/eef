@@ -1,5 +1,5 @@
 import { useRoute, Link } from "wouter";
-import { solutionsData } from "@/data/solutions";
+import { getSolutionsData } from "@/data/solutions";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Gallery } from "@/components/Gallery";
@@ -7,24 +7,47 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, CheckCircle2, Settings, Phone, FileText, ArrowRight } from "lucide-react";
 import NotFound from "@/pages/not-found";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
-import { solutionSeoDetails } from "@/data/seo-enhancements";
+import { useRef, useMemo } from "react";
+import { getSolutionSeoDetails } from "@/data/seo-enhancements";
+import { useLang } from "@/contexts/LanguageContext";
+import { useTranslation } from "@/lib/i18n";
+import { getCounterpartPath } from "@/lib/route-map";
+
+const EN_SLUG_MAP: Record<string, string> = {
+  "cold-rooms": "rashladne-komore",
+  "freezing-tunnels": "tuneli-za-smrzavanje",
+  "ulo-rooms": "ulo-komore",
+  "cooling-units": "rashladni-agregati",
+  "chillers": "cileri",
+  "electrical-cabinets": "elektro-ormani",
+  "thermal-insulation": "termoizolacija",
+};
 
 export default function SolutionDetail() {
-  const [match, params] = useRoute("/eko-rashlada/:slug");
+  const [srMatch, srParams] = useRoute("/eko-rashlada/:slug");
+  const [enMatch, enParams] = useRoute("/en/eco-cooling/:slug");
+  const match = srMatch || enMatch;
+  const params = srParams || enParams;
   const containerRef = useRef(null);
-  
+  const { isEnglish } = useLang();
+  const { t } = useTranslation();
+  const l = (srHref: string) => isEnglish ? getCounterpartPath(srHref, "en") : srHref;
+
+  const solutionsData = useMemo(() => getSolutionsData(isEnglish), [isEnglish]);
+  const solutionSeoDetails = useMemo(() => getSolutionSeoDetails(isEnglish), [isEnglish]);
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"]
   });
-  
+
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  
+
   if (!match || !params) return <NotFound />;
-  
-  const solution = solutionsData.find(s => s.id === params.slug);
+
+  const solutionId = EN_SLUG_MAP[params.slug] || params.slug;
+  const solution = solutionsData.find((s: { id: string }) => s.id === solutionId);
 
   if (!solution) return <NotFound />;
 
@@ -32,7 +55,7 @@ export default function SolutionDetail() {
   const details = solutionSeoDetails[solution.id];
 
   // Find next solution for navigation
-  const currentIndex = solutionsData.findIndex(s => s.id === params.slug);
+  const currentIndex = solutionsData.findIndex((s: { id: string }) => s.id === solutionId);
   const nextSolution = solutionsData[(currentIndex + 1) % solutionsData.length];
 
   return (
@@ -61,9 +84,9 @@ export default function SolutionDetail() {
         </div>
         
         <div className="container mx-auto px-6 relative z-10">
-          <Link href="/eko-rashlada">
+          <Link href={l("/eko-rashlada")}>
             <Button variant="ghost" className="mb-8 text-white/70 hover:text-white hover:bg-white/10 -ml-4 group backdrop-blur-sm border border-transparent hover:border-white/10">
-              <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" /> Nazad na Rešenja
+              <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" /> {isEnglish ? "Back to Solutions" : "Nazad na Rešenja"}
             </Button>
           </Link>
 
@@ -78,7 +101,7 @@ export default function SolutionDetail() {
                 <Icon className="w-7 h-7" />
               </div>
               <div className="h-px w-20 bg-gradient-to-r from-white/20 to-transparent" />
-              <span className="text-primary font-mono text-sm tracking-widest uppercase">Tehnička Specifikacija</span>
+              <span className="text-primary font-mono text-sm tracking-widest uppercase">{isEnglish ? "Technical Specification" : "Tehnička Specifikacija"}</span>
             </div>
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-heading font-bold text-white mb-8 leading-tight tracking-tight">
@@ -117,7 +140,7 @@ export default function SolutionDetail() {
                   {/* Image overlay badge */}
                   <div className="absolute bottom-6 right-6 z-20 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl border border-white/50 shadow-lg flex items-center gap-2">
                     <Settings className="w-4 h-4 text-primary" />
-                    <span className="text-xs font-bold text-[#0e1035] uppercase tracking-wider">Industrijski Standard</span>
+                    <span className="text-xs font-bold text-[#0e1035] uppercase tracking-wider">{isEnglish ? "Industrial Standard" : "Industrijski Standard"}</span>
                   </div>
                 </motion.div>
               )}
@@ -131,10 +154,12 @@ export default function SolutionDetail() {
                 className="bg-white rounded-3xl p-8 md:p-12 shadow-xl shadow-slate-200/50 border border-slate-100"
               >
                 <h2 className="text-3xl font-bold text-[#0e1035] mb-4">
-                  Rešenje industrijskog hlađenja: {solution.title}
+                  {isEnglish ? "Industrial refrigeration solution: " : "Rešenje industrijskog hlađenja: "}{solution.title}
                 </h2>
                 <p className="text-slate-600 leading-relaxed mb-8">
-                  Ovo rešenje je optimizovano za industrijsko hlađenje sa fokusom na stabilan proces, bezbedan rad i uštedu energije u svakodnevnoj eksploataciji.
+                  {isEnglish
+                    ? "This solution is optimized for industrial refrigeration with a focus on stable process, safe operation, and energy savings in daily operation."
+                    : "Ovo rešenje je optimizovano za industrijsko hlađenje sa fokusom na stabilan proces, bezbedan rad i uštedu energije u svakodnevnoj eksploataciji."}
                 </p>
                 <div 
                   className="prose prose-lg max-w-none text-slate-600 
@@ -156,9 +181,9 @@ export default function SolutionDetail() {
 
               {details?.faqs?.length ? (
                 <section className="mt-12 bg-white rounded-3xl p-8 md:p-12 shadow-xl shadow-slate-200/50 border border-slate-100">
-                  <h2 className="text-3xl font-bold text-[#0e1035] mb-6">Često postavljana pitanja</h2>
+                  <h2 className="text-3xl font-bold text-[#0e1035] mb-6">{isEnglish ? "Frequently Asked Questions" : "Često postavljana pitanja"}</h2>
                   <div className="space-y-6">
-                    {details.faqs.map((item) => (
+                    {details.faqs.map((item: { question: string; answer: string }) => (
                       <article key={item.question} className="border-b border-slate-200 pb-5 last:border-b-0 last:pb-0">
                         <h3 className="text-xl font-semibold text-[#0e1035] mb-2">{item.question}</h3>
                         <p className="text-slate-600 leading-relaxed">{item.answer}</p>
@@ -169,16 +194,18 @@ export default function SolutionDetail() {
               ) : null}
 
               <section className="mt-12 bg-[#0e1035] rounded-3xl p-8 md:p-10 border border-white/10">
-                <h2 className="text-2xl font-bold text-white mb-3">Treba vam ponuda za ovo rešenje?</h2>
+                <h2 className="text-2xl font-bold text-white mb-3">{isEnglish ? "Need a quote for this solution?" : "Treba vam ponuda za ovo rešenje?"}</h2>
                 <p className="text-white/70 mb-6">
-                  Naš inženjerski tim priprema predlog opreme, tehnički koncept i plan implementacije prema vašem objektu.
+                  {isEnglish
+                    ? "Our engineering team prepares equipment proposals, technical concepts, and implementation plans according to your facility."
+                    : "Naš inženjerski tim priprema predlog opreme, tehnički koncept i plan implementacije prema vašem objektu."}
                 </p>
                 <div className="flex flex-wrap gap-3">
                   <Button asChild className="bg-primary hover:bg-primary/90 text-white">
-                    <Link href="/kontakt">Kontaktirajte nas</Link>
+                    <Link href={l("/kontakt")}>{isEnglish ? "Contact us" : "Kontaktirajte nas"}</Link>
                   </Button>
                   <Button asChild variant="outline" className="border-white/20 text-white bg-white/5 hover:bg-white/10">
-                    <Link href="/usluge/inzenjering">Pogledajte uslugu projektovanja</Link>
+                    <Link href={l("/usluge/inzenjering")}>{isEnglish ? "View engineering service" : "Pogledajte uslugu projektovanja"}</Link>
                   </Button>
                 </div>
               </section>
@@ -186,7 +213,7 @@ export default function SolutionDetail() {
               {/* Gallery Section - Only for Rashladne Komore */}
               {params.slug === "rashladne-komore" && (
                 <Gallery 
-                  title="Galerija Rešenja" 
+                  title={isEnglish ? "Solution Gallery" : "Galerija Rešenja"} 
                   images={[
                     "/assets/solutions/rashladne-komore/gallery-1.webp",
                     "/assets/solutions/rashladne-komore/gallery-2.webp",
@@ -204,7 +231,7 @@ export default function SolutionDetail() {
               {/* Gallery Section - Only for Tuneli za Smrzavanje */}
               {params.slug === "tuneli-za-smrzavanje" && (
                 <Gallery 
-                  title="Galerija Rešenja" 
+                  title={isEnglish ? "Solution Gallery" : "Galerija Rešenja"} 
                   images={[
                     "/assets/solutions/tuneli-za-smrzavanje/gallery-1.webp",
                     "/assets/solutions/tuneli-za-smrzavanje/gallery-2.webp",
@@ -218,7 +245,7 @@ export default function SolutionDetail() {
               {/* Gallery Section - Only for ULO Komore */}
               {params.slug === "ulo-komore" && (
                 <Gallery 
-                  title="Galerija Rešenja" 
+                  title={isEnglish ? "Solution Gallery" : "Galerija Rešenja"} 
                   images={[
                     "/assets/solutions/ulo-komore/gallery-1.webp",
                     "/assets/solutions/ulo-komore/gallery-2.webp",
@@ -241,7 +268,7 @@ export default function SolutionDetail() {
               {/* Gallery Section - Only for Rashladni Agregati */}
               {params.slug === "rashladni-agregati" && (
                 <Gallery 
-                  title="Galerija Rešenja" 
+                  title={isEnglish ? "Solution Gallery" : "Galerija Rešenja"} 
                   images={[
                     "/assets/solutions/rashladni-agregati/gallery-1.webp",
                     "/assets/solutions/rashladni-agregati/gallery-2.webp",
@@ -261,7 +288,7 @@ export default function SolutionDetail() {
               {/* Gallery Section - Only for Cileri */}
               {params.slug === "cileri" && (
                 <Gallery 
-                  title="Galerija Rešenja" 
+                  title={isEnglish ? "Solution Gallery" : "Galerija Rešenja"} 
                   images={[
                     "/assets/solutions/cileri/gallery-1.webp",
                     "/assets/solutions/cileri/gallery-2.webp",
@@ -279,7 +306,7 @@ export default function SolutionDetail() {
               {/* Gallery Section - Only for Elektro Ormani */}
               {params.slug === "elektro-ormani" && (
                 <Gallery 
-                  title="Galerija Rešenja" 
+                  title={isEnglish ? "Solution Gallery" : "Galerija Rešenja"} 
                   images={[
                     "/assets/solutions/elektro-ormani/gallery-1.webp",
                     "/assets/solutions/elektro-ormani/gallery-2.webp",
@@ -301,7 +328,7 @@ export default function SolutionDetail() {
               {/* Gallery Section - Only for Termoizolacija */}
               {params.slug === "termoizolacija" && (
                 <Gallery 
-                  title="Galerija Rešenja" 
+                  title={isEnglish ? "Solution Gallery" : "Galerija Rešenja"} 
                   images={[
                     "/assets/solutions/termoizolacija/gallery-1.webp",
                     "/assets/solutions/termoizolacija/gallery-2.webp",
@@ -338,7 +365,7 @@ export default function SolutionDetail() {
                     <div className="p-2 rounded-lg bg-white/10 border border-white/10">
                       <Settings className="w-5 h-5 text-primary" />
                     </div>
-                    Ključne Karakteristike
+                    {isEnglish ? "Key Features" : "Ključne Karakteristike"}
                   </h3>
                   
                   <div className="space-y-4">
@@ -359,14 +386,14 @@ export default function SolutionDetail() {
               {/* Next Solution Teaser */}
               {nextSolution && (
                 <div>
-                  <Link href={`/eko-rashlada/${nextSolution.id}`}>
+                  <Link href={l(`/eko-rashlada/${nextSolution.id}`)}>
                     <div className="block bg-gradient-to-br from-[#0e1035] to-[#1a1d5c] rounded-3xl p-1 cursor-pointer group hover:shadow-2xl hover:shadow-primary/20 transition-all duration-300">
                       <div className="bg-[#0e1035] rounded-[22px] p-6 h-full relative overflow-hidden">
                         <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                           <ArrowRight className="w-12 h-12 text-white" />
                         </div>
                         
-                        <p className="text-xs text-primary font-mono uppercase tracking-widest mb-2">Sledeće Rešenje</p>
+                        <p className="text-xs text-primary font-mono uppercase tracking-widest mb-2">{isEnglish ? "Next Solution" : "Sledeće Rešenje"}</p>
                         <h4 className="text-lg font-bold text-white mb-1 group-hover:text-primary transition-colors">{nextSolution.title}</h4>
                         <p className="text-white/40 text-sm line-clamp-1">{nextSolution.shortDesc}</p>
                       </div>
@@ -379,16 +406,18 @@ export default function SolutionDetail() {
               <div className="bg-white rounded-3xl p-8 border border-slate-200 shadow-xl shadow-slate-200/50 relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-[40px] group-hover:bg-primary/10 transition-colors" />
                 
-                <h3 className="text-2xl font-bold text-[#0e1035] mb-3 relative z-10">Zainteresovani?</h3>
+                <h3 className="text-2xl font-bold text-[#0e1035] mb-3 relative z-10">{isEnglish ? "Interested?" : "Zainteresovani?"}</h3>
                 <p className="text-slate-500 mb-8 text-sm leading-relaxed relative z-10">
-                  Naš tim inženjera je spreman da odgovori na vaše zahteve i ponudi optimalno rešenje.
+                  {isEnglish
+                    ? "Our engineering team is ready to respond to your requirements and offer an optimal solution."
+                    : "Naš tim inženjera je spreman da odgovori na vaše zahteve i ponudi optimalno rešenje."}
                 </p>
                 
                 <div className="grid gap-3 relative z-10">
                   <Button className="w-full bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/25 h-12 text-base" asChild>
-                    <Link href="/kontakt">
+                    <Link href={l("/kontakt")}>
                       <FileText className="w-4 h-4 mr-2" />
-                      Zatražite ponudu
+                      {isEnglish ? "Request a quote" : "Zatražite ponudu"}
                     </Link>
                   </Button>
                   <Button

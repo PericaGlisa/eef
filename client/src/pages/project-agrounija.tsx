@@ -3,7 +3,7 @@ import { Footer } from "@/components/layout/Footer";
 import { motion } from "framer-motion";
 import { ArrowLeft, X, ChevronLeft, ChevronRight, Snowflake, MapPin, Calendar, Building2, Zap } from "lucide-react";
 import { Link } from "wouter";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   Carousel,
   CarouselContent,
@@ -18,8 +18,12 @@ import {
 } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import Autoplay from "embla-carousel-autoplay";
+import { useTranslation } from "@/lib/i18n";
+import { useLang } from "@/contexts/LanguageContext";
 
 export default function ProjectAgrounija() {
+  const { t } = useTranslation();
+  const { isEnglish } = useLang();
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const openLightbox = (index: number) => {
@@ -42,12 +46,12 @@ export default function ProjectAgrounija() {
     }
   };
 
-  const stats = [
-    { icon: <Snowflake className="w-6 h-6" />, label: "Kapacitet Faza 1", value: "3.500t" },
-    { icon: <Snowflake className="w-6 h-6" />, label: "Kapacitet Faza 2", value: "4.000t" },
-    { icon: <Zap className="w-6 h-6" />, label: "Ušteda Energije", value: "30%" },
-    { icon: <Building2 className="w-6 h-6" />, label: "Investitor", value: "MK Farming" },
-  ];
+  const stats = useMemo(() => [
+    { icon: <Snowflake className="w-6 h-6" />, label: t("projectAgrounija.phase1Capacity"), value: "3.500t" },
+    { icon: <Snowflake className="w-6 h-6" />, label: t("projectAgrounija.phase2Capacity"), value: "4.000t" },
+    { icon: <Zap className="w-6 h-6" />, label: t("projectAgrounija.energySavings"), value: "30%" },
+    { icon: <Building2 className="w-6 h-6" />, label: t("projectAgrounija.investor"), value: "MK Farming" },
+  ], [t]);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -58,7 +62,7 @@ export default function ProjectAgrounija() {
         <div className="absolute inset-0">
           <img 
             src="/assets/projects/agrounija/gallery-1.webp" 
-            alt="Agrounija Hladnjača" 
+            alt="Agrounija Cold Store" 
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-background" />
@@ -68,7 +72,7 @@ export default function ProjectAgrounija() {
           <Link href="/reference">
             <a className="inline-flex items-center text-white/80 hover:text-white mb-8 transition-colors absolute top-32 left-4 md:left-8">
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Nazad na reference
+              {t("projectAgrounija.backToReferences")}
             </a>
           </Link>
 
@@ -90,7 +94,7 @@ export default function ProjectAgrounija() {
               <div className="hidden md:block">
                 <div className="flex items-center text-white/80 mb-1">
                   <MapPin className="w-4 h-4 mr-2" />
-                  Krčedin, Srbija
+                  {isEnglish ? "Krčedin, Serbia" : "Krčedin, Srbija"}
                 </div>
                 <div className="flex items-center text-white/80">
                   <Calendar className="w-4 h-4 mr-2" />
@@ -102,7 +106,7 @@ export default function ProjectAgrounija() {
             <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight">
               AGROUNIJA
               <span className="block text-2xl md:text-3xl font-normal text-primary mt-2">
-                Hladnjača za skladištenje jabuka
+                {t("projectAgrounija.subtitle")}
               </span>
             </h1>
           </motion.div>
@@ -142,19 +146,35 @@ export default function ProjectAgrounija() {
               >
                 <div className="bg-card/30 rounded-2xl p-8 border border-white/5 space-y-6">
                   <p>
-                    <span className="text-white font-medium">Tokom 2017. godine</span> započeta je izgradnja prve faze hladnjače za potrebe skladištenja jabuke u ULO/DCA atmosferi. Hladnjača Agrounija se nalazi u Krčedinu i posluje kao deo MK Farming porodice. Kapacitet rashladnih komora u prvoj fazi je 3500 tona.
+                    <span className="text-white font-medium">
+                      {isEnglish ? "During 2017" : "Tokom 2017. godine"}
+                    </span>
+                    {isEnglish
+                      ? ", construction of the first phase of the cold store for apple storage in ULO/DCA atmosphere began. The Agrounija cold store is located in Krčedin and operates as part of the MK Farming family. The cooling chamber capacity in the first phase is 3,500 tons."
+                      : " započeta je izgradnja prve faze hladnjače za potrebe skladištenja jabuke u ULO/DCA atmosferi. Hladnjača Agrounija se nalazi u Krčedinu i posluje kao deo MK Farming porodice. Kapacitet rashladnih komora u prvoj fazi je 3500 tona."
+                    }
                   </p>
                   
                   <p>
-                    2018. godine je realizovano proširenje kapaciteta hladnjače u vidu druge faze, čiji kapacitet je 4000 tona.
+                    {isEnglish
+                      ? "In 2018, an expansion of the cold store capacity was realized in the form of a second phase, with a capacity of 4,000 tons."
+                      : "2018. godine je realizovano proširenje kapaciteta hladnjače u vidu druge faze, čiji kapacitet je 4000 tona."
+                    }
                   </p>
                   
                   <p>
-                    Kvalitet rashladnih mašina je visok i na savremenom nivou, sa kompjuterskim vođenjem i regulacijom koja omogućava niska vršna opterećenja. Osnova za hlađenje u celom sistemu primarnog kruga je rashladno sredstvo <span className="text-primary">amonijak (NH3)</span> sa indirektnom ekspanzijom, koji preko izmenjivača ima u sekundarnom krugu rashladno sredstvo Glycol, koji se distribuira potrošačima u svim komorama na svim režimima.
+                    {isEnglish ? (
+                      <>The quality of the refrigeration machines is high and at a modern level, with computer control and regulation that enables low peak loads. The basis for cooling in the entire primary circuit is the refrigerant <span className="text-primary">ammonia (NH3)</span> with indirect expansion, which via heat exchangers has glycol as the secondary circuit refrigerant, distributed to consumers in all chambers at all operating modes.</>
+                    ) : (
+                      <>Kvalitet rashladnih mašina je visok i na savremenom nivou, sa kompjuterskim vođenjem i regulacijom koja omogućava niska vršna opterećenja. Osnova za hlađenje u celom sistemu primarnog kruga je rashladno sredstvo <span className="text-primary">amonijak (NH3)</span> sa indirektnom ekspanzijom, koji preko izmenjivača ima u sekundarnom krugu rashladno sredstvo Glycol, koji se distribuira potrošačima u svim komorama na svim režimima.</>
+                    )}
                   </p>
                   
                   <p className="border-l-4 border-primary pl-6 italic text-white/90">
-                    Sistem hlađenja, zajedno sa izolacijom, LED rasvetom i rekuperacijom otpadne toplote za podno grejanje čini ovu hladnjaču posebnom i obezbeđuje uštedu energije do 30% u poređenju sa dotadašnjim hladnjačama istog kapaciteta i namene.
+                    {isEnglish
+                      ? "The cooling system, together with the insulation, LED lighting, and waste heat recovery for underfloor heating, makes this cold store special and ensures energy savings of up to 30% compared to previous cold stores of the same capacity and purpose."
+                      : "Sistem hlađenja, zajedno sa izolacijom, LED rasvetom i rekuperacijom otpadne toplote za podno grejanje čini ovu hladnjaču posebnom i obezbeđuje uštedu energije do 30% u poređenju sa dotadašnjim hladnjačama istog kapaciteta i namene."
+                    }
                   </p>
                 </div>
               </motion.div>
@@ -162,7 +182,7 @@ export default function ProjectAgrounija() {
               <div>
                 <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
                   <span className="w-8 h-1 bg-primary mr-4 rounded-full"></span>
-                  Video Prezentacija
+                  {t("projectAgrounija.videoTitle")}
                 </h2>
                 <div className="aspect-video w-full rounded-2xl overflow-hidden bg-black/50 border border-white/10 shadow-2xl">
                   <video 
@@ -171,7 +191,7 @@ export default function ProjectAgrounija() {
                     poster="/assets/projects/agrounija/gallery-1.webp"
                   >
                     <source src="/assets/projects/agrounija/video.mp4" type="video/mp4" />
-                    Vaš pretraživač ne podržava video tag.
+                    {t("projectAgrounija.browserNoVideo")}
                   </video>
                 </div>
               </div>
@@ -182,20 +202,20 @@ export default function ProjectAgrounija() {
               <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
                 <h2 className="text-2xl font-bold text-white flex items-center">
                   <span className="w-8 h-1 bg-primary mr-4 rounded-full"></span>
-                  Galerija Projekta
+                  {t("projectAgrounija.galleryTitle")}
                 </h2>
                 <div className="flex flex-wrap gap-2 md:gap-3 text-sm text-muted-foreground bg-card/30 p-3 rounded-xl border border-white/5">
                   <div className="flex items-center bg-white/5 rounded-lg px-3 py-1.5 whitespace-nowrap">
                     <div className="w-1.5 h-1.5 rounded-full bg-primary mr-2" />
-                    ULO/DCA Atmosfera
+                    {t("projectAgrounija.tagUlo")}
                   </div>
                   <div className="flex items-center bg-white/5 rounded-lg px-3 py-1.5 whitespace-nowrap">
                     <div className="w-1.5 h-1.5 rounded-full bg-primary mr-2" />
-                    Amonijak (NH3)
+                    {t("projectAgrounija.tagAmmonia")}
                   </div>
                   <div className="flex items-center bg-white/5 rounded-lg px-3 py-1.5 whitespace-nowrap">
                     <div className="w-1.5 h-1.5 rounded-full bg-primary mr-2" />
-                    Podno grejanje
+                    {t("projectAgrounija.tagHeating")}
                   </div>
                 </div>
               </div>
@@ -222,18 +242,18 @@ export default function ProjectAgrounija() {
                         >
                           <img
                             src={`/assets/projects/agrounija/gallery-${i + 1}.webp`}
-                            alt={`Agrounija projekat slika ${i + 1}`}
+                            alt={`Agrounija project image ${i + 1}`}
                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                             loading="lazy"
                             onError={(e) => {
                               const target = e.target as HTMLImageElement;
                               target.style.display = 'none';
-                              target.parentElement!.innerHTML = `<div class="w-full h-full flex items-center justify-center text-white/20 text-sm">Slika ${i + 1}</div>`;
+                              target.parentElement!.innerHTML = `<div class="w-full h-full flex items-center justify-center text-white/20 text-sm">Image ${i + 1}</div>`;
                             }}
                           />
                           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
                             <span className="bg-black/60 text-white px-4 py-2 rounded-full text-sm backdrop-blur-md transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
-                              Uvećaj
+                              {t("projectAgrounija.zoom")}
                             </span>
                           </div>
                         </div>
@@ -241,7 +261,7 @@ export default function ProjectAgrounija() {
                     ))}
                   </CarouselContent>
                   <div className="flex justify-between items-center mt-2 px-2">
-                    <span className="text-sm text-muted-foreground">28 fotografija</span>
+                    <span className="text-sm text-muted-foreground">28 {t("projectAgrounija.photosCount")}</span>
                     <div className="flex gap-2">
                       <CarouselPrevious className="relative static translate-y-0 h-8 w-8" />
                       <CarouselNext className="relative static translate-y-0 h-8 w-8" />
@@ -259,7 +279,7 @@ export default function ProjectAgrounija() {
       <Dialog open={lightboxIndex !== null} onOpenChange={(open) => !open && closeLightbox()}>
         <DialogContent className="max-w-[95vw] max-h-[95vh] w-full h-full bg-black/90 border-none p-0 flex items-center justify-center" hideCloseButton>
           <VisuallyHidden>
-            <DialogTitle>Pregled slike {lightboxIndex !== null ? lightboxIndex + 1 : ''}</DialogTitle>
+            <DialogTitle>{isEnglish ? "Image preview" : "Pregled slike"} {lightboxIndex !== null ? lightboxIndex + 1 : ''}</DialogTitle>
           </VisuallyHidden>
           
           <button 
@@ -287,7 +307,7 @@ export default function ProjectAgrounija() {
             <div className="relative w-full h-full flex items-center justify-center p-4 md:p-12">
                <img
                 src={`/assets/projects/agrounija/gallery-${lightboxIndex + 1}.webp`}
-                alt={`Agrounija projekat slika ${lightboxIndex + 1}`}
+                alt={`Agrounija project image ${lightboxIndex + 1}`}
                 className="max-w-full max-h-full object-contain"
               />
             </div>

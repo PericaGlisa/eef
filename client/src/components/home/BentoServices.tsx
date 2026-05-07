@@ -1,66 +1,73 @@
 import { motion } from "framer-motion";
-import { ArrowUpRight, DraftingCompass, Wrench, ShieldCheck, Lightbulb, BarChart3, Factory, CheckCircle2 } from "lucide-react";
+import { ArrowUpRight, DraftingCompass, Wrench, ShieldCheck, Lightbulb, BarChart3, Factory } from "lucide-react";
 import { Link } from "wouter";
-
-const services = [
-  {
-    title: "Inženjering & Projektovanje",
-    description: "Od idejnog rešenja do izvođačkog projekta. Naš tim inženjera koristi najsavremenije softverske alate za proračun termodinamike i 3D modelovanje.",
-    icon: DraftingCompass,
-    image: "/assets/service-engineering.webp",
-    tags: ["3D Modelovanje", "Termodinamika", "AutoCAD", "Revit"],
-    features: ["Analiza zahteva", "Izbor opreme", "3D modelovanje", "Optimizacija"],
-    link: "/usluge/inzenjering"
-  },
-  {
-    title: "Izvođenje Radova",
-    description: "Montaža industrijskih sistema po principu 'ključ u ruke'. Preciznost u svakom varu, sigurnost u svakom spoju.",
-    icon: Factory,
-    image: "/assets/service-execution.webp",
-    tags: ["Sertifikovani Varioci", "Ključ u Ruke"],
-    features: ["Montaža cevovoda", "Elektro ormani", "Puštanje u rad"],
-    link: "/usluge/izvodjenje"
-  },
-  {
-    title: "Servis & Održavanje",
-    description: "24/7 monitoring i preventivno održavanje. Brz odziv servisnih ekipa širom zemlje.",
-    icon: Wrench,
-    image: "/assets/service-maintenance.webp",
-    tags: ["24/7 Podrška", "Originalni Delovi"],
-    features: ["Redovni servisi", "Interventni izlasci", "Rezervni delovi"],
-    link: "/usluge/servis"
-  },
-  {
-    title: "Energetska Revizija",
-    description: "Detaljna analiza potrošnje i ROI proračuni za maksimalnu uštedu.",
-    icon: BarChart3,
-    image: "/assets/service-energy.webp",
-    tags: ["ROI Analiza", "ISO 50001"],
-    features: ["Merenje potrošnje", "Analiza gubitaka", "Predlog mera"],
-    link: "/usluge/energetska-revizija"
-  },
-  {
-    title: "Konsalting",
-    description: "Stručno savetovanje za odabir freona i tranziciju na prirodne rashladne fluide.",
-    icon: Lightbulb,
-    image: "/assets/service-consulting.webp",
-    tags: ["CO2 Sistemi", "Amonijak"],
-    features: ["Studije izvodljivosti", "Tehnička rešenja", "Zakonska regulativa"],
-    link: "/usluge/konsalting"
-  },
-  {
-    title: "Sigurnost & Kvalitet",
-    description: "Implementacija najviših standarda bezbednosti i kvaliteta u rashladnoj tehnici.",
-    icon: ShieldCheck,
-    image: "/assets/service-safety.webp",
-    tags: ["HACCP", "Bezbednost"],
-    badges: ["ISO 9001", "ISO 14001", "HACCP"],
-    features: ["Procena rizika", "Obuka zaposlenih", "Kontrola kvaliteta"],
-    link: "/usluge/sigurnost"
-  }
-];
+import { useTranslation } from "@/lib/i18n";
+import { useLang } from "@/contexts/LanguageContext";
+import { getCounterpartPath } from "@/lib/route-map";
 
 export function BentoServices() {
+  const { t, tArray } = useTranslation();
+  const { isEnglish } = useLang();
+  const l = (srHref: string) => isEnglish ? getCounterpartPath(srHref, "en") : srHref;
+
+  const services = [
+    {
+      title: t("bento.engineeringTitle"),
+      description: t("bento.engineeringDesc"),
+      icon: DraftingCompass,
+      image: "/assets/service-engineering.webp",
+      tags: tArray("bento.engineeringTags"),
+      features: tArray("bento.engineeringFeatures"),
+      link: l("/usluge/inzenjering")
+    },
+    {
+      title: t("bento.executionTitle"),
+      description: t("bento.executionDesc"),
+      icon: Factory,
+      image: "/assets/service-execution.webp",
+      tags: tArray("bento.executionTags"),
+      features: tArray("bento.executionFeatures"),
+      link: l("/usluge/izvodjenje")
+    },
+    {
+      title: t("bento.serviceTitle"),
+      description: t("bento.serviceDesc"),
+      icon: Wrench,
+      image: "/assets/service-maintenance.webp",
+      tags: tArray("bento.serviceTags"),
+      features: tArray("bento.serviceFeatures"),
+      link: l("/usluge/servis")
+    },
+    {
+      title: t("bento.energyTitle"),
+      description: t("bento.energyDesc"),
+      icon: BarChart3,
+      image: "/assets/service-energy.webp",
+      tags: tArray("bento.energyTags"),
+      features: tArray("bento.energyFeatures"),
+      link: l("/usluge/energetska-revizija")
+    },
+    {
+      title: t("bento.consultingTitle"),
+      description: t("bento.consultingDesc"),
+      icon: Lightbulb,
+      image: "/assets/service-consulting.webp",
+      tags: tArray("bento.consultingTags"),
+      features: tArray("bento.consultingFeatures"),
+      link: l("/usluge/konsalting")
+    },
+    {
+      title: t("bento.safetyTitle"),
+      description: t("bento.safetyDesc"),
+      icon: ShieldCheck,
+      image: "/assets/service-safety.webp",
+      tags: tArray("bento.safetyTags"),
+      badges: tArray("bento.safetyBadges"),
+      features: tArray("bento.safetyFeatures"),
+      link: l("/usluge/sigurnost")
+    }
+  ];
+
   return (
     <section className="content-auto py-16 md:py-24 bg-[#F5F7FA] relative overflow-hidden">
       {/* Soft transition gradients */}
@@ -81,14 +88,16 @@ export function BentoServices() {
               className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-[#171A54]/10 text-primary font-mono text-xs uppercase tracking-widest mb-4 backdrop-blur-sm shadow-sm"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
-              Ekspertiza
+              {t("bento.badge")}
             </motion.div>
             <h2 className="text-4xl md:text-6xl font-heading font-bold text-[#171A54] max-w-2xl">
-              Sveobuhvatna <span className="text-primary">Rešenja</span>
+              {t("bento.title").split(" ").map((word: string, i: number, arr: string[]) => (
+                i === arr.length - 1 ? <span key={i} className="text-primary">{word}</span> : <span key={i}>{word} </span>
+              ))}
             </h2>
           </div>
           <div className="max-w-md text-[#171A54]/70 text-left md:text-right">
-            <p>Spoj vrhunskog inženjeringa, napredne tehnologije i posvećenosti održivosti.</p>
+            <p>{t("bento.subtitle")}</p>
           </div>
         </div>
 

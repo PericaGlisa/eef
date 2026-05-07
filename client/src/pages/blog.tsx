@@ -1,14 +1,18 @@
 import { Link } from "wouter";
-import { newsItems } from "@/data/news";
+import { getNewsItems } from "@/data/news";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowUpRight, Tag, Search, Filter, ChevronRight, Newspaper } from "lucide-react";
+import { ArrowUpRight, Search, ChevronRight, Newspaper } from "lucide-react";
 import { useState, useRef, useMemo, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useTranslation } from "@/lib/i18n";
+import { useLang } from "@/contexts/LanguageContext";
 
 export default function Blog() {
+  const { t } = useTranslation();
+  const { isEnglish } = useLang();
   const [activeCategory, setActiveCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState(() => {
     if (typeof window === "undefined") return "";
@@ -25,21 +29,25 @@ export default function Blog() {
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
+  const basePath = isEnglish ? "/en/news" : "/vesti";
+
+  const newsItems = useMemo(() => getNewsItems(isEnglish), [isEnglish]);
+
   // Extract unique categories
   const categories = useMemo(() => {
-    const cats = new Set(newsItems.map(item => item.category));
-    return ["all", ...Array.from(cats)];
-  }, []);
+    const cats = new Set(newsItems.map((item: { category: string }) => item.category));
+    return ["all", ...Array.from(cats)] as string[];
+  }, [newsItems]);
 
   // Filter items
   const filteredItems = useMemo(() => {
-    return newsItems.filter(item => {
+    return newsItems.filter((item: { category: string; title: string; desc: string }) => {
       const matchesCategory = activeCategory === "all" || item.category === activeCategory;
       const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
                            item.desc.toLowerCase().includes(searchQuery.toLowerCase());
       return matchesCategory && matchesSearch;
     });
-  }, [activeCategory, searchQuery]);
+  }, [newsItems, activeCategory, searchQuery]);
 
   const featuredPost = newsItems[0];
   const otherPosts = activeCategory === "all" && !searchQuery 
@@ -54,9 +62,9 @@ export default function Blog() {
       params.delete("q");
     }
     const nextQuery = params.toString();
-    const nextUrl = nextQuery ? `/vesti?${nextQuery}` : "/vesti";
+    const nextUrl = nextQuery ? `${basePath}?${nextQuery}` : basePath;
     window.history.replaceState(window.history.state, "", nextUrl);
-  }, [searchQuery]);
+  }, [searchQuery, basePath]);
 
   return (
     <div className="bg-background min-h-screen selection:bg-primary selection:text-white" ref={containerRef}>
@@ -91,16 +99,16 @@ export default function Blog() {
           >
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-primary text-sm font-mono mb-6 backdrop-blur-sm">
               <Newspaper className="w-4 h-4" />
-              <span className="tracking-wider uppercase">Info Centar</span>
+              <span className="tracking-wider uppercase">{t("blog.heroBadge")}</span>
             </div>
             
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-heading font-bold text-white mb-8 leading-tight tracking-tight">
-              Arhiva <br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-emerald-300 to-primary bg-300% animate-gradient">Vesti</span>
+              {t("blog.heroTitle1")} <br/>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-emerald-300 to-primary bg-300% animate-gradient">{t("blog.heroTitle2")}</span>
             </h1>
             
             <p className="text-xl md:text-2xl text-white/60 max-w-2xl font-light leading-relaxed border-l-4 border-primary/50 pl-6">
-              Najnovije informacije, realizovani projekti i stručni članci iz sveta industrijskog hlađenja.
+              {t("blog.heroSubtitle")}
             </p>
           </motion.div>
         </div>
@@ -125,7 +133,7 @@ export default function Blog() {
                       : "text-slate-400 hover:text-white hover:bg-white/5"
                   }`}
                 >
-                  {cat === "all" ? "Sve Vesti" : cat}
+                  {cat === "all" ? t("blog.allNews") : cat}
                 </button>
               ))}
             </div>
@@ -134,7 +142,7 @@ export default function Blog() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <Input 
                 type="text" 
-                placeholder="Pretraži vesti..." 
+                placeholder={t("blog.searchPlaceholder")}
                 className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-slate-500 focus:border-primary/50 focus:ring-primary/20 w-full"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -147,9 +155,9 @@ export default function Blog() {
             <div className="mb-20">
               <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
                 <span className="w-2 h-8 bg-primary rounded-full" />
-                Izdvajamo
+                {t("blog.featured")}
               </h2>
-              <Link href={`/vesti/${featuredPost.slug}`}>
+              <Link href={`${basePath}/${featuredPost.slug}`}>
                 <div className="group relative grid grid-cols-1 lg:grid-cols-2 gap-8 bg-white/5 rounded-3xl overflow-hidden border border-white/10 hover:border-primary/30 transition-all duration-500 cursor-pointer">
                   <div className="relative h-[400px] lg:h-full overflow-hidden">
                     <div className="absolute inset-0 bg-[#0a0c29]/20 group-hover:bg-transparent transition-all duration-500 z-10" />
@@ -176,7 +184,7 @@ export default function Blog() {
                     </p>
                     
                     <div className="flex items-center text-white font-medium group-hover:translate-x-2 transition-transform duration-300">
-                      Pročitaj ceo članak <ArrowUpRight className="w-5 h-5 ml-2 text-primary" />
+                      {t("blog.readArticle")} <ArrowUpRight className="w-5 h-5 ml-2 text-primary" />
                     </div>
                   </div>
                 </div>
@@ -189,14 +197,14 @@ export default function Blog() {
             {(activeCategory === "all" && !searchQuery) && (
               <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
                 <span className="w-2 h-8 bg-slate-700 rounded-full" />
-                Ostale Vesti
+                {t("blog.otherNews")}
               </h2>
             )}
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {otherPosts.length > 0 ? (
                 otherPosts.map((item, i) => (
-                  <Link key={item.id} href={`/vesti/${item.slug}`}>
+                  <Link key={item.id} href={`${basePath}/${item.slug}`}>
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
@@ -231,7 +239,7 @@ export default function Blog() {
                         </p>
                         
                         <div className="flex items-center text-white/40 text-xs group-hover:text-primary transition-colors mt-auto uppercase tracking-widest font-mono pt-4 border-t border-white/5">
-                          Pročitaj više <ChevronRight className="w-3 h-3 ml-2 group-hover:translate-x-1 transition-transform" />
+                          {t("blog.readMore")} <ChevronRight className="w-3 h-3 ml-2 group-hover:translate-x-1 transition-transform" />
                         </div>
                       </div>
                     </motion.div>
@@ -242,8 +250,8 @@ export default function Blog() {
                   <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/5 mb-4">
                     <Search className="w-8 h-8 text-slate-500" />
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-2">Nema pronađenih vesti</h3>
-                  <p className="text-slate-400">Pokušajte sa drugim terminom pretrage ili promenite kategoriju.</p>
+                  <h3 className="text-xl font-bold text-white mb-2">{t("blog.emptyTitle")}</h3>
+                  <p className="text-slate-400">{t("blog.emptyText")}</p>
                   <Button 
                     variant="link" 
                     className="text-primary mt-4"
@@ -252,7 +260,7 @@ export default function Blog() {
                       setActiveCategory("all");
                     }}
                   >
-                    Prikaži sve vesti
+                    {t("blog.showAll")}
                   </Button>
                 </div>
               )}

@@ -1,7 +1,7 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { MapPaths } from './SerbiaMapPaths';
 import { motion, AnimatePresence } from 'framer-motion';
-import { locations, Location } from './locations';
+import { getLocations, Location } from './locations';
 import { ZoomIn, ZoomOut, RotateCcw, ArrowRight } from 'lucide-react';
 import { LogoSnowflake } from '../ui/LogoSnowflake';
 import { Link } from 'wouter';
@@ -9,9 +9,10 @@ import { Link } from 'wouter';
 export interface SerbiaMapProps {
   activeLocation?: Location | null;
   onSelect?: (location: Location | null) => void;
+  isEnglish?: boolean;
 }
 
-export function SerbiaMap({ activeLocation: externalActive, onSelect }: SerbiaMapProps = {}) {
+export function SerbiaMap({ activeLocation: externalActive, onSelect, isEnglish = false }: SerbiaMapProps = {}) {
   const [internalActive, setInternalActive] = useState<Location | null>(null);
   const [scale, setScale] = useState(1);
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -22,6 +23,7 @@ export function SerbiaMap({ activeLocation: externalActive, onSelect }: SerbiaMa
   const [hoveredLocationId, setHoveredLocationId] = useState<string | null>(null);
   
   const activeLocation = externalActive !== undefined ? externalActive : internalActive;
+  const locations = useMemo(() => getLocations(isEnglish), [isEnglish]);
 
   // Sort locations so the hovered or active one is last (highest z-index in SVG)
   const sortedLocations = [...locations].sort((a, b) => {

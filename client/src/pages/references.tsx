@@ -1,32 +1,16 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useMemo } from "react";
 import { InteractiveMapDashboard } from "@/components/references/InteractiveMapDashboard";
-import { internationalLocations } from "@/components/references/internationalLocations";
-import { Globe, Map, Building2, Thermometer, Zap, Award, CheckCircle2, Factory, ArrowRight, LayoutGrid } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Link } from "wouter";
-
-// Spotlight Project Data
-const spotlightProject = {
-  title: "AGROUNIJA",
-  location: "Krčedin, Srbija",
-  type: "ULO Hladnjača",
-  capacity: "7.500 tona",
-  temp: "0.8°C do 1.2°C",
-  tech: "Ultra Low Oxygen (ULO)",
-  desc: "Vrhunski centar za skladištenje jabuke ukupnog kapaciteta 7.500 tona. Implementirana je najsavremenija ULO tehnologija (faza I i II) koja obezbeđuje premium kvalitet voća za izvoz na svetska tržišta.",
-  image: "/assets/projects/agrounija/gallery-1.webp", 
-  stats: [
-    { label: "Kapacitet", value: "7.500t", icon: Building2 },
-    { label: "Režim Rada", value: "1°C", icon: Thermometer },
-    { label: "Ušteda Energije", value: "40%", icon: Zap },
-    { label: "Tehnologija", value: "ULO", icon: Factory },
-  ]
-};
+import { getInternationalLocations } from "@/components/references/internationalLocations";
+import { Globe, Map, Building2, Thermometer, Zap, Award, CheckCircle2, Factory } from "lucide-react";
+import { useTranslation } from "@/lib/i18n";
+import { useLang } from "@/contexts/LanguageContext";
 
 export default function References() {
+  const { t } = useTranslation();
+  const { isEnglish } = useLang();
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -35,6 +19,34 @@ export default function References() {
   
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+
+  const spotlightProject = useMemo(() => ({
+    title: "AGROUNIJA",
+    location: isEnglish ? t("references.spotlightLocation") : "Krčedin, Srbija",
+    type: isEnglish ? t("references.spotlightType") : "ULO Hladnjača",
+    capacity: "7.500 tona",
+    temp: "0.8°C do 1.2°C",
+    tech: "Ultra Low Oxygen (ULO)",
+    desc: isEnglish
+      ? "A premier apple storage center with a total capacity of 7,500 tons. State-of-the-art ULO technology (Phase I and II) has been implemented, ensuring premium fruit quality for export to global markets."
+      : "Vrhunski centar za skladištenje jabuke ukupnog kapaciteta 7.500 tona. Implementirana je najsavremenija ULO tehnologija (faza I i II) koja obezbeđuje premium kvalitet voća za izvoz na svetska tržišta.",
+    image: "/assets/projects/agrounija/gallery-1.webp", 
+    stats: [
+      { label: isEnglish ? t("references.spotlightCapacity") : "Kapacitet", value: "7.500t", icon: Building2 },
+      { label: isEnglish ? t("references.spotlightMode") : "Režim Rada", value: "1°C", icon: Thermometer },
+      { label: isEnglish ? t("references.spotlightSavings") : "Ušteda Energije", value: "40%", icon: Zap },
+      { label: isEnglish ? t("references.spotlightTech") : "Tehnologija", value: "ULO", icon: Factory },
+    ]
+  }), [isEnglish, t]);
+
+  const heroStats = useMemo(() => [
+    { label: t("references.statProjects"), value: "350+" },
+    { label: t("references.statClients"), value: "200+" },
+    { label: t("references.statExperience"), value: "30+" },
+    { label: t("references.statCountries"), value: "8" },
+  ], [t]);
+
+  const internationalLocations = useMemo(() => getInternationalLocations(isEnglish), [isEnglish]);
 
   return (
     <div className="bg-background min-h-screen" ref={containerRef}>
@@ -65,27 +77,21 @@ export default function References() {
           >
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-primary text-sm font-mono mb-8 backdrop-blur-sm">
               <Award className="w-4 h-4" />
-              <span className="tracking-wider uppercase">Lider u Industrijskom Hlađenju</span>
+              <span className="tracking-wider uppercase">{t("references.heroBadge")}</span>
             </div>
 
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-heading font-bold text-white mb-8 leading-tight tracking-tight">
-              Inženjersko <br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-emerald-300 to-primary bg-300% animate-gradient">Nasleđe</span>
+              {t("references.heroTitle1")} <br/>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-emerald-300 to-primary bg-300% animate-gradient">{t("references.heroTitle2")}</span>
             </h1>
             
             <p className="text-xl md:text-2xl text-white/60 max-w-2xl font-light leading-relaxed border-l-4 border-primary/50 pl-6 mb-12">
-              Više od 30 godina iskustva u projektovanju i izvođenju najsloženijih rashladnih sistema. 
-              Naši projekti su naša najbolja preporuka.
+              {t("references.heroSubtitle")}
             </p>
 
             {/* Hero Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 border-t border-white/10 pt-12">
-              {[
-                { label: "Završenih Projekata", value: "350+" },
-                { label: "Zadovoljnih Klijenata", value: "200+" },
-                { label: "Godina Iskustva", value: "30+" },
-                { label: "Država u Regionu", value: "8" },
-              ].map((stat, i) => (
+              {heroStats.map((stat, i) => (
                 <div key={i} className="space-y-1">
                   <div className="text-3xl md:text-4xl font-bold text-white font-heading">{stat.value}</div>
                   <div className="text-sm text-white/40 uppercase tracking-widest font-mono">{stat.label}</div>
@@ -104,7 +110,7 @@ export default function References() {
              <div className="flex-1 space-y-8">
                <div className="inline-flex items-center gap-2 text-primary font-mono text-sm tracking-widest uppercase">
                  <CheckCircle2 className="w-4 h-4" />
-                 Izdvojeni Projekat
+                 {t("references.spotlightBadge")}
                </div>
                
                <h2 className="text-4xl md:text-5xl font-heading font-bold text-white">
@@ -147,7 +153,7 @@ export default function References() {
                  <div className="absolute bottom-6 left-6">
                     <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/90 text-white text-xs font-bold shadow-lg backdrop-blur-sm">
                       <CheckCircle2 className="w-3.5 h-3.5" />
-                      PREMIUM REFERENCA
+                      {t("references.spotlightRef")}
                     </div>
                  </div>
                </div>
@@ -166,12 +172,11 @@ export default function References() {
                    <Map className="w-8 h-8 text-primary" />
                  </div>
                  <h2 className="text-3xl md:text-4xl font-heading font-bold text-[#171A54]">
-                   Mapa Projekata
+                   {t("references.mapTitle")}
                  </h2>
                </div>
                <p className="text-[#171A54]/60 max-w-xl text-lg">
-                 Detaljan pregled naših referenci širom Srbije. 
-                 Filtrirajte po gradovima, klijentima i tipu industrije.
+                 {t("references.mapSubtitle")}
                </p>
              </div>
            </div>
@@ -195,10 +200,10 @@ export default function References() {
              </div>
              <div>
                <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-2">
-                 Međunarodno Prisustvo
+                 {t("references.internationalTitle")}
                </h2>
                <p className="text-white/60">
-                 Ekspertiza koja prelazi granice.
+                 {t("references.internationalSubtitle")}
                </p>
              </div>
            </div>

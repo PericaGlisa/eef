@@ -1,17 +1,20 @@
 import { useEffect, useMemo } from "react";
 import { useLocation } from "wouter";
-import { newsItems } from "@/data/news";
-import { servicesContent } from "@/data/services-content";
-import { solutionsData } from "@/data/solutions";
-import { newsSeoDetails, serviceSeoDetails, solutionSeoDetails } from "@/data/seo-enhancements";
+import { getNewsItems } from "@/data/news";
+import { getServicesContent } from "@/data/services-content";
+import { getSolutionsData } from "@/data/solutions";
+import { getNewsSeoDetails, getServiceSeoDetails, getSolutionSeoDetails } from "@/data/seo-enhancements";
+import { srToEn, enToSr } from "@/lib/route-map";
 
 export const SITE_URL = "https://eef.rs";
 export const SITE_NAME = "Eko Elektrofrigo";
 export const DEFAULT_IMAGE = `${SITE_URL}/opengraph.jpg`;
 const DEFAULT_OG_IMAGE_WIDTH = "1200";
 const DEFAULT_OG_IMAGE_HEIGHT = "630";
-const DEFAULT_DESCRIPTION =
+const DEFAULT_DESCRIPTION_SR =
   "Lider u inženjeringu, projektovanju i održavanju industrijskih rashladnih sistema. Energetski efikasna rešenja, ključ u ruke projekti i 24/7 servisna podrška.";
+const DEFAULT_DESCRIPTION_EN =
+  "Leader in engineering, design, and maintenance of industrial refrigeration systems. Energy-efficient solutions, turnkey projects, and 24/7 service support.";
 
 export type SeoMeta = {
   title: string;
@@ -61,11 +64,33 @@ function parseNewsDate(value: string) {
 }
 
 export function getSeoMeta(pathname: string): SeoMeta {
+  const isEnglish = pathname.startsWith("/en");
   const normalizedPath = normalizePathname(pathname);
-  const staticMeta: Record<string, SeoMeta> = {
+  
+  // For SEO lookup, we use the Serbian version of the path as the key for both languages
+  // This avoids duplicating keys and keeps everything in sync
+  let lookupPath = normalizedPath;
+  
+  if (isEnglish) {
+    // Try exact match in enToSr first
+    if (enToSr[normalizedPath]) {
+      lookupPath = enToSr[normalizedPath];
+    } else if (enToSr[normalizedPath + "/"]) {
+      // Handle cases where the map has a trailing slash (like the homepage /en/)
+      lookupPath = enToSr[normalizedPath + "/"];
+    } else {
+      // Fallback: strip /en prefix
+      lookupPath = normalizedPath.replace(/^\/en/, "") || "/";
+    }
+  }
+
+  // Final normalization to ensure lookupPath doesn't have double slashes or trailing slashes (except for /)
+  lookupPath = normalizePathname(lookupPath);
+
+  const staticMetaSr: Record<string, SeoMeta> = {
     "/": {
       title: "Eko Elektrofrigo | Industrijska Rashladna Tehnika",
-      description: DEFAULT_DESCRIPTION,
+      description: DEFAULT_DESCRIPTION_SR,
       canonicalPath: "/",
       kind: "default",
       breadcrumbs: [{ name: "Početna", path: "/" }],
@@ -232,15 +257,193 @@ export function getSeoMeta(pathname: string): SeoMeta {
     },
   };
 
-  if (staticMeta[normalizedPath]) return staticMeta[normalizedPath];
+  const staticMetaEn: Record<string, SeoMeta> = {
+    "/": {
+      title: "Eko Elektrofrigo | Industrial Refrigeration",
+      description: DEFAULT_DESCRIPTION_EN,
+      canonicalPath: "/en",
+      kind: "default",
+      breadcrumbs: [{ name: "Home", path: "/en" }],
+      image: "/opengraph.jpg",
+    },
+    "/o-nama": {
+      title: "About Us | Eko Elektrofrigo",
+      description:
+        "Learn about the Eko Elektrofrigo team, experience, quality standards, and completed projects in industrial refrigeration.",
+      canonicalPath: "/en/about",
+      kind: "default",
+      breadcrumbs: [
+        { name: "Home", path: "/en" },
+        { name: "About Us", path: "/en/about" },
+      ],
+      image: "/og-o-nama.jpg",
+    },
+    "/kontakt": {
+      title: "Contact | Eko Elektrofrigo",
+      description:
+        "Contact the Eko Elektrofrigo team for design, installation, and service of industrial refrigeration systems.",
+      canonicalPath: "/en/contact",
+      kind: "default",
+      breadcrumbs: [
+        { name: "Home", path: "/en" },
+        { name: "Contact", path: "/en/contact" },
+      ],
+      image: "/og-kontakt.jpg",
+    },
+    "/usluge": {
+      title: "Services | Eko Elektrofrigo",
+      description:
+        "Complete industrial refrigeration services: engineering, installation, maintenance, energy auditing, consulting, and safety.",
+      canonicalPath: "/en/services",
+      kind: "default",
+      breadcrumbs: [
+        { name: "Home", path: "/en" },
+        { name: "Services", path: "/en/services" },
+      ],
+      image: "/og-usluge.jpg",
+    },
+    "/eko-rashlada": {
+      title: "Eco Cooling | Eko Elektrofrigo",
+      description:
+        "Advanced refrigeration solutions for cold storage, freezing, controlled atmosphere, units, chillers, and automation.",
+      canonicalPath: "/en/eco-cooling",
+      kind: "default",
+      breadcrumbs: [
+        { name: "Home", path: "/en" },
+        { name: "Eco Cooling", path: "/en/eco-cooling" },
+      ],
+      image: "/og-eko-rashlada.jpg",
+    },
+    "/partneri": {
+      title: "Partners | Eko Elektrofrigo",
+      description:
+        "Overview of strategic partners and technological collaborations of Eko Elektrofrigo in industrial refrigeration.",
+      canonicalPath: "/en/partners",
+      kind: "default",
+      breadcrumbs: [
+        { name: "Home", path: "/en" },
+        { name: "Partners", path: "/en/partners" },
+      ],
+      image: "/og-partneri.jpg",
+    },
+    "/dokumentacija": {
+      title: "Documentation | Eko Elektrofrigo",
+      description:
+        "Certificates, diplomas, and technical documentation confirming quality and compliance with standards.",
+      canonicalPath: "/en/documentation",
+      kind: "default",
+      breadcrumbs: [
+        { name: "Home", path: "/en" },
+        { name: "Documentation", path: "/en/documentation" },
+      ],
+      image: "/og-dokumentacija.jpg",
+    },
+    "/dokumentacija/sertifikati": {
+      title: "Certificates | Eko Elektrofrigo",
+      description:
+        "Official ISO certificates and quality certifications of Eko Elektrofrigo.",
+      canonicalPath: "/en/documentation/certificates",
+      kind: "default",
+      breadcrumbs: [
+        { name: "Home", path: "/en" },
+        { name: "Documentation", path: "/en/documentation" },
+        { name: "Certificates", path: "/en/documentation/certificates" },
+      ],
+      image: "/og-sertifikati.jpg",
+    },
+    "/dokumentacija/diplome": {
+      title: "Diplomas | Eko Elektrofrigo",
+      description:
+        "Overview of diplomas and professional certifications of Eko Elektrofrigo.",
+      canonicalPath: "/en/documentation/diplomas",
+      kind: "default",
+      breadcrumbs: [
+        { name: "Home", path: "/en" },
+        { name: "Documentation", path: "/en/documentation" },
+        { name: "Diplomas", path: "/en/documentation/diplomas" },
+      ],
+      image: "/og-diplome.jpg",
+    },
+    "/reference": {
+      title: "References | Eko Elektrofrigo",
+      description:
+        "Projects and references of Eko Elektrofrigo across Serbia and the region.",
+      canonicalPath: "/en/references",
+      kind: "default",
+      breadcrumbs: [
+        { name: "Home", path: "/en" },
+        { name: "References", path: "/en/references" },
+      ],
+      image: "/og-reference.jpg",
+    },
+    "/reference/agrounija": {
+      title: "Agrounija Reference | Eko Elektrofrigo",
+      description:
+        "Detailed overview of the completed Agrounija project and the technical solutions implemented.",
+      canonicalPath: "/en/references/agrounija",
+      kind: "default",
+      breadcrumbs: [
+        { name: "Home", path: "/en" },
+        { name: "References", path: "/en/references" },
+        { name: "Agrounija", path: "/en/references/agrounija" },
+      ],
+      image: "/og-agrounija.jpg",
+    },
+    "/vesti": {
+      title: "News | Eko Elektrofrigo",
+      description:
+        "Latest news, events, and expert articles from the field of industrial refrigeration.",
+      canonicalPath: "/en/news",
+      kind: "default",
+      breadcrumbs: [
+        { name: "Home", path: "/en" },
+        { name: "News", path: "/en/news" },
+      ],
+      image: "/og-blog.jpg",
+    },
+    "/politika-privatnosti": {
+      title: "Privacy Policy | Eko Elektrofrigo",
+      description:
+        "Privacy policy and user data processing practices on the Eko Elektrofrigo website.",
+      canonicalPath: "/en/privacy",
+      kind: "default",
+      breadcrumbs: [
+        { name: "Home", path: "/en" },
+        { name: "Privacy Policy", path: "/en/privacy" },
+      ],
+      image: "/og-privacy.jpg",
+    },
+    "/uslovi-koriscenja": {
+      title: "Terms of Use | Eko Elektrofrigo",
+      description:
+        "Terms of use of the Eko Elektrofrigo website and content usage rules.",
+      canonicalPath: "/en/terms",
+      kind: "default",
+      breadcrumbs: [
+        { name: "Home", path: "/en" },
+        { name: "Terms of Use", path: "/en/terms" },
+      ],
+      image: "/og-terms.jpg",
+    },
+  };
 
-  if (normalizedPath.startsWith("/usluge/")) {
-    const slug = normalizedPath.replace("/usluge/", "");
-    const service = servicesContent.find((item) => item.id === slug);
+  const staticMeta = isEnglish ? staticMetaEn : staticMetaSr;
+
+  // 1. Check static meta first
+  if (staticMeta[lookupPath]) {
+    return staticMeta[lookupPath];
+  }
+
+  // 2. Check dynamic services
+  if (lookupPath.startsWith("/usluge/")) {
+    const slug = lookupPath.replace("/usluge/", "");
+    const servicesContent = getServicesContent(isEnglish);
+    const serviceSeoDetails = getServiceSeoDetails(isEnglish);
+    const service = servicesContent.find((item: { id: string }) => item.id === slug);
     const serviceSeo = serviceSeoDetails[slug];
     if (service) {
       return {
-        title: `${service.title} | Usluge | Eko Elektrofrigo`,
+        title: `${service.title} | ${isEnglish ? "Services" : "Usluge"} | Eko Elektrofrigo`,
         description: service.shortDesc,
         canonicalPath: normalizedPath,
         kind: "service",
@@ -248,21 +451,23 @@ export function getSeoMeta(pathname: string): SeoMeta {
         lastUpdated: serviceSeo?.lastUpdated,
         faq: serviceSeo?.faqs ?? [],
         breadcrumbs: [
-          { name: "Početna", path: "/" },
-          { name: "Usluge", path: "/usluge" },
+          { name: isEnglish ? "Home" : "Početna", path: isEnglish ? "/en" : "/" },
+          { name: isEnglish ? "Services" : "Usluge", path: isEnglish ? "/en/services" : "/usluge" },
           { name: service.title, path: normalizedPath },
         ],
       };
     }
   }
 
-  if (normalizedPath.startsWith("/eko-rashlada/")) {
-    const slug = normalizedPath.replace("/eko-rashlada/", "");
-    const solution = solutionsData.find((item) => item.id === slug);
+  if (lookupPath.startsWith("/eko-rashlada/")) {
+    const slug = lookupPath.replace("/eko-rashlada/", "");
+    const solutionsData = getSolutionsData(isEnglish);
+    const solutionSeoDetails = getSolutionSeoDetails(isEnglish);
+    const solution = solutionsData.find((item: { id: string }) => item.id === slug);
     const solutionSeo = solutionSeoDetails[slug];
     if (solution) {
       return {
-        title: `${solution.title} | Eko Rashlada | Eko Elektrofrigo`,
+        title: `${solution.title} | ${isEnglish ? "Eco Cooling" : "Eko Rashlada"} | Eko Elektrofrigo`,
         description: solution.shortDesc,
         canonicalPath: normalizedPath,
         kind: "solution",
@@ -270,26 +475,28 @@ export function getSeoMeta(pathname: string): SeoMeta {
         lastUpdated: solutionSeo?.lastUpdated,
         faq: solutionSeo?.faqs ?? [],
         breadcrumbs: [
-          { name: "Početna", path: "/" },
-          { name: "Eko Rashlada", path: "/eko-rashlada" },
+          { name: isEnglish ? "Home" : "Početna", path: isEnglish ? "/en" : "/" },
+          { name: isEnglish ? "Eco Cooling" : "Eko Rashlada", path: isEnglish ? "/en/eco-cooling" : "/eko-rashlada" },
           { name: solution.title, path: normalizedPath },
         ],
       };
     }
   }
 
-  if (normalizedPath.startsWith("/vesti/")) {
-    const slug = normalizedPath.replace("/vesti/", "");
+  if (lookupPath.startsWith("/vesti/")) {
+    const slug = lookupPath.replace("/vesti/", "");
+    const newsItems = getNewsItems(isEnglish);
+    const newsSeoDetails = getNewsSeoDetails(isEnglish);
     // Try to find by slug first
-    let post = newsItems.find((item) => item.slug === slug);
+    let post = newsItems.find((item: { slug: string }) => item.slug === slug);
     // Fallback: try to find by ID if slug is a number
     if (!post && !isNaN(Number(slug))) {
-      post = newsItems.find((item) => item.id === Number(slug));
+      post = newsItems.find((item: { id: number }) => item.id === Number(slug));
     }
     const newsSeo = post ? newsSeoDetails[post.id] : undefined;
     if (post) {
       return {
-        title: `${post.title} | Vesti | Eko Elektrofrigo`,
+        title: `${post.title} | ${isEnglish ? "News" : "Vesti"} | Eko Elektrofrigo`,
         description: post.desc,
         canonicalPath: normalizedPath,
         kind: "article",
@@ -298,8 +505,8 @@ export function getSeoMeta(pathname: string): SeoMeta {
         lastUpdated: parseNewsDate(post.date),
         faq: newsSeo?.faqs ?? [],
         breadcrumbs: [
-          { name: "Početna", path: "/" },
-          { name: "Vesti", path: "/vesti" },
+          { name: isEnglish ? "Home" : "Početna", path: isEnglish ? "/en" : "/" },
+          { name: isEnglish ? "News" : "Vesti", path: isEnglish ? "/en/news" : "/vesti" },
           { name: post.title, path: normalizedPath },
         ],
       };
@@ -307,11 +514,11 @@ export function getSeoMeta(pathname: string): SeoMeta {
   }
 
   return {
-    title: "Stranica nije pronađena | Eko Elektrofrigo",
-    description: DEFAULT_DESCRIPTION,
+    title: isEnglish ? "Page Not Found | Eko Elektrofrigo" : "Stranica nije pronađena | Eko Elektrofrigo",
+    description: isEnglish ? DEFAULT_DESCRIPTION_EN : DEFAULT_DESCRIPTION_SR,
     canonicalPath: normalizedPath,
     kind: "default",
-    breadcrumbs: [{ name: "Početna", path: "/" }],
+    breadcrumbs: [{ name: isEnglish ? "Home" : "Početna", path: isEnglish ? "/en" : "/" }],
   };
 }
 
@@ -493,10 +700,14 @@ function upsertPageJsonLd(data: unknown[]) {
 }
 
 function upsertAlternateLinks(pathname: string) {
-  const normalized = pathname === "/" ? "" : pathname;
+  const isEnglish = pathname.startsWith("/en");
+  const srPath = isEnglish ? (enToSr[pathname] || pathname.replace(/^\/en/, "") || "/") : pathname;
+  const enPath = isEnglish ? pathname : (srToEn[pathname] || `/en${pathname === "/" ? "" : pathname}`);
+
   const alternates = [
-    { hreflang: "sr-Latn-RS", href: `${SITE_URL}${normalized}` },
-    { hreflang: "x-default", href: `${SITE_URL}${normalized}` },
+    { hreflang: "sr-Latn-RS", href: `${SITE_URL}${srPath === "/" ? "" : srPath}` },
+    { hreflang: "en", href: `${SITE_URL}${enPath === "/" ? "" : enPath}` },
+    { hreflang: "x-default", href: `${SITE_URL}${srPath === "/" ? "" : srPath}` },
   ];
 
   document.head.querySelectorAll('link[rel="alternate"][data-seo="hreflang"]').forEach((item) => item.remove());
@@ -593,6 +804,7 @@ export function SeoManager() {
   const meta = useMemo(() => getSeoMeta(pathname), [pathname]);
 
   useEffect(() => {
+    const isEnglish = pathname.startsWith("/en");
     const canonicalUrl = `${SITE_URL}${meta.canonicalPath === "/" ? "" : meta.canonicalPath}`;
     const pageImage = toAbsoluteUrl(meta.image);
     const ogType = meta.kind === "article" ? "article" : "website";
@@ -608,7 +820,7 @@ export function SeoManager() {
     upsertMetaByProperty("og:type", ogType);
     upsertMetaByProperty("og:url", canonicalUrl);
     upsertMetaByProperty("og:site_name", SITE_NAME);
-    upsertMetaByProperty("og:locale", "sr_RS");
+    upsertMetaByProperty("og:locale", isEnglish ? "en_US" : "sr_RS");
     upsertMetaByProperty("og:image", pageImage);
     upsertMetaByProperty("og:image:secure_url", pageImage);
     upsertMetaByProperty("og:image:type", imageType);

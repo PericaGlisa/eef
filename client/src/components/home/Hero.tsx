@@ -4,6 +4,9 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Magnetic } from "@/components/ui/magnetic";
 import { ArrowRight, Cpu, Snowflake, Wind, Settings, Zap } from "lucide-react";
+import { useTranslation } from "@/lib/i18n";
+import { getCounterpartPath } from "@/lib/route-map";
+import { useLang } from "@/contexts/LanguageContext";
 
 const FloatingIcon = ({ icon: Icon, initialX, initialY, delay }: any) => (
   <motion.div
@@ -39,6 +42,10 @@ export function Hero() {
   const [firstSlideReady, setFirstSlideReady] = useState(false);
   const [enableBackgroundMotion, setEnableBackgroundMotion] = useState(false);
   const reduceMotion = useReducedMotion();
+  const { t } = useTranslation();
+  const { lang } = useLang();
+  const isEnglish = lang === "en";
+  const l = (srHref: string) => isEnglish ? getCounterpartPath(srHref, "en") : srHref;
 
   // Check for mobile device
   useEffect(() => {
@@ -158,8 +165,6 @@ export function Hero() {
       </div>
       )}
 
-
-
       {/* Content Layer */}
       <div className="relative z-30 container mx-auto px-4 sm:px-6 h-full flex flex-col justify-center pt-28 pb-16 sm:pt-30 sm:pb-20 md:pt-24 md:pb-8 lg:pt-30 lg:pb-0">
         <div className="max-w-5xl lg:max-w-6xl space-y-5 sm:space-y-7 lg:space-y-8">
@@ -170,7 +175,7 @@ export function Hero() {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md text-primary font-mono text-xs uppercase tracking-widest mb-6 hover:bg-white/10 transition-colors cursor-default shadow-[0_0_20px_rgba(86,170,74,0.1)] group"
           >
             <span className="w-2 h-2 rounded-full bg-primary animate-pulse shadow-[0_0_10px_rgba(86,170,74,0.8)] group-hover:scale-150 transition-transform"></span>
-            Lider u industrijskoj rashladi
+            {t("hero.badge")}
           </motion.div>
 
           <div className="space-y-4 relative">
@@ -183,9 +188,9 @@ export function Hero() {
               transition={{ duration: 0.35 }}
               className="text-5xl sm:text-6xl md:text-[clamp(4.2rem,7.3vw,6.6rem)] lg:text-8xl font-bold text-white leading-[0.88] font-heading tracking-tight drop-shadow-2xl"
             >
-              Inženjerska <br />
+              {t("hero.headline1")} <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-white to-primary/50 relative">
-                Izvrsnost.
+                {t("hero.headline2")}
                 <svg className="absolute -bottom-4 left-0 w-1/2 h-4 text-primary opacity-50" viewBox="0 0 100 10" preserveAspectRatio="none">
                   <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="2" fill="none" />
                 </svg>
@@ -198,7 +203,11 @@ export function Hero() {
               transition={{ duration: 0.35 }}
               className="text-xl sm:text-2xl md:text-[clamp(1.35rem,2.2vw,1.9rem)] lg:text-3xl text-white/60 font-light max-w-2xl lg:max-w-3xl border-l-2 border-primary/30 pl-5 lg:pl-6 mt-5 lg:mt-6"
             >
-              Projektovanje, izvođenje i održavanje <span className="text-white font-medium">najsavremenijih</span> rashladnih sistema.
+              {isEnglish ? (
+                <>Design, construction, and maintenance of <span className="text-white font-medium">the most advanced</span> refrigeration systems.</>
+              ) : (
+                <>Projektovanje, izvođenje i održavanje <span className="text-white font-medium">najsavremenijih</span> rashladnih sistema.</>
+              )}
             </motion.p>
           </div>
 
@@ -209,7 +218,7 @@ export function Hero() {
             className="text-base sm:text-lg text-white/40 font-mono h-[30px] lg:h-[32px] flex items-center gap-3 mt-3 lg:mt-4"
           >
              <div className="w-1 h-8 bg-primary/50" />
-            <TypewriterText text="30 godina tradicije. 350+ projekata." />
+            <TypewriterText text={t("hero.typewriter")} />
           </motion.div>
 
           <motion.div
@@ -225,9 +234,9 @@ export function Hero() {
                 onClick={() => import("@/lib/audio").then(m => m.audio.playClick())}
                 asChild
               >
-                <Link href="/kontakt">
+                <Link href={l("/kontakt")}>
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-                  Zatražite rešenje <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  {t("hero.ctaPrimary")} <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
             </Magnetic>
@@ -239,7 +248,7 @@ export function Hero() {
                 onClick={() => import("@/lib/audio").then(m => m.audio.playClick())}
                 asChild
               >
-                <Link href="/eko-rashlada">Pogledajte rešenja</Link>
+                <Link href={l("/eko-rashlada")}>{t("hero.ctaSecondary")}</Link>
               </Button>
             </Magnetic>
           </motion.div>
@@ -250,8 +259,8 @@ export function Hero() {
             transition={{ duration: 0.6, delay: isMobile ? 1.9 : 1.2 }}
             className="flex flex-wrap items-center gap-3 text-[10px] sm:text-xs uppercase tracking-widest text-white/50"
           >
-            <span className="px-3 py-2 rounded-full bg-white/5 border border-white/10">350+ projekata</span>
-            <span className="px-3 py-2 rounded-full bg-white/5 border border-white/10">ISO 9001</span>
+            <span className="px-3 py-2 rounded-full bg-white/5 border border-white/10">{t("hero.stat1")}</span>
+            <span className="px-3 py-2 rounded-full bg-white/5 border border-white/10">{t("hero.stat2")}</span>
           </motion.div>
           <motion.div
             initial={{ opacity: 0 }}
@@ -259,7 +268,7 @@ export function Hero() {
             transition={{ delay: 2, duration: 1 }}
             className="mt-5 lg:mt-6 flex md:hidden flex-col items-center gap-2 text-white/50"
           >
-            <span className="text-[10px] uppercase tracking-[0.2em] font-mono text-primary/80">Skrolujte dalje</span>
+            <span className="text-[10px] uppercase tracking-[0.2em] font-mono text-primary/80">{t("common.scrollDown")}</span>
             <motion.div
               animate={{ y: [0, 10, 0], opacity: [0.5, 1, 0.5] }}
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
@@ -276,7 +285,7 @@ export function Hero() {
         transition={{ delay: 2, duration: 1 }}
         className="absolute bottom-2 md:bottom-8 left-1/2 -translate-x-1/2 z-30 hidden md:flex flex-col items-center gap-2 text-white/50"
       >
-        <span className="text-[10px] uppercase tracking-[0.2em] font-mono text-primary/80">Skrolujte dalje</span>
+        <span className="text-[10px] uppercase tracking-[0.2em] font-mono text-primary/80">{t("common.scrollDown")}</span>
         <motion.div
           animate={{ y: [0, 10, 0], opacity: [0.5, 1, 0.5] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}

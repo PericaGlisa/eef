@@ -25,6 +25,9 @@ import {
 import ReactMarkdown from 'react-markdown';
 import { cn } from './lib/utils';
 import { getChatResponse } from './services/chatService';
+import { useLang } from '@/contexts/LanguageContext';
+import { useTranslation } from '@/lib/i18n';
+import { getCounterpartPath } from '@/lib/route-map';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -33,6 +36,33 @@ interface Message {
 }
 
 export default function App() {
+  const { isEnglish } = useLang();
+  const { t } = useTranslation();
+  const l = (srHref: string) => isEnglish ? getCounterpartPath(srHref, "en") : srHref;
+
+  const greetingSR = 'Dobar dan! Ja sam AI asistent kompanije Eko Elektrofrigo. Specijalizovan sam za B2B HVAC rešenja i industrijsko hlađenje. Kako Vam mogu pomoći danas?';
+  const greetingEN = 'Hello! I am the AI assistant of Eko Elektrofrigo. I specialize in B2B HVAC solutions and industrial refrigeration. How can I help you today?';
+
+  // Update greeting when language changes (only if no real conversation yet)
+  useEffect(() => {
+    setMessages(prev => {
+      // If there's only the initial greeting (or greeting + idle message), update it
+      if (prev.length <= 2) {
+        const newGreeting = isEnglish ? greetingEN : greetingSR;
+        return prev.map(m => {
+          // Replace the initial greeting or idle message
+          if (m.role === 'assistant' && (m.text === greetingSR || m.text === greetingEN ||
+              m.text === "Tu sam ako vam zatreba još neka informacija o našim sistemima!" ||
+              m.text === "I'm here if you need any more information about our systems!")) {
+            return { ...m, text: newGreeting };
+          }
+          return m;
+        });
+      }
+      return prev;
+    });
+  }, [isEnglish]);
+
   const [messages, setMessages] = useState<Message[]>(() => {
     const saved = localStorage.getItem('eef_chat_history');
     if (saved) {
@@ -50,7 +80,7 @@ export default function App() {
     return [
       {
         role: 'assistant',
-        text: 'Dobar dan! Ja sam AI asistent kompanije Eko Elektrofrigo. Specijalizovan sam za B2B HVAC rešenja i industrijsko hlađenje. Kako Vam mogu pomoći danas?',
+        text: isEnglish ? greetingEN : greetingSR,
         timestamp: new Date()
       }
     ];
@@ -83,7 +113,9 @@ export default function App() {
     // Only start timers if there's actual conversation (more than initial greeting)
     if (messages.length > 1) {
       const lastMessage = messages[messages.length - 1];
-      const idleMsgText = "Tu sam ako vam zatreba još neka informacija o našim sistemima!";
+      const idleMsgText = isEnglish
+        ? "I'm here if you need any more information about our systems!"
+        : "Tu sam ako vam zatreba još neka informacija o našim sistemima!";
       const isLastMessageAuto = lastMessage.text === idleMsgText;
 
       // 5 minute timer for "Still here" message
@@ -195,7 +227,7 @@ export default function App() {
           }
           return next;
         });
-      });
+      }, isEnglish);
 
       setMessages(prev => {
         const next = [...prev];
@@ -204,7 +236,7 @@ export default function App() {
           if (message.role === 'assistant' && message.timestamp.getTime() === modelTimestamp.getTime()) {
             next[i] = {
               ...message,
-              text: response || 'Izvinite, došlo je do greške u komunikaciji.'
+              text: response || (isEnglish ? 'Sorry, a communication error occurred.' : 'Izvinite, došlo je do greške u komunikaciji.')
             };
             break;
           }
@@ -221,7 +253,9 @@ export default function App() {
           if (message.role === 'assistant' && message.timestamp.getTime() === modelTimestamp.getTime()) {
             next[i] = {
               ...message,
-              text: 'Trenutno nisam u mogućnosti da odgovorim. Molimo pokušajte kasnije ili nas kontaktirajte direktno.'
+              text: isEnglish
+                ? 'I am currently unable to respond. Please try again later or contact us directly.'
+                : 'Trenutno nisam u mogućnosti da odgovorim. Molimo pokušajte kasnije ili nas kontaktirajte direktno.'
             };
             break;
           }
@@ -233,14 +267,24 @@ export default function App() {
     }
   };
 
-  const departments = [
+  const departments = isEnglish ? [
+    { name: 'Sales', icon: ShoppingCart, color: 'bg-green-600' },
+    { name: 'Technical Support', icon: Cpu, color: 'bg-[#171A54]' },
+    { name: 'Service', icon: Wrench, color: 'bg-primary' },
+    { name: 'General Info', icon: Info, color: 'bg-indigo-500' },
+  ] : [
     { name: 'Prodaja', icon: ShoppingCart, color: 'bg-green-600' },
     { name: 'Tehnička Podrška', icon: Cpu, color: 'bg-[#171A54]' },
     { name: 'Servis', icon: Wrench, color: 'bg-primary' },
     { name: 'Opšte Informacije', icon: Info, color: 'bg-indigo-500' },
   ];
 
-  const quickActions = [
+  const quickActions = isEnglish ? [
+    { label: "ULO Rooms", icon: Globe, desc: "Ultra-low oxygen" },
+    { label: "CO2 Systems", icon: ShieldCheck, desc: "Green tech" },
+    { label: "Service & Maintenance", icon: Wrench, desc: "Expert support" },
+    { label: "Efficiency", icon: Zap, desc: "Energy savings" },
+  ] : [
     { label: "ULO Komore", icon: Globe, desc: "Ultra-low oxygen" },
     { label: "CO2 Sistemi", icon: ShieldCheck, desc: "Green tech" },
     { label: "Servis i Održavanje", icon: Wrench, desc: "Stručna podrška" },
@@ -252,10 +296,14 @@ export default function App() {
   };
 
   const handleDepartmentClick = (deptName: string) => {
-    let prompt = `Reci mi više o sektoru: ${deptName}. Koje su njihove nadležnosti i kako ih mogu kontaktirati?`;
+    let prompt = isEnglish
+      ? `Tell me more about the department: ${deptName}. What are their responsibilities and how can I contact them?`
+      : `Reci mi više o sektoru: ${deptName}. Koje su njihove nadležnosti i kako ih mogu kontaktirati?`;
     
-    if (deptName === 'Opšte Informacije') {
-      prompt = `Reci mi više o sektoru: Opšte Informacije (Administracija i ostalo). Znam da je kontakt email office@eef.rs. Koje su još nadležnosti ovog sektora?`;
+    if (deptName === 'Opšte Informacije' || deptName === 'General Info') {
+      prompt = isEnglish
+        ? `Tell me more about the department: General Info (Administration and more). I know the contact email is office@eef.rs. What else does this department handle?`
+        : `Reci mi više o sektoru: Opšte Informacije (Administracija i ostalo). Znam da je kontakt email office@eef.rs. Koje su još nadležnosti ovog sektora?`;
     }
     
     handleSend(prompt);
@@ -269,7 +317,7 @@ export default function App() {
     
     const initialMessage: Message = {
       role: 'assistant',
-      text: 'Dobar dan! Ja sam AI asistent kompanije Eko Elektrofrigo. Specijalizovan sam za B2B HVAC rešenja i industrijsko hlađenje. Kako Vam mogu pomoći danas?',
+      text: isEnglish ? greetingEN : greetingSR,
       timestamp: new Date()
     };
     setMessages([initialMessage]);
@@ -371,14 +419,14 @@ export default function App() {
               />
             </motion.div>
             <div>
-              <h1 className="font-display font-bold text-lg md:text-2xl tracking-tighter leading-none mb-1">EEF Asistent</h1>
+              <h1 className="font-display font-bold text-lg md:text-2xl tracking-tighter leading-none mb-1">{isEnglish ? "EEF Assistant" : "EEF Asistent"}</h1>
               <div className="flex items-center gap-2">
                 <div className="flex items-center gap-1.5 px-2 py-0.5 bg-green-500/10 border border-green-500/20 rounded-full">
                   <span className="relative flex h-1.5 w-1.5">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500"></span>
                   </span>
-                  <span className="text-[9px] text-green-400 font-bold uppercase tracking-[0.1em]">Aktivan</span>
+                  <span className="text-[9px] text-green-400 font-bold uppercase tracking-[0.1em]">{isEnglish ? "Online" : "Aktivan"}</span>
                 </div>
               </div>
             </div>
@@ -402,19 +450,19 @@ export default function App() {
                           exit={{ opacity: 0, x: 10, scale: 0.9 }}
                           className="absolute right-0 top-[120%] bg-white text-slate-900 px-4 py-3 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.3)] border border-slate-200 flex flex-col items-center z-[999] min-w-[200px]"
                         >
-                          <span className="text-xs font-bold text-center">Obrisati istoriju ćaskanja?</span>
+                          <span className="text-xs font-bold text-center">{isEnglish ? "Clear chat history?" : "Obrisati istoriju ćaskanja?"}</span>
                           <div className="flex gap-2 w-full justify-center mt-2">
                             <button 
                               onClick={clearHistory}
                               className="text-[10px] font-bold uppercase tracking-wider bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600 transition-colors"
                             >
-                              Da
+                              {isEnglish ? "Yes" : "Da"}
                             </button>
                             <button 
                               onClick={() => setShowClearConfirm(false)}
                               className="text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600 px-6 py-2 rounded-lg hover:bg-slate-200 transition-colors"
                             >
-                              Ne
+                              {isEnglish ? "No" : "Ne"}
                             </button>
                           </div>
                         </motion.div>
@@ -422,7 +470,7 @@ export default function App() {
                     </AnimatePresence>
                     <button 
                       onClick={clearHistory}
-                      title="Obriši istoriju ćaskanja"
+                      title={isEnglish ? "Clear chat history" : "Obriši istoriju ćaskanja"}
                       className={cn(
                         "w-10 h-10 md:w-14 md:h-14 flex items-center justify-center border rounded-xl md:rounded-2xl transition-all duration-500 backdrop-blur-2xl group",
                         showClearConfirm 
@@ -549,7 +597,7 @@ export default function App() {
                       "text-[8px] md:text-[9px] mt-3 opacity-30 font-bold uppercase tracking-widest",
                       msg.role === 'user' ? "text-right" : "text-left"
                     )}>
-                      {msg.timestamp.toLocaleTimeString('sr-RS', { 
+                      {msg.timestamp.toLocaleTimeString(isEnglish ? 'en-US' : 'sr-RS', { 
                         hour: '2-digit', 
                         minute: '2-digit',
                         hour12: false,
@@ -589,7 +637,7 @@ export default function App() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-              placeholder="Postavite pitanje..."
+              placeholder={isEnglish ? "Ask a question..." : "Postavite pitanje..."}
               className="w-full bg-slate-50 border border-slate-200/40 rounded-xl md:rounded-2xl py-3 md:py-5 pl-5 md:pl-8 pr-14 md:pr-20 focus:outline-none focus:ring-4 focus:ring-green-600/5 focus:border-green-600/30 focus:bg-white transition-all text-slate-800 dark:text-slate-800 text-[13px] md:text-[15px] placeholder:text-slate-400 font-medium shadow-inner"
               disabled={isLoading}
             />
@@ -608,11 +656,13 @@ export default function App() {
           <div className="flex flex-col items-center justify-center mt-3 px-2 gap-1.5">
               <div className="text-center px-4">
                 <span className="text-[9px] text-slate-400 font-medium leading-tight block">
-                  Započinjanjem razgovora prihvatate da se sadržaj komunikacije može sačuvati u svrhu stručnog savetovanja i unapređenja usluge, u skladu sa našom <a href="/privacy" className="underline hover:text-primary transition-colors">Politikom privatnosti</a>.
+                  {isEnglish
+                    ? <>By starting a conversation, you agree that the content may be saved for professional consulting and service improvement, in accordance with our <a href={l("/politika-privatnosti")} className="underline hover:text-primary transition-colors">Privacy Policy</a>.</>
+                    : <>Započinjanjem razgovora prihvatate da se sadržaj komunikacije može sačuvati u svrhu stručnog savetovanja i unapređenja usluge, u skladu sa našom <a href="/politika-privatnosti" className="underline hover:text-primary transition-colors">Politikom privatnosti</a>.</>}
                 </span>
               </div>
               <div className="text-[9px] text-slate-300 font-bold uppercase tracking-[0.2em] mt-1">
-                Eko Elektrofrigo AI Asistent
+                Eko Elektrofrigo AI {isEnglish ? "Assistant" : "Asistent"}
               </div>
             </div>
         </div>

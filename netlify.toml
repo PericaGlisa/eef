@@ -22,6 +22,11 @@
   status = 200
 
 [[redirects]]
+  from = "/api/send-transcript"
+  to = "/.netlify/functions/send-transcript"
+  status = 200
+
+[[redirects]]
   from = "/about"
   to = "/o-nama"
   status = 301

@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useSmoothScroll } from "@/hooks/use-smooth-scroll";
 import { SeoManager } from "@/components/SeoManager";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 
 const NotFound = lazy(() => import("@/pages/not-found"));
 const Home = lazy(() => import("@/pages/home"));
@@ -75,68 +76,28 @@ function Router() {
     <Suspense fallback={<div className="min-h-svh bg-background" />}>
       <Switch>
         <Route path="/" component={Home} />
-        <Route path="/about">
-          <RedirectTo to="/o-nama" />
-        </Route>
-        <Route path="/contact">
-          <RedirectTo to="/kontakt" />
-        </Route>
-        <Route path="/services">
-          <RedirectTo to="/usluge" />
-        </Route>
-        <Route path="/services/:slug">
-          {(params) => {
-            const slugMap: Record<string, string> = {
-              engineering: "inzenjering",
-              execution: "izvodjenje",
-              maintenance: "servis",
-              "energy-audit": "energetska-revizija",
-              consulting: "konsalting",
-              safety: "sigurnost",
-            };
-            const slug = params?.slug ? slugMap[params.slug] ?? params.slug : "";
-            return <RedirectTo to={`/usluge/${slug}`} />;
-          }}
-        </Route>
-        <Route path="/eco-cooling">
-          <RedirectTo to="/eko-rashlada" />
-        </Route>
-        <Route path="/eco-cooling/:slug">
-          {(params) => <RedirectTo to={`/eko-rashlada/${params.slug}`} />}
-        </Route>
-        <Route path="/partners">
-          <RedirectTo to="/partneri" />
-        </Route>
-        <Route path="/documentation">
-          <RedirectTo to="/dokumentacija" />
-        </Route>
-        <Route path="/documentation/certificates">
-          <RedirectTo to="/dokumentacija/sertifikati" />
-        </Route>
-        <Route path="/documentation/diplomas">
-          <RedirectTo to="/dokumentacija/diplome" />
-        </Route>
-        <Route path="/references">
-          <RedirectTo to="/reference" />
-        </Route>
-        <Route path="/references/agrounija">
-          <RedirectTo to="/reference/agrounija" />
-        </Route>
-        <Route path="/blog">
-          <RedirectTo to="/vesti" />
-        </Route>
-        <Route path="/news/:slug">
-          {(params) => {
-            // Map English slugs to Serbian /vesti/ routes
-            return <RedirectTo to={`/vesti/${params.slug}`} />;
-          }}
-        </Route>
-        <Route path="/privacy">
-          <RedirectTo to="/politika-privatnosti" />
-        </Route>
-        <Route path="/terms">
-          <RedirectTo to="/uslovi-koriscenja" />
-        </Route>
+        {/* Legacy redirects (old English URLs → Serbian) */}
+        <Route path="/about"><RedirectTo to="/o-nama" /></Route>
+        <Route path="/contact"><RedirectTo to="/kontakt" /></Route>
+        <Route path="/services"><RedirectTo to="/usluge" /></Route>
+        <Route path="/services/:slug">{(params) => {
+          const slugMap: Record<string, string> = { engineering: "inzenjering", execution: "izvodjenje", maintenance: "servis", "energy-audit": "energetska-revizija", consulting: "konsalting", safety: "sigurnost" };
+          const slug = params?.slug ? slugMap[params.slug] ?? params.slug : "";
+          return <RedirectTo to={`/usluge/${slug}`} />;
+        }}</Route>
+        <Route path="/eco-cooling"><RedirectTo to="/eko-rashlada" /></Route>
+        <Route path="/eco-cooling/:slug">{(params) => <RedirectTo to={`/eko-rashlada/${params.slug}`} />}</Route>
+        <Route path="/partners"><RedirectTo to="/partneri" /></Route>
+        <Route path="/documentation"><RedirectTo to="/dokumentacija" /></Route>
+        <Route path="/documentation/certificates"><RedirectTo to="/dokumentacija/sertifikati" /></Route>
+        <Route path="/documentation/diplomas"><RedirectTo to="/dokumentacija/diplome" /></Route>
+        <Route path="/references"><RedirectTo to="/reference" /></Route>
+        <Route path="/references/agrounija"><RedirectTo to="/reference/agrounija" /></Route>
+        <Route path="/blog"><RedirectTo to="/vesti" /></Route>
+        <Route path="/news/:slug">{(params) => <RedirectTo to={`/vesti/${params.slug}`} />}</Route>
+        <Route path="/privacy"><RedirectTo to="/politika-privatnosti" /></Route>
+        <Route path="/terms"><RedirectTo to="/uslovi-koriscenja" /></Route>
+        {/* Serbian routes (default) */}
         <Route path="/o-nama" component={About} />
         <Route path="/kontakt" component={Contact} />
         <Route path="/usluge" component={Services} />
@@ -154,6 +115,25 @@ function Router() {
         <Route path="/politika-privatnosti" component={Privacy} />
         <Route path="/uslovi-koriscenja" component={Terms} />
         <Route path="/groq-dijagnostika" component={GroqDiagnostic} />
+        {/* English routes (/en/*) */}
+        <Route path="/en" component={Home} />
+        <Route path="/en/about" component={About} />
+        <Route path="/en/contact" component={Contact} />
+        <Route path="/en/services" component={Services} />
+        <Route path="/en/services/:slug" component={ServiceDetail} />
+        <Route path="/en/eco-cooling" component={EcoCooling} />
+        <Route path="/en/eco-cooling/:slug" component={SolutionDetail} />
+        <Route path="/en/partners" component={Partners} />
+        <Route path="/en/documentation" component={Documentation} />
+        <Route path="/en/documentation/certificates" component={Documentation} />
+        <Route path="/en/documentation/diplomas" component={Documentation} />
+        <Route path="/en/references" component={References} />
+        <Route path="/en/references/agrounija" component={ProjectAgrounija} />
+        <Route path="/en/news" component={Blog} />
+        <Route path="/en/news/:slug" component={NewsPost} />
+        <Route path="/en/privacy" component={Privacy} />
+        <Route path="/en/terms" component={Terms} />
+        <Route path="/en/groq-diagnostic" component={GroqDiagnostic} />
         <Route component={NotFound} />
       </Switch>
     </Suspense>
@@ -202,13 +182,15 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <NoiseOverlay />
-        <SeoManager />
-        <ChatBoundary>
-          <Suspense fallback={null}>{showChat ? <NewAIChat /> : null}</Suspense>
-        </ChatBoundary>
-        <Toaster />
-        <Router />
+        <LanguageProvider>
+          <NoiseOverlay />
+          <SeoManager />
+          <ChatBoundary>
+            <Suspense fallback={null}>{showChat ? <NewAIChat /> : null}</Suspense>
+          </ChatBoundary>
+          <Toaster />
+          <Router />
+        </LanguageProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );

@@ -2,39 +2,46 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "wouter";
-import { solutionsData } from "@/data/solutions";
+import { getSolutionsData } from "@/data/solutions";
 import { ArrowRight, Leaf, Zap, Award, BarChart3, CheckCircle2, ChevronRight, Wind, Snowflake, Settings } from "lucide-react";
-import { useRef } from "react";
+import { useRef, useMemo } from "react";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "@/lib/i18n";
+import { useLang } from "@/contexts/LanguageContext";
+import { getCounterpartPath } from "@/lib/route-map";
 
 export default function EcoCooling() {
+  const { t } = useTranslation();
+  const { isEnglish } = useLang();
+  const l = (srHref: string) => isEnglish ? getCounterpartPath(srHref, "en") : srHref;
+
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"]
   });
-  
+
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
+  const solutionsData = useMemo(() => getSolutionsData(isEnglish), [isEnglish]);
   const storageSolutions = solutionsData.slice(0, 3);
   const machinerySolutions = solutionsData.slice(3, 5);
   const infrastructureSolutions = solutionsData.slice(5, 7);
 
-  const stats = [
-    { value: "30+", label: "Godina Iskustva", icon: Award },
-    { value: "350+", label: "Završenih Projekata", icon: CheckCircle2 },
-    { value: "40%", label: "Ušteda Energije", icon: Leaf },
-    { value: "24/7", label: "Tehnička Podrška", icon: Zap },
-  ];
+  const stats = useMemo(() => [
+    { value: "30+", label: isEnglish ? "Years of Experience" : "Godina Iskustva", icon: Award },
+    { value: "350+", label: isEnglish ? "Completed Projects" : "Završenih Projekata", icon: CheckCircle2 },
+    { value: "40%", label: isEnglish ? "Energy Savings" : "Ušteda Energije", icon: Leaf },
+    { value: "24/7", label: isEnglish ? "Technical Support" : "Tehnička Podrška", icon: Zap },
+  ], [isEnglish]);
 
   return (
     <div className="bg-background min-h-screen" ref={containerRef}>
       <Navbar />
       
-      {/* Hero Section - Standardized & Modernized */}
+      {/* Hero Section */}
       <section className="relative min-h-[70vh] flex items-center pt-32 pb-20 overflow-hidden">
-        {/* Parallax Background */}
         <div className="absolute inset-0 z-0">
           <motion.div style={{ y, opacity }} className="absolute inset-0 w-full h-full">
              <div className="absolute inset-0 bg-[#0e1035]/70 z-10 mix-blend-multiply" />
@@ -42,7 +49,7 @@ export default function EcoCooling() {
              <div className="absolute inset-0 bg-[url('/assets/grid-pattern.svg')] opacity-10 z-10" />
              <img 
                src="/assets/portfolio-cold-room.webp" 
-               alt="Industrial Cooling"  
+               alt={isEnglish ? "Industrial Cooling" : "Industrijsko hlađenje"}  
                className="w-full h-full object-cover"
              />
           </motion.div>
@@ -57,7 +64,7 @@ export default function EcoCooling() {
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-primary text-sm font-mono mb-6 backdrop-blur-md"
             >
               <Leaf className="w-4 h-4" />
-              <span className="tracking-widest uppercase">Održiva Budućnost</span>
+              <span className="tracking-widest uppercase">{t("ecoCooling.heroBadge")}</span>
             </motion.div>
 
             <motion.h1 
@@ -66,8 +73,8 @@ export default function EcoCooling() {
               transition={{ duration: 0.8, delay: 0.1 }}
               className="text-5xl md:text-7xl lg:text-8xl font-heading font-bold text-white mb-8 leading-tight tracking-tight drop-shadow-2xl"
             >
-              Inženjering <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-300">Hladnog Lanca</span>
+              {isEnglish ? "Cold Chain" : "Inženjering"} <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-300">{isEnglish ? "Engineering" : "Hladnog Lanca"}</span>
             </motion.h1>
             
             <motion.p 
@@ -76,8 +83,7 @@ export default function EcoCooling() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="text-xl md:text-2xl text-white/70 max-w-2xl font-light leading-relaxed mb-10 border-l-4 border-primary pl-6"
             >
-              Napredna tehnologija hlađenja koja štedi energiju i čuva kvalitet vaših proizvoda. 
-              Od projektovanja do realizacije po principu "ključ u ruke".
+              {t("ecoCooling.heroSubtitle")}
             </motion.p>
 
             <motion.div
@@ -87,10 +93,10 @@ export default function EcoCooling() {
               className="flex flex-wrap gap-4"
             >
               <Button size="lg" className="bg-primary hover:bg-primary/90 text-white font-bold px-8 h-14 text-lg rounded-full" asChild>
-                <Link href="/kontakt">Zakažite Konsultacije <ArrowRight className="ml-2 w-5 h-5" /></Link>
+                <Link href={l("/kontakt")}>{isEnglish ? "Schedule Consultation" : "Zakažite Konsultacije"} <ArrowRight className="ml-2 w-5 h-5" /></Link>
               </Button>
               <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 font-bold px-8 h-14 text-lg rounded-full backdrop-blur-sm" asChild>
-                <Link href="/reference">Pogledajte Reference</Link>
+                <Link href={l("/reference")}>{isEnglish ? "View References" : "Pogledajte Reference"}</Link>
               </Button>
             </motion.div>
           </div>
@@ -127,13 +133,12 @@ export default function EcoCooling() {
         <div className="absolute inset-0 bg-[url('/assets/grid-pattern.svg')] opacity-5" />
         
         <div className="container mx-auto px-6 relative z-10">
-          {/* Main Section Header */}
           <div className="text-center mb-20">
             <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
-              Sveobuhvatna <span className="text-primary">Rešenja</span>
+              {t("ecoCooling.solutionsTitle")}
             </h2>
             <p className="text-white/60 text-lg max-w-2xl mx-auto font-light">
-              Naša ekspertiza pokriva svaki aspekt industrijskog hlađenja, od skladištenja do automatizacije.
+              {t("ecoCooling.solutionsSubtitle")}
             </p>
           </div>
 
@@ -142,8 +147,8 @@ export default function EcoCooling() {
               <Snowflake className="w-8 h-8" />
             </div>
             <div>
-              <h2 className="text-3xl font-bold text-white">Skladišna Tehnologija</h2>
-              <p className="text-white/50 text-sm">Očuvanje kvaliteta i svežine</p>
+              <h2 className="text-3xl font-bold text-white">{t("ecoCooling.storageTech")}</h2>
+              <p className="text-white/50 text-sm">{t("ecoCooling.storageSubtitle")}</p>
             </div>
           </div>
 
@@ -151,7 +156,7 @@ export default function EcoCooling() {
             {storageSolutions.map((solution, index) => {
                const Icon = solution.icon;
                return (
-                <Link key={index} href={`/eko-rashlada/${solution.id}`}>
+                <Link key={index} href={l(`/eko-rashlada/${solution.id}`)}>
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -189,13 +194,13 @@ export default function EcoCooling() {
         </div>
       </section>
 
-      {/* Section 2: Machinery (Rashladna Tehnika) */}
+      {/* Section 2: Machinery */}
       <section className="py-24 bg-slate-50 relative overflow-hidden">
         <div className="container mx-auto px-6 relative z-10">
           <div className="flex items-center gap-4 mb-12 justify-end text-right">
             <div>
-              <h2 className="text-3xl font-bold text-[#171A54]">Rashladna Tehnika</h2>
-              <p className="text-slate-500 text-sm">Srce svakog sistema</p>
+              <h2 className="text-3xl font-bold text-[#171A54]">{t("ecoCooling.machinery")}</h2>
+              <p className="text-slate-500 text-sm">{t("ecoCooling.machinerySubtitle")}</p>
             </div>
             <div className="p-3 bg-[#171A54]/5 rounded-xl text-[#171A54]">
               <Wind className="w-8 h-8" />
@@ -206,7 +211,7 @@ export default function EcoCooling() {
             {machinerySolutions.map((solution, index) => {
               const Icon = solution.icon;
               return (
-                <Link key={index} href={`/eko-rashlada/${solution.id}`}>
+                <Link key={index} href={l(`/eko-rashlada/${solution.id}`)}>
                   <motion.div
                     initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
                     whileInView={{ opacity: 1, x: 0 }}
@@ -222,7 +227,7 @@ export default function EcoCooling() {
                            className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                          />
                          <div className="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-lg text-xs font-bold text-[#171A54] z-20">
-                           PREMIUM OPREMA
+                           {isEnglish ? "PREMIUM EQUIPMENT" : "PREMIUM OPREMA"}
                          </div>
                       </div>
                       
@@ -249,7 +254,7 @@ export default function EcoCooling() {
         </div>
       </section>
 
-      {/* Section 3: Infrastructure (Infrastruktura & Kontrola) */}
+      {/* Section 3: Infrastructure */}
       <section className="py-24 bg-[#1a1c4b] relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('/assets/grid-pattern.svg')] opacity-5" />
         
@@ -259,8 +264,8 @@ export default function EcoCooling() {
               <Settings className="w-8 h-8" />
             </div>
             <div>
-              <h2 className="text-3xl font-bold text-white">Infrastruktura & Kontrola</h2>
-              <p className="text-blue-200/50 text-sm">Automatizacija i optimizacija procesa</p>
+              <h2 className="text-3xl font-bold text-white">{t("ecoCooling.infrastructure")}</h2>
+              <p className="text-blue-200/50 text-sm">{t("ecoCooling.infrastructureSubtitle")}</p>
             </div>
           </div>
 
@@ -268,7 +273,7 @@ export default function EcoCooling() {
             {infrastructureSolutions.map((solution, index) => {
                const Icon = solution.icon;
                return (
-                <Link key={index} href={`/eko-rashlada/${solution.id}`}>
+                <Link key={index} href={l(`/eko-rashlada/${solution.id}`)}>
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -276,7 +281,6 @@ export default function EcoCooling() {
                     className="group bg-gradient-to-br from-white/5 to-transparent border border-white/10 p-1 rounded-3xl hover:border-primary/50 transition-colors cursor-pointer"
                   >
                     <div className="bg-[#0e1035] rounded-[22px] p-8 h-full relative overflow-hidden">
-                      {/* Tech Background Effect */}
                       <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-[50px] rounded-full pointer-events-none group-hover:bg-primary/20 transition-colors" />
                       
                       <div className="relative z-10">
@@ -312,32 +316,32 @@ export default function EcoCooling() {
         <div className="container mx-auto px-6">
            <div className="text-center mb-16">
              <h2 className="text-3xl md:text-4xl font-bold text-[#171A54] mb-4">
-               Zašto <span className="text-primary">Eko Elektrofrigo?</span>
+               {t("ecoCooling.whyTitle")}
              </h2>
              <p className="text-slate-500 max-w-2xl mx-auto">
-               Kombinujemo decenijsko iskustvo sa najnovijim tehnološkim dostignućima kako bismo vam pružili rešenja koja traju.
+               {t("ecoCooling.whySubtitle")}
              </p>
            </div>
 
            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
              {[
                {
-                 title: "Energetska Efikasnost",
-                 desc: "Naši sistemi su dizajnirani da minimizuju potrošnju energije, smanjujući operativne troškove i ekološki otisak.",
+                 title: t("ecoCooling.whyEfficiency"),
+                 desc: t("ecoCooling.whyEfficiencyDesc"),
                  icon: Leaf,
                  color: "text-green-500",
                  bg: "bg-green-50"
                },
                {
-                 title: "Vrhunska Tehnologija",
-                 desc: "Koristimo opremu renomiranih svetskih proizvođača (Bitzer, Danfoss, Isolcell) garantujući pouzdanost i dugovečnost.",
+                 title: t("ecoCooling.whyTech"),
+                 desc: t("ecoCooling.whyTechDesc"),
                  icon: Award,
                  color: "text-blue-500",
                  bg: "bg-blue-50"
                },
                {
-                 title: "Sveobuhvatna Podrška",
-                 desc: "Od inicijalnog koncepta i projektovanja, preko instalacije, do 24/7 servisne podrške i održavanja.",
+                 title: t("ecoCooling.whySupport"),
+                 desc: t("ecoCooling.whySupportDesc"),
                  icon: Settings,
                  color: "text-orange-500",
                  bg: "bg-orange-50"
@@ -357,36 +361,20 @@ export default function EcoCooling() {
         </div>
       </section>
 
-      {/* CTA Section - Modernized */}
+      {/* CTA Section */}
       <section className="py-24 relative overflow-hidden group">
         <div className="absolute inset-0 bg-[#0e1035] z-0">
           <div className="absolute inset-0 bg-[url('/assets/grid-pattern.svg')] opacity-10" />
           <div className="absolute right-0 bottom-0 w-1/2 h-full bg-gradient-to-l from-primary/10 to-transparent" />
           
-          {/* Animated Background Elements */}
           <motion.div 
-            animate={{ 
-              scale: [1, 1.2, 1],
-              opacity: [0.1, 0.2, 0.1] 
-            }}
-            transition={{ 
-              duration: 8,
-              repeat: Infinity,
-              ease: "easeInOut" 
-            }}
+            animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
             className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] pointer-events-none"
           />
           <motion.div 
-            animate={{ 
-              scale: [1, 1.5, 1],
-              opacity: [0.05, 0.1, 0.05] 
-            }}
-            transition={{ 
-              duration: 10,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 1
-            }}
+            animate={{ scale: [1, 1.5, 1], opacity: [0.05, 0.1, 0.05] }}
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
             className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-[100px] pointer-events-none"
           />
         </div>
@@ -403,7 +391,7 @@ export default function EcoCooling() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
               </span>
-              <span className="text-sm font-medium tracking-wide uppercase">Dostupni smo za vaš projekat</span>
+              <span className="text-sm font-medium tracking-wide uppercase">{t("ecoCooling.ctaReady")}</span>
             </motion.div>
 
             <motion.h2 
@@ -413,7 +401,7 @@ export default function EcoCooling() {
               transition={{ delay: 0.1 }}
               className="text-4xl md:text-6xl font-heading font-bold text-white mb-6 leading-tight"
             >
-              Spremni za <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-400">Unapređenje?</span>
+              {isEnglish ? "Ready for an " : "Spremni za "}<span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-400">{isEnglish ? "Upgrade?" : "Unapređenje?"}</span>
             </motion.h2>
 
             <motion.p 
@@ -423,7 +411,7 @@ export default function EcoCooling() {
               transition={{ delay: 0.2 }}
               className="text-xl text-white/60 mb-10 leading-relaxed max-w-2xl mx-auto"
             >
-              Naš inženjerski tim je spreman da analizira vaše potrebe i kreira optimalno rešenje koje štedi energiju i novac.
+              {t("ecoCooling.ctaText")}
             </motion.p>
 
             <motion.div 
@@ -434,8 +422,8 @@ export default function EcoCooling() {
               className="flex flex-col sm:flex-row gap-4 justify-center items-center"
             >
               <Button size="lg" className="bg-primary hover:bg-primary/90 text-white font-bold px-10 h-14 text-lg rounded-full shadow-[0_0_30px_rgba(86,170,74,0.3)] hover:shadow-[0_0_50px_rgba(86,170,74,0.5)] transition-all transform hover:-translate-y-1 w-full sm:w-auto" asChild>
-                <Link href="/kontakt" className="flex items-center gap-2">
-                  Zatražite Ponudu
+                <Link href={l("/kontakt")} className="flex items-center gap-2">
+                  {t("ecoCooling.ctaBtn")}
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </Button>
@@ -456,15 +444,15 @@ export default function EcoCooling() {
             >
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-primary" />
-                <span>Besplatna konsultacija</span>
+                <span>{t("ecoCooling.ctaConsult")}</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-primary" />
-                <span>Izlazak na teren</span>
+                <span>{t("ecoCooling.ctaField")}</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-primary" />
-                <span>Garancija kvaliteta</span>
+                <span>{t("ecoCooling.ctaQuality")}</span>
               </div>
             </motion.div>
           </div>

@@ -1,130 +1,19 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { motion, useScroll, useSpring } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useMemo } from "react";
 import { Linkedin, Mail, Lightbulb, Wrench, Factory, Key, ShieldCheck, GraduationCap, Truck, Settings, DraftingCompass, Cpu, FileCode, Database } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-
-const values = [
-  {
-    title: "Inovacije",
-    desc: "Lider u inovacijama od 1996. Koristimo najsavremeniju tehnologiju prilagođenu zahtevima investitora.",
-    icon: Lightbulb
-  },
-  {
-    title: "Inženjering",
-    desc: "30 godina iskustva i tim od 8 inženjera garantuju najviši kvalitet.",
-    icon: Wrench
-  },
-  {
-    title: "Proizvodnja",
-    desc: "Sopstvena radionica gde stvaramo proizvode prema specifičnim zahtevima.",
-    icon: Factory
-  },
-  {
-    title: "Ključ u Ruke",
-    desc: "Realizacija najsavremenijih projekata hladnjača po principu 'ključ u ruke'.",
-    icon: Key
-  },
-  {
-    title: "Pouzdanost",
-    desc: "Beskompromisan akcenat na kvalitet za dugoročnu saradnju.",
-    icon: ShieldCheck
-  },
-  {
-    title: "Edukacija",
-    desc: "Trening i obuka korisnika prilikom primopredaje objekata.",
-    icon: GraduationCap
-  },
-  {
-    title: "Distribucija",
-    desc: "Glavni distributer za Bitzer, Danfoss, Alfa Lu-Ve za Srbiju.",
-    icon: Truck
-  },
-  {
-    title: "Podrška 24/7",
-    desc: "Redovno održavanje i servisna podrška dostupna non-stop.",
-    icon: Settings
-  }
-];
-
-const history = [
-  {
-    year: "1996",
-    title: "Osnivanje & Danfoss",
-    desc: "Osnivanje Eko Elekofrigo kao trgovačke kompanije i potpisivanje prvog ugovora o distribuciji sa kompanijom Danfoss.",
-    stats: "Početak",
-    image: "/assets/history/1996.webp"
-  },
-  {
-    year: "1998",
-    title: "Bitzer & Prvi Inženjering",
-    desc: "Potpisivanje ugovora sa Bitzerom. Prvi samostalni inženjering posao rashladnih instalacija u prvom megamarket objektu u Srbiji.",
-    stats: "Megamarket",
-    image: "/assets/history/1998.webp"
-  },
-  {
-    year: "2000",
-    title: "Alfa Laval",
-    desc: "Eko Elektrofrigo postaje generalni distributer za proizvode kompanije Alfa Laval.",
-    stats: "Distribucija",
-    image: "/assets/history/2000.webp"
-  },
-  {
-    year: "2002",
-    title: "Hladnjače za Maline",
-    desc: "Prvo samostalno projektovanje i izvođenje hladnjača za zamrzavanje i skladištenje maline. 5 hladnjača, ukupno 4000 tona.",
-    stats: "4000 tona",
-    image: "/assets/history/2002.webp"
-  },
-  {
-    year: "2006",
-    title: "IM Matijević & Inovacije",
-    desc: "Projektovanje za IM Matijević (100t/dan). Prvi 'ključ u ruke' projekat, prva ULO hladnjača (Slankamen) i najveći tuneli za zamrzavanje (Frucom Arilje).",
-    stats: "Ključ u ruke",
-    image: "/assets/history/2006.webp"
-  },
-  {
-    year: "2009",
-    title: "Pumpni Sistem R404a",
-    desc: "U Industriji mesa Matijević kompletiran pumpni sistem freona R404a za šest pločastih vertikalnih zamrzivača.",
-    stats: "R404a Sistem",
-    image: "/assets/history/2009.webp"
-  },
-  {
-    year: "2012",
-    title: "Energetska Efikasnost",
-    desc: "Hladnjača 'Zadrugar' (4000t), energetski najefikasnija u Srbiji sa tri tunela za smrzavanje (3x30t/dan).",
-    stats: "Najefikasnija",
-    image: "/assets/history/2012.webp"
-  },
-  {
-    year: "2014",
-    title: "Izlazak na EU Tržište",
-    desc: "Prvi projekti Eko Elektrofriga u inostranstvu: Hrvatska, Slovenija, Poljska...",
-    stats: "EU Projekti",
-    image: "/assets/history/2014.webp"
-  },
-  {
-    year: "2020",
-    title: "Celanova ULO",
-    desc: "Najveći realizovani projekat: ULO hladnjača za jabuku 'Celanova' u Vršcu, kapaciteta 10,000 tona.",
-    stats: "10,000 tona",
-    image: "/assets/history/2020.webp"
-  }
-];
-
-const team = [
-  { name: "Boban Čelarević", role: "Tehnička podrška", gender: "male" as const, email: "celarevic.boban@eef.rs" },
-  { name: "Damjan Novaković", role: "Inženjer mašinstva", gender: "male" as const, email: "novakovic.damjan@eef.rs" },
-  { name: "Milan Parić", role: "Inženjer mašinstva", gender: "male" as const, email: "paric.milan@eef.rs" },
-  { name: "Marica Marinković", role: "Inženjer mašinstva", gender: "female" as const, email: "marinkovic.marica@eef.rs" },
-  { name: "Uroš Milošević", role: "Inženjer mašinstva", gender: "male" as const, email: "milosevic.uros@eef.rs" },
-  { name: "Dane Cvijan", role: "Inženjer mašinstva", gender: "male" as const, email: "cvijan.dane@eef.rs" }
-];
+import { useTranslation } from "@/lib/i18n";
+import { useLang } from "@/contexts/LanguageContext";
+import { getCounterpartPath } from "@/lib/route-map";
 
 export default function About() {
+  const { t } = useTranslation();
+  const { lang, isEnglish } = useLang();
+  const l = (srHref: string) => isEnglish ? getCounterpartPath(srHref, "en") : srHref;
+
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -135,6 +24,131 @@ export default function About() {
     damping: 30,
     restDelta: 0.001
   });
+
+  const values = useMemo(() => [
+    {
+      title: t("about.valuesInnovation"),
+      desc: t("about.valuesInnovationDesc"),
+      icon: Lightbulb
+    },
+    {
+      title: t("about.valuesEngineering"),
+      desc: t("about.valuesEngineeringDesc"),
+      icon: Wrench
+    },
+    {
+      title: t("about.valuesManufacturing"),
+      desc: t("about.valuesManufacturingDesc"),
+      icon: Factory
+    },
+    {
+      title: t("about.valuesTurnkey"),
+      desc: t("about.valuesTurnkeyDesc"),
+      icon: Key
+    },
+    {
+      title: t("about.valuesReliability"),
+      desc: t("about.valuesReliabilityDesc"),
+      icon: ShieldCheck
+    },
+    {
+      title: t("about.valuesEducation"),
+      desc: t("about.valuesEducationDesc"),
+      icon: GraduationCap
+    },
+    {
+      title: t("about.valuesDistribution"),
+      desc: t("about.valuesDistributionDesc"),
+      icon: Truck
+    },
+    {
+      title: t("about.valuesSupport"),
+      desc: t("about.valuesSupportDesc"),
+      icon: Settings
+    }
+  ], [t]);
+
+  const history = useMemo(() => [
+    {
+      year: "1996",
+      title: t("about.history1996Title"),
+      desc: t("about.history1996Desc"),
+      stats: t("about.history1996Stats"),
+      image: "/assets/history/1996.webp"
+    },
+    {
+      year: "1998",
+      title: t("about.history1998Title"),
+      desc: t("about.history1998Desc"),
+      stats: t("about.history1998Stats"),
+      image: "/assets/history/1998.webp"
+    },
+    {
+      year: "2000",
+      title: t("about.history2000Title"),
+      desc: t("about.history2000Desc"),
+      stats: t("about.history2000Stats"),
+      image: "/assets/history/2000.webp"
+    },
+    {
+      year: "2002",
+      title: t("about.history2002Title"),
+      desc: t("about.history2002Desc"),
+      stats: t("about.history2002Stats"),
+      image: "/assets/history/2002.webp"
+    },
+    {
+      year: "2006",
+      title: t("about.history2006Title"),
+      desc: t("about.history2006Desc"),
+      stats: t("about.history2006Stats"),
+      image: "/assets/history/2006.webp"
+    },
+    {
+      year: "2009",
+      title: t("about.history2009Title"),
+      desc: t("about.history2009Desc"),
+      stats: t("about.history2009Stats"),
+      image: "/assets/history/2009.webp"
+    },
+    {
+      year: "2012",
+      title: t("about.history2012Title"),
+      desc: t("about.history2012Desc"),
+      stats: t("about.history2012Stats"),
+      image: "/assets/history/2012.webp"
+    },
+    {
+      year: "2014",
+      title: t("about.history2014Title"),
+      desc: t("about.history2014Desc"),
+      stats: t("about.history2014Stats"),
+      image: "/assets/history/2014.webp"
+    },
+    {
+      year: "2020",
+      title: t("about.history2020Title"),
+      desc: t("about.history2020Desc"),
+      stats: t("about.history2020Stats"),
+      image: "/assets/history/2020.webp"
+    }
+  ], [t]);
+
+  const team = useMemo(() => [
+    { name: "Boban Čelarević", role: t("about.roleTechnicalSupport"), gender: "male" as const, email: "celarevic.boban@eef.rs" },
+    { name: "Damjan Novaković", role: t("about.roleMechanicalEngineer"), gender: "male" as const, email: "novakovic.damjan@eef.rs" },
+    { name: "Milan Parić", role: t("about.roleMechanicalEngineer"), gender: "male" as const, email: "paric.milan@eef.rs" },
+    { name: "Marica Marinković", role: t("about.roleMechanicalEngineer"), gender: "female" as const, email: "marinkovic.marica@eef.rs" },
+    { name: "Uroš Milošević", role: t("about.roleMechanicalEngineer"), gender: "male" as const, email: "milosevic.uros@eef.rs" },
+    { name: "Dane Cvijan", role: t("about.roleMechanicalEngineer"), gender: "male" as const, email: "cvijan.dane@eef.rs" }
+  ], [t]);
+
+  const engineeringItems = useMemo(() => [
+    { icon: DraftingCompass, title: t("about.engineeringCad"), desc: t("about.engineeringCadDesc") },
+    { icon: Cpu, title: t("about.engineeringThermal"), desc: t("about.engineeringThermalDesc") },
+    { icon: FileCode, title: t("about.engineeringPlc"), desc: t("about.engineeringPlcDesc") },
+    { icon: Database, title: t("about.engineeringMonitoring"), desc: t("about.engineeringMonitoringDesc") }
+  ], [t]);
 
   return (
     <div className="bg-background min-h-screen" ref={containerRef}>
@@ -157,7 +171,7 @@ export default function About() {
 
           <motion.img 
             src="/assets/hero-bg.jpg" 
-            alt="Hero Background"  
+            alt={isEnglish ? "About Us Background" : "O nama pozadina"}
             className="w-full h-full object-cover"
             initial={{ scale: 1.1 }}
             animate={{ scale: 1 }}
@@ -173,41 +187,35 @@ export default function About() {
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-primary mb-6 backdrop-blur-sm">
               <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-              <span className="text-xs font-mono tracking-widest uppercase">Lider u regionu</span>
+              <span className="text-xs font-mono tracking-widest uppercase">{t("about.heroBadge")}</span>
             </div>
             
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-8 leading-[0.9] tracking-tight">
-              Od Osnivanja do <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-400">Industrijskog Lidera.</span>
+              {t("about.heroHeadline1")} <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-400">{t("about.heroHeadline2")}</span>
             </h1>
             
             <p className="text-xl md:text-2xl text-white/60 max-w-2xl font-light leading-relaxed mb-10 border-l-2 border-primary/50 pl-6">
-              30 godina inovacija, inženjerske preciznosti i posvećenosti. 
-              Mi nismo samo izvođači radova - mi smo <span className="text-white font-medium">arhitekte održive budućnosti</span>.
+              {t("about.heroSubheadline")}
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Engineering DNA Section (New) */}
+      {/* Engineering DNA Section */}
       <section className="py-24 bg-white relative overflow-hidden border-b border-slate-100">
         <div className="container mx-auto px-6">
            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
              <div>
                <h2 className="text-4xl font-bold text-[#171A54] mb-6">
-                 Inženjerski <span className="text-primary">DNK</span>
+                 {t("about.engineeringTitle")}
                </h2>
                <p className="text-[#171A54]/70 text-lg leading-relaxed mb-8">
-                 Naša snaga leži u tehničkoj superiornosti. Koristimo najnaprednije alate za projektovanje i simulaciju kako bismo osigurali maksimalnu efikasnost svakog sistema.
+                 {t("about.engineeringDesc")}
                </p>
                
                <div className="grid grid-cols-2 gap-6">
-                 {[
-                   { icon: DraftingCompass, title: "CAD/Revit Dizajn", desc: "Precizno 3D modelovanje" },
-                   { icon: Cpu, title: "Termo Simulacije", desc: "Napredni proračuni opterećenja" },
-                   { icon: FileCode, title: "PLC Programiranje", desc: "Automatizacija po meri" },
-                   { icon: Database, title: "Monitoring", desc: "Sistemi za praćenje u realnom vremenu" }
-                 ].map((item, i) => (
+                 {engineeringItems.map((item, i) => (
                    <div key={i} className="flex gap-4 items-start">
                      <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 text-primary">
                        <item.icon className="w-5 h-5" />
@@ -224,13 +232,13 @@ export default function About() {
              <div className="relative">
                <div className="absolute -inset-4 bg-primary/5 rounded-3xl -rotate-2" />
                <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-slate-200">
-                 <img src="/assets/service-engineering.webp" alt="Engineering" className="w-full h-auto" />
+                 <img src="/assets/service-engineering.webp" alt={isEnglish ? "Engineering" : "Inženjering"} className="w-full h-auto" />
                  
                  {/* Floating Badge */}
                  <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-white/50 max-w-[200px]">
                    <div className="flex items-center gap-2 mb-2">
                      <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                     <span className="text-[10px] font-mono uppercase font-bold text-[#171A54]">Software Stack</span>
+                     <span className="text-[10px] font-mono uppercase font-bold text-[#171A54]">{t("about.softwareStack")}</span>
                    </div>
                    <div className="flex gap-2">
                      <span className="px-2 py-1 bg-slate-100 rounded text-[10px] font-bold text-slate-600">Revit</span>
@@ -249,10 +257,10 @@ export default function About() {
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-[#171A54] mb-4">
-              Stubovi <span className="text-primary">Uspeha</span>
+              {t("about.valuesTitle")}
             </h2>
             <p className="text-slate-500 max-w-2xl mx-auto">
-              Vrednosti koje definišu naš pristup svakom projektu i klijentu.
+              {t("about.valuesSubtitle")}
             </p>
           </div>
           
@@ -286,7 +294,7 @@ export default function About() {
         
         <div className="container mx-auto px-6 relative z-10">
           <div className="text-center mb-20">
-            <h2 className="text-4xl font-bold text-white">Naša <span className="text-primary">Istorija</span></h2>
+            <h2 className="text-4xl font-bold text-white">{t("about.historyTitle")}</h2>
           </div>
 
           <div className="relative">
@@ -346,14 +354,14 @@ export default function About() {
            <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
              <div>
                <h2 className="text-4xl font-bold text-[#171A54] mb-4">
-                 Upoznajte <span className="text-primary">Eksperte</span>
+                 {t("about.teamTitle")}
                </h2>
                <p className="text-slate-500 max-w-xl">
-                 Ljudi koji stoje iza naših najsloženijih inženjerskih poduhvata.
+                 {t("about.teamSubtitle")}
                </p>
              </div>
              <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white" asChild>
-               <Link href="/kontakt">Pridruži se timu</Link>
+               <Link href={l("/kontakt")}>{t("about.teamJoin")}</Link>
              </Button>
            </div>
 
@@ -382,7 +390,7 @@ export default function About() {
                         </div>
                         <a
                           href={`mailto:${member.email}`}
-                          aria-label={`Pošalji email: ${member.email}`}
+                          aria-label={`${t("about.ariaEmail")}: ${member.email}`}
                           className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white hover:bg-primary hover:text-white transition-colors"
                         >
                           <Mail className="w-5 h-5" />

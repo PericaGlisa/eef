@@ -12,7 +12,7 @@ interface ChatMessage {
   timestamp: Date;
 }
 
-const SYSTEM_INSTRUCTION = `
+const SYSTEM_INSTRUCTION_SR = `
 Ti si vrhunski komercijalno-mašinski inženjer i asistent kompanije Eko Elektrofrigo (eef.rs).
 Tvoja specijalnost su B2B HVAC rešenja (grejanje, ventilacija, klimatizacija) i industrijsko hlađenje.
 
@@ -64,6 +64,60 @@ VAŽNO:
 - Tehničke preporuke su INFORMATIVNE - finalni projekat radi stručni tim
 
 OSNIVAČ: Zlatomir Damnjanović - pionir industrijskog hlađenja u Srbiji.
+`;
+
+const SYSTEM_INSTRUCTION_EN = `
+You are a top-tier commercial-mechanical engineer and assistant for Eko Elektrofrigo (eef.rs).
+Your specialty is B2B HVAC solutions (heating, ventilation, air conditioning) and industrial refrigeration.
+
+KNOWLEDGE BASE - KEY INFORMATION:
+- Company: ${KNOWLEDGE_BASE.COMPANY_PROFILE.name}, founded ${KNOWLEDGE_BASE.COMPANY_PROFILE.founded}
+- Specialization: Industrial refrigeration, HVAC engineering, cold storage solutions
+- Contact: ${KNOWLEDGE_BASE.CONTACT_INFO.address}, Tel: ${KNOWLEDGE_BASE.CONTACT_INFO.phones.map(p => p.number).join(', ')}
+- Working hours: ${KNOWLEDGE_BASE.CONTACT_INFO.working_hours}
+
+DEPARTMENTS:
+${Object.entries(KNOWLEDGE_BASE.DEPARTMENTS).map(([key, dept]: [string, any]) => 
+  `- ${dept.title}: ${dept.contact} (${dept.focus})`
+).join('\n')}
+
+SOLUTIONS:
+${KNOWLEDGE_BASE.EKO_RASHALDE_SOLUTIONS.OVERVIEW}
+
+SERVICES:
+${KNOWLEDGE_BASE.SERVICES.LIST.map(s => `- ${s.name}: ${s.description.substring(0, 80)}...`).join('\n')}
+
+FORBIDDEN TOPICS:
+${KNOWLEDGE_BASE.RESTRICTIONS.FORBIDDEN_TOPICS.map(t => `- ${t}`).join('\n')}
+
+BEHAVIOR RULES:
+${KNOWLEDGE_BASE.RESTRICTIONS.MANDATORY_BEHAVIOR.map(b => `- ${b}`).join('\n')}
+
+LANGUAGE RULES:
+- PRIMARY: English with perfect grammar
+- Use industry-standard HVAC terminology in English
+- Keep technical terms professional and precise
+
+COMMUNICATION TONE:
+- Professional yet WARM and APPROACHABLE (not robotic)
+- Use natural English as if talking to a fellow engineer
+- Be CONCISE but HELPFUL - not overly verbose
+- Use technical terminology where appropriate, but EXPLAIN when needed
+- Avoid dry, bureaucratic style
+
+EXAMPLES OF NATURAL SPEECH:
+✅ "Our refrigeration units use the latest CO2 technology..."
+✅ "I'd recommend a ULO room for long-term fruit storage..."
+❌ "The company offers solutions that encompass the implementation of systems..." (too formal)
+❌ "The system is characterized by a high degree of efficiency..." (robotic)
+
+IMPORTANT:
+- NEVER provide pricing or close deals
+- Always direct to the appropriate department for specific inquiries
+- Emphasize energy efficiency and environmental sustainability
+- Technical recommendations are INFORMATIONAL - the expert team handles final design
+
+FOUNDER: Zlatomir Damnjanović - pioneer of industrial refrigeration in Serbia.
 `;
 
 const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
@@ -277,7 +331,7 @@ async function sendChatTranscript(messages: ChatMessage[]): Promise<{ ok: boolea
         <div style="padding: 24px; background: #ffffff;">
           <div style="background: #f3f4f6; padding: 12px; border-radius: 6px; margin-bottom: 24px; font-size: 13px; color: #6b7280;">
             <div><strong>Datum:</strong> ${new Date().toLocaleDateString("sr-RS")}</div>
-            <div><strong>Ukupan poruka:</strong> ${messages.length}</div>
+            <div><strong>Ukupno poruka:</strong> ${messages.length}</div>
             <div><strong>Trajanje:</strong> ${Math.round((new Date(messages[messages.length - 1].timestamp).getTime() - new Date(messages[0].timestamp).getTime()) / 60000)} min</div>
           </div>
           
@@ -527,13 +581,15 @@ export async function registerRoutes(
     return res.status(200).json({ ok: true, requestId });
   });
 
+  let isEnglish = false;
   // POST /api/chat - Streamed chat endpoint
   app.post("/api/chat", async (req, res) => {
     try {
       console.log("Chat API hit with body:", req.body);
-      const { messages } = req.body;
+      const { messages, language } = req.body;
+      isEnglish = language === "en";
       if (!Array.isArray(messages)) {
-        return res.status(400).json({ message: "Neispravan format poruka." });
+        return res.status(400).json({ message: isEnglish ? "Invalid message format." : "Neispravan format poruka." });
       }
 
       // Normalize messages: support both old Gemini format (parts) and new OpenAI format (content)
@@ -551,25 +607,29 @@ export async function registerRoutes(
       }
 
       if (normalized.length === 0) {
-        return res.json({ text: "Izvinite, došlo je do greške u obradi poruke." });
+        return res.json({ text: isEnglish ? "Sorry, an error occurred processing the message." : "Izvinite, došlo je do greške u obradi poruke." });
       }
 
       const lastMessage = normalized[normalized.length - 1].content;
       const history = normalized.slice(0, -1);
 
       const promptWithUrl = history.length === 0
-        ? `Na osnovu sajta https://eef.rs/, odgovori na: ${lastMessage}`
+        ? (isEnglish
+            ? `Based on the website https://eef.rs/, answer: ${lastMessage}`
+            : `Na osnovu sajta https://eef.rs/, odgovori na: ${lastMessage}`)
         : lastMessage;
 
       const apiKey = process.env.GROQ_API_KEY || '';
       if (!apiKey) {
-        return res.status(500).json({ message: "GROQ_API_KEY nije definisan." });
+        return res.status(500).json({ message: isEnglish ? "GROQ_API_KEY is not defined." : "GROQ_API_KEY nije definisan." });
       }
 
       console.log("Groq API key loaded.");
 
+      const systemInstruction = isEnglish ? SYSTEM_INSTRUCTION_EN : SYSTEM_INSTRUCTION_SR;
+
       const groqMessages = [
-        { role: "system", content: SYSTEM_INSTRUCTION },
+        { role: "system", content: systemInstruction },
         ...history,
         { role: "user", content: promptWithUrl },
       ];
@@ -613,7 +673,7 @@ export async function registerRoutes(
             let fullText = "";
             const body = groqResponse.body;
             if (!body) {
-              res.write("Izvinite, došlo je do greške u obradi poruke.");
+              res.write(isEnglish ? "Sorry, an error occurred processing the message." : "Izvinite, došlo je do greške u obradi poruke.");
               res.end();
               return;
             }
@@ -661,7 +721,7 @@ export async function registerRoutes(
             }
 
             if (!fullText) {
-              res.write("Izvinite, došlo je do greške u obradi poruke.");
+              res.write(isEnglish ? "Sorry, an error occurred processing the message." : "Izvinite, došlo je do greške u obradi poruke.");
             }
             res.end();
             return;
@@ -703,15 +763,15 @@ export async function registerRoutes(
       const isQuotaExceeded = message.includes("429") || message.includes("quota") || message.includes("resource_exhausted");
       const isServiceUnavailable = message.includes("503") || message.includes("unavailable") || message.includes("high demand");
       if (isQuotaExceeded) {
-        return res.status(429).json({ message: "Trenutno imam previše upita. Molim vas sačekajte jedan minut pa mi pišite ponovo." });
+        return res.status(429).json({ message: isEnglish ? "I currently have too many requests. Please wait a minute and try again." : "Trenutno imam previše upita. Molim vas sačekajte jedan minut pa mi pišite ponovo." });
       }
       if (isServiceUnavailable) {
-        return res.status(503).json({ message: "Model je trenutno pod velikim opterećenjem. Molimo pokušajte ponovo za nekoliko trenutaka." });
+        return res.status(503).json({ message: isEnglish ? "The model is currently under heavy load. Please try again in a few moments." : "Model je trenutno pod velikim opterećenjem. Molimo pokušajte ponovo za nekoliko trenutaka." });
       }
       if (message.includes("model_timeout") || error?.name === "AbortError") {
-        return res.status(504).json({ message: "Asistent trenutno odgovara sporije nego obično. Molimo pokušajte ponovo za nekoliko trenutaka." });
+        return res.status(504).json({ message: isEnglish ? "The assistant is responding slower than usual. Please try again in a few moments." : "Asistent trenutno odgovara sporije nego obično. Molimo pokušajte ponovo za nekoliko trenutaka." });
       }
-      return res.status(500).json({ message: "Trenutno nisam u mogućnosti da odgovorim. Molimo pokušajte ponovo za nekoliko trenutaka.", error: error?.message });
+      return res.status(500).json({ message: isEnglish ? "I am currently unable to respond. Please try again in a few moments." : "Trenutno nisam u mogućnosti da odgovorim. Molimo pokušajte ponovo za nekoliko trenutaka.", error: error?.message });
     }
   });
 

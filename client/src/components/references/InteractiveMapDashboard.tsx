@@ -3,11 +3,17 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, MapPin, Building2, Users, ArrowRight } from 'lucide-react';
 import { SerbiaMap } from './SerbiaMap';
 import { LogoSnowflake } from '../ui/LogoSnowflake';
-import { locations, Location } from './locations';
+import { getLocations, Location } from './locations';
+import { useTranslation } from '@/lib/i18n';
+import { useLang } from '@/contexts/LanguageContext';
 
 export function InteractiveMapDashboard() {
   const [activeLocation, setActiveLocation] = useState<Location | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const { t } = useTranslation();
+  const { isEnglish } = useLang();
+
+  const locations = useMemo(() => getLocations(isEnglish), [isEnglish]);
 
   const filteredLocations = useMemo(() => {
     return locations.filter(loc => 
@@ -18,7 +24,7 @@ export function InteractiveMapDashboard() {
         (p.client && p.client.toLowerCase().includes(searchTerm.toLowerCase()))
       )
     );
-  }, [searchTerm]);
+  }, [searchTerm, locations]);
 
   const stats = useMemo(() => {
     const totalProjects = locations.reduce((acc, loc) => acc + loc.projects.length, 0);
@@ -31,7 +37,7 @@ export function InteractiveMapDashboard() {
       });
     });
     return { totalProjects, totalCities, totalClients: clients.size };
-  }, []);
+  }, [locations]);
 
   return (
     <div className="bg-[#0e1035] rounded-3xl border border-white/10 shadow-2xl flex flex-col lg:flex-row h-auto lg:h-[800px] lg:max-h-[85vh] overflow-hidden relative isolate">
@@ -40,9 +46,9 @@ export function InteractiveMapDashboard() {
         {/* Header & Stats */}
         <div className="p-6 border-b border-white/10 space-y-6">
           <div>
-            <h3 className="text-2xl font-bold text-white mb-2">Istražite Projekte</h3>
+            <h3 className="text-2xl font-bold text-white mb-2">{t("references.mapExploreTitle")}</h3>
             <p className="text-white/50 text-sm">
-              Pretražite našu bazu referenci po gradovima, klijentima ili vrsti projekta.
+              {t("references.mapExploreDesc")}
             </p>
           </div>
 
@@ -50,15 +56,15 @@ export function InteractiveMapDashboard() {
           <div className="grid grid-cols-3 gap-2">
             <div className="bg-white/5 rounded-lg p-3 text-center">
               <div className="text-primary font-bold text-xl">{stats.totalProjects}</div>
-              <div className="text-[10px] text-white/40 uppercase tracking-wider">Projekata</div>
+              <div className="text-[10px] text-white/40 uppercase tracking-wider">{t("references.mapStatProjects")}</div>
             </div>
             <div className="bg-white/5 rounded-lg p-3 text-center">
               <div className="text-primary font-bold text-xl">{stats.totalCities}</div>
-              <div className="text-[10px] text-white/40 uppercase tracking-wider">Gradova</div>
+              <div className="text-[10px] text-white/40 uppercase tracking-wider">{t("references.mapStatCities")}</div>
             </div>
             <div className="bg-white/5 rounded-lg p-3 text-center">
               <div className="text-primary font-bold text-xl">{stats.totalClients}</div>
-              <div className="text-[10px] text-white/40 uppercase tracking-wider">Klijenata</div>
+              <div className="text-[10px] text-white/40 uppercase tracking-wider">{t("references.mapStatClients")}</div>
             </div>
           </div>
 
@@ -67,7 +73,7 @@ export function InteractiveMapDashboard() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
             <input 
               type="text" 
-              placeholder="Pretraži..." 
+              placeholder={t("references.mapSearchPlaceholder")}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-2 text-white placeholder:text-white/30 focus:outline-none focus:border-primary/50 transition-colors"
@@ -83,7 +89,7 @@ export function InteractiveMapDashboard() {
         >
           {filteredLocations.length === 0 ? (
             <div className="text-center text-white/30 py-8">
-              Nema rezultata pretrage
+              {t("references.mapNoResults")}
             </div>
           ) : (
             filteredLocations.map(loc => (
@@ -125,7 +131,7 @@ export function InteractiveMapDashboard() {
                   ))}
                   {loc.projects.length > 2 && (
                     <div className="text-xs text-primary/70">
-                      + još {loc.projects.length - 2} projekta
+                      + {t("references.mapMoreProjects")} {loc.projects.length - 2}
                     </div>
                   )}
                 </div>
@@ -140,7 +146,8 @@ export function InteractiveMapDashboard() {
         <div className="absolute inset-0">
           <SerbiaMap 
             activeLocation={activeLocation} 
-            onSelect={setActiveLocation} 
+            onSelect={setActiveLocation}
+            isEnglish={isEnglish}
           />
         </div>
         
@@ -151,7 +158,7 @@ export function InteractiveMapDashboard() {
               <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
                 <MapPin className="w-4 h-4 text-primary" />
               </div>
-              <p>Kliknite na grad na mapi ili izaberite iz liste za detalje.</p>
+              <p>{t("references.mapClickInstruction")}</p>
             </div>
           </div>
         )}

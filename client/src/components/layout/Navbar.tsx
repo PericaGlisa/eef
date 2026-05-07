@@ -25,9 +25,17 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/lib/i18n";
+import { useLang } from "@/contexts/LanguageContext";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { getCounterpartPath } from "@/lib/route-map";
 
 export function Navbar() {
-  const [location] = useLocation();
+  const { t } = useTranslation();
+  const { lang, isEnglish } = useLang();
+  const [location, setLocation] = useLocation();
+  const l = (srHref: string) => isEnglish ? getCounterpartPath(srHref, "en") : srHref;
+
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -65,10 +73,10 @@ export function Navbar() {
   }, [isOpen]);
 
   const quickAccessLinks = [
-    { name: "Početna", href: "/", icon: Home },
-    { name: "Kontakt", href: "/kontakt", icon: Phone },
-    { name: "Reference", href: "/reference", icon: Star },
-    { name: "Blog", href: "/blog", icon: BookOpen },
+    { name: t("common.home"), href: l("/"), icon: Home },
+    { name: t("nav.contact"), href: l("/kontakt"), icon: Phone },
+    { name: t("nav.references"), href: l("/reference"), icon: Star },
+    { name: "Blog", href: l("/vesti"), icon: BookOpen },
   ];
 
   const getCurrentPageName = () => {
@@ -78,45 +86,45 @@ export function Navbar() {
 
   const navLinks = [
     {
-      name: "Eko Rashlada",
-      href: "/eko-rashlada",
-      description: "Istražite naša eko rashladna rešenja dizajnirana za maksimalnu efikasnost, održivost i pouzdanost.",
+      name: t("nav.ecoCooling"),
+      href: l("/eko-rashlada"),
+      description: t("nav.ecoCoolingDesc"),
       items: [
-        { name: "Rashladne komore", href: "/eko-rashlada/rashladne-komore", icon: Snowflake, desc: "Plusne i minusne komore" },
-        { name: "Tuneli za smrzavanje", href: "/eko-rashlada/tuneli-za-smrzavanje", icon: Wind, desc: "Brzo smrzavanje" },
-        { name: "ULO Komore", href: "/eko-rashlada/ulo-komore", icon: Box, desc: "Kontrolisana atmosfera" },
-        { name: "Rashladni agregati", href: "/eko-rashlada/rashladni-agregati", icon: Server, desc: "Ekološki freoni i CO2" },
-        { name: "Čileri", href: "/eko-rashlada/cileri", icon: Droplets, desc: "Indirektno hlađenje" },
-        { name: "Elektro ormani & CNSU", href: "/eko-rashlada/elektro-ormani", icon: Zap, desc: "Nadzor i upravljanje" },
-        { name: "Termoizolacija", href: "/eko-rashlada/termoizolacija", icon: Thermometer, desc: "Paneli i vrata" }
+        { name: t("nav.coldRooms"), href: l("/eko-rashlada/rashladne-komore"), icon: Snowflake, desc: t("nav.coldRoomsDesc") },
+        { name: t("nav.freezingTunnels"), href: l("/eko-rashlada/tuneli-za-smrzavanje"), icon: Wind, desc: t("nav.freezingTunnelsDesc") },
+        { name: t("nav.uloRooms"), href: l("/eko-rashlada/ulo-komore"), icon: Box, desc: t("nav.uloRoomsDesc") },
+        { name: t("nav.coolingUnits"), href: l("/eko-rashlada/rashladni-agregati"), icon: Server, desc: t("nav.coolingUnitsDesc") },
+        { name: t("nav.chillers"), href: l("/eko-rashlada/cileri"), icon: Droplets, desc: t("nav.chillersDesc") },
+        { name: t("nav.electricalCabinets"), href: l("/eko-rashlada/elektro-ormani"), icon: Zap, desc: t("nav.electricalCabinetsDesc") },
+        { name: t("nav.thermalInsulation"), href: l("/eko-rashlada/termoizolacija"), icon: Thermometer, desc: t("nav.thermalInsulationDesc") }
       ]
     },
     {
-      name: "Usluge",
-      href: "/usluge",
-      description: "Sveobuhvatna inženjerska podrška: od idejnog rešenja i projektovanja, preko stručne montaže, do pouzdanog servisa i održavanja 24/7.",
+      name: t("nav.services"),
+      href: l("/usluge"),
+      description: t("nav.servicesDesc"),
       items: [
-        { name: "Inženjering", href: "/usluge/inzenjering", icon: DraftingCompass, desc: "Projektovanje i 3D modeli" },
-        { name: "Izvođenje", href: "/usluge/izvodjenje", icon: Factory, desc: "Montaža ključ u ruke" },
-        { name: "Servis", href: "/usluge/servis", icon: Wrench, desc: "Održavanje 24/7" },
-        { name: "Energetska Revizija", href: "/usluge/energetska-revizija", icon: BarChart3, desc: "ROI i uštede" },
-        { name: "Konsalting", href: "/usluge/konsalting", icon: Lightbulb, desc: "Stručno savetovanje" },
-        { name: "Sigurnost", href: "/usluge/sigurnost", icon: ShieldCheck, desc: "Kvalitet i standardi" }
+        { name: t("nav.engineering"), href: l("/usluge/inzenjering"), icon: DraftingCompass, desc: t("nav.engineeringDesc") },
+        { name: t("nav.execution"), href: l("/usluge/izvodjenje"), icon: Factory, desc: t("nav.executionDesc") },
+        { name: t("nav.service"), href: l("/usluge/servis"), icon: Wrench, desc: t("nav.serviceDesc") },
+        { name: t("nav.energyAudit"), href: l("/usluge/energetska-revizija"), icon: BarChart3, desc: t("nav.energyAuditDesc") },
+        { name: t("nav.consulting"), href: l("/usluge/konsalting"), icon: Lightbulb, desc: t("nav.consultingDesc") },
+        { name: t("nav.safety"), href: l("/usluge/sigurnost"), icon: ShieldCheck, desc: t("nav.safetyDesc") }
       ]
     },
-    { name: "Kompanija", href: "/o-nama" },
-    { name: "Partneri", href: "/partneri" },
-    { name: "Reference", href: "/reference" },
+    { name: t("nav.company"), href: l("/o-nama") },
+    { name: t("nav.partners"), href: l("/partneri") },
+    { name: t("nav.references"), href: l("/reference") },
     {
-      name: "Dokumentacija",
-      href: "/dokumentacija",
-      description: "Pristupite našim zvaničnim sertifikatima i potvrdama kvaliteta.",
+      name: t("nav.documentation"),
+      href: l("/dokumentacija"),
+      description: t("nav.documentationDesc"),
       items: [
-        { name: "Sertifikati", href: "/dokumentacija/sertifikati", icon: ShieldCheck, desc: "ISO 9001, 14001, 45001" },
-        { name: "Diplome", href: "/dokumentacija/diplome", icon: BookOpen, desc: "Partnerska priznanja" }
+        { name: t("nav.certificates"), href: l("/dokumentacija/sertifikati"), icon: ShieldCheck, desc: t("nav.certificatesDesc") },
+        { name: t("nav.diplomas"), href: l("/dokumentacija/diplome"), icon: BookOpen, desc: t("nav.diplomasDesc") }
       ]
     },
-    { name: "Kontakt", href: "/kontakt" },
+    { name: t("nav.contact"), href: l("/kontakt") },
   ];
 
   return (
@@ -141,7 +149,8 @@ export function Navbar() {
           </a>
         </div>
 
-        <div className="hidden md:flex items-center gap-2 relative z-10">
+        <div className="hidden md:flex items-center gap-3 relative z-10">
+          <LanguageSwitcher className="text-white/80" />
           <a 
             href="https://www.linkedin.com/feed/update/urn:li:activity:6899988285712596994" 
             target="_blank" 
@@ -161,7 +170,7 @@ export function Navbar() {
       >
         <div className="container mx-auto px-6 flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group shrink-0">
+          <Link href={l("/")} className="flex items-center gap-3 group shrink-0">
             <img 
               src="/assets/logo.png" 
               alt="EEF Logo" 
@@ -196,7 +205,7 @@ export function Navbar() {
                                     </div>
                                     <Button variant="outline" size="sm" className="w-full justify-between text-xs border-white/10 hover:border-primary/50 hover:bg-white/5 text-white" asChild>
                                         <Link href={link.href}>
-                                            Pogledaj sve <ChevronRight className="w-3 h-3 ml-2" />
+                                            {t("common.viewAll")} <ChevronRight className="w-3 h-3 ml-2" />
                                         </Link>
                                     </Button>
                                 </div>
@@ -262,7 +271,7 @@ export function Navbar() {
                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
                      <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
                    </span>
-                   Posetite Web Shop
+                   {t("common.visitWebShop")}
                    <ChevronRight className="w-3 h-3" />
                  </span>
                </a>
@@ -311,34 +320,37 @@ export function Navbar() {
                   style={{ overscrollBehavior: 'contain', touchAction: 'pan-y' }}
                   onWheel={(e) => e.stopPropagation()}
                 >
-                  {/* Header with Logo and Close Button */}
+                  {/* Header with Logo, Language Switcher and Close Button */}
                   <div className="flex items-center justify-between mb-8">
                     {/* Logo */}
-                    <Link href="/" onClick={() => setIsOpen(false)}>
+                    <Link href={l("/")} onClick={() => setIsOpen(false)}>
                       <img 
                         src="/assets/logo.png" 
                         alt="Eko Elektrofrigo Logo"
                         className="h-10 w-auto object-contain brightness-0 invert"
                       />
                     </Link>
-                    
-                    {/* Close Button */}
-                    <button
-                      onClick={() => setIsOpen(false)}
-                      className="w-10 h-10 rounded-full flex items-center justify-center text-white hover:bg-white/10 transition-all"
-                      aria-label="Zatvori meni"
-                    >
-                      <X className="w-6 h-6" />
-                    </button>
+
+                    <div className="flex items-center gap-3">
+                      <LanguageSwitcher variant="full" />
+                      {/* Close Button */}
+                      <button
+                        onClick={() => setIsOpen(false)}
+                        className="w-10 h-10 rounded-full flex items-center justify-center text-white hover:bg-white/10 transition-all"
+                        aria-label={t("common.close")}
+                      >
+                        <X className="w-6 h-6" />
+                      </button>
+                    </div>
                   </div>
                   {/* Breadcrumb Trail */}
-                  {location !== "/" && (
+                  {location !== "/" && location !== "/en" && location !== "/en/" && (
                     <motion.div 
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       className="flex items-center gap-2 text-xs text-white/40 mb-6"
                     >
-                      <Link href="/" className="hover:text-primary transition-colors">Početna</Link>
+                      <Link href={l("/")} className="hover:text-primary transition-colors">{t("common.home")}</Link>
                       <ChevronRight className="w-3 h-3" />
                       <span className="text-white/70">{getCurrentPageName()}</span>
                     </motion.div>
@@ -355,7 +367,7 @@ export function Navbar() {
                       <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
                       <input 
                         type="text" 
-                        placeholder="Pretraži usluge..."
+                        placeholder={t("common.searchPlaceholder")}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-white placeholder:text-white/30 focus:outline-none focus:border-primary/50 transition-colors"
@@ -499,8 +511,8 @@ export function Navbar() {
                         <div className="flex items-start gap-3">
                           <Clock className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                           <div>
-                            <p className="text-xs uppercase tracking-wider text-white/50 mb-1">Radno Vreme</p>
-                            <p className="text-sm text-white">Pon - Pet: 07:30 - 15:30</p>
+                            <p className="text-xs uppercase tracking-wider text-white/50 mb-1">{t("common.workingHours")}</p>
+                            <p className="text-sm text-white">{t("common.monFri")}: 07:30 - 15:30</p>
                           </div>
                         </div>
                       </div>
@@ -521,7 +533,7 @@ export function Navbar() {
                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
                              <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
                            </span>
-                           Posetite Web Shop
+                           {t("common.visitWebShop")}
                            <ChevronRight className="w-4 h-4" />
                          </span>
                        </a>
@@ -530,7 +542,7 @@ export function Navbar() {
                      <div>
                         <h4 className="text-xs font-bold uppercase tracking-widest text-primary/80 mb-6 flex items-center gap-2">
                           <span className="w-8 h-[1px] bg-primary/50"></span>
-                          Kontakt
+                          {t("nav.contact")}
                         </h4>
                         <div className="space-y-4">
                           <a href="mailto:office@eef.rs" className="text-xl text-white hover:text-primary transition-colors block font-light">office@eef.rs</a>

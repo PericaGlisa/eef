@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Calendar, Tag } from "lucide-react";
 import { Link } from "wouter";
-import { newsItems } from "@/data/news";
+import { getNewsItems } from "@/data/news";
 import {
   Carousel,
   CarouselContent,
@@ -10,8 +10,17 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
+import { useLang } from "@/contexts/LanguageContext";
+import { useTranslation } from "@/lib/i18n";
+import { getCounterpartPath } from "@/lib/route-map";
+import { useMemo } from "react";
 
 export function NewsTicker() {
+  const { isEnglish } = useLang();
+  const { t } = useTranslation();
+  const l = (srHref: string) => isEnglish ? getCounterpartPath(srHref, "en") : srHref;
+  const newsItems = useMemo(() => getNewsItems(isEnglish), [isEnglish]);
+
   return (
     <section className="content-auto py-24 bg-white relative overflow-hidden">
       {/* Background Decor */}
@@ -27,17 +36,17 @@ export function NewsTicker() {
               className="flex items-center gap-3"
             >
               <div className="h-px w-8 bg-primary" />
-              <span className="text-primary font-mono text-xs tracking-[0.2em] uppercase">Newsroom</span>
+              <span className="text-primary font-mono text-xs tracking-[0.2em] uppercase">{isEnglish ? "Newsroom" : "Novosti"}</span>
             </motion.div>
             <h2 className="text-4xl md:text-5xl font-bold text-[#171A54] tracking-tight">
-              Aktuelnosti iz <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-600">Industrije</span>
+              {isEnglish ? "Latest from" : "Aktuelnosti iz"} <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-600">{isEnglish ? "Industry" : "Industrije"}</span>
             </h2>
           </div>
           
           <div className="hidden md:block">
-            <Link href="/vesti">
+            <Link href={l("/vesti")}>
               <button className="group flex items-center gap-3 px-6 py-3 rounded-full border border-[#171A54]/10 hover:border-primary/50 hover:bg-primary/5 transition-all duration-300 cursor-pointer">
-                <span className="text-sm font-medium text-[#171A54] group-hover:text-primary">Pogledaj arhivu</span>
+                <span className="text-sm font-medium text-[#171A54] group-hover:text-primary">{isEnglish ? "View archive" : "Pogledaj arhivu"}</span>
                 <div className="w-8 h-8 rounded-full bg-[#171A54]/5 flex items-center justify-center text-[#171A54] group-hover:bg-primary group-hover:text-white transition-all duration-300">
                   <ArrowRight className="w-4 h-4" />
                 </div>
@@ -63,7 +72,7 @@ export function NewsTicker() {
           <CarouselContent className="-ml-8">
             {newsItems.map((item, i) => (
               <CarouselItem key={item.id} className="pl-8 md:basis-1/2 lg:basis-1/3 h-auto">
-                <Link href={`/vesti/${item.slug}`} className="h-full block">
+                <Link href={l(`/vesti/${item.slug}`)} className="h-full block">
                   <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -99,7 +108,7 @@ export function NewsTicker() {
                       </p>
                       
                       <div className="pt-4 flex items-center gap-2 text-primary text-xs font-bold uppercase tracking-widest opacity-60 group-hover:opacity-100 group-hover:translate-x-2 transition-all duration-300">
-                        Pročitaj više <ArrowRight className="w-4 h-4" />
+                        {isEnglish ? "Read more" : "Pročitaj više"} <ArrowRight className="w-4 h-4" />
                       </div>
                     </div>
                   </motion.div>
@@ -115,9 +124,9 @@ export function NewsTicker() {
         </Carousel>
 
         <div className="mt-12 md:hidden flex justify-center">
-            <Link href="/vesti">
+            <Link href={l("/vesti")}>
               <button className="group flex items-center gap-3 px-6 py-3 rounded-full border border-[#171A54]/10 hover:border-primary/50 hover:bg-primary/5 transition-all duration-300 cursor-pointer">
-                <span className="text-sm font-medium text-[#171A54] group-hover:text-primary">Pogledaj arhivu</span>
+                <span className="text-sm font-medium text-[#171A54] group-hover:text-primary">{isEnglish ? "View archive" : "Pogledaj arhivu"}</span>
                 <div className="w-8 h-8 rounded-full bg-[#171A54]/5 flex items-center justify-center text-[#171A54] group-hover:bg-primary group-hover:text-white transition-all duration-300">
                   <ArrowRight className="w-4 h-4" />
                 </div>

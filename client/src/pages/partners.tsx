@@ -1,73 +1,19 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ExternalLink, CheckCircle2, ArrowRight, MousePointerClick } from "lucide-react";
+import { ExternalLink, ArrowRight, MousePointerClick } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import { Link } from "wouter";
-
-const partners = [
-  { 
-    id: "bitzer",
-    name: "Bitzer", 
-    role: "Distributer za Srbiju",
-    description: "Kompanija Eko Elektrofrigo je distributer proizvoda kompanije Bitzer za teritoriju Republike Srbije. Bitzer Group već 86 godina daje ključan doprinos inovativnim proizvodima i uslugama iz oblasti tehnologije hlađenja i klimatizacije. Danas kompanija Bitzer predstavlja vodećeg svetskog proizvođača kompresora, prepoznatljivih po svojoj efikasnosti, operativnoj pouzdanosti i niskim troškovima životog ciklusa u najrazličitijim, kako industrijskim, tako i komercijalnim sistemima hlađenja. Svojim kvalitetom Bitzer kompresori garantuju stabilan i pouzdan rad sistema čiji su ključan deo.",
-    products: ["Klipni kompresori", "Vijčani kompresori", "Scroll kompresori"],
-    link: "https://www.bitzer.de/us/en/",
-    color: "bg-[#00965e]", // Bitzer green approximation
-    logo: "/assets/partners/bitzer.png"
-  },
-  { 
-    id: "danfoss",
-    name: "Danfoss", 
-    role: "Distributer za Srbiju",
-    description: "Kompanija Eko Elektrofrigo je distributer proizvoda kompanije Danfoss za teritoriju Republike Srbije. Danfoss predstavlja vodećeg svetskog proizvođača i distributera automatike za industriju hlađenja i klimatizacije. Prodajni asortiman proizvoda za oblast industrijskog hlađenja predstavlja najkompletniji na svetskom tržištu. Primena Danfoss komponenti je široka, od instalacija u komercijalnom hlađenju, do velikih industrijskih sistema hlađenja.",
-    subtext: "Danfossov proizvodni program ,,Climate Solutions za hlađenje’’ obuhvata kompletnu i široku paletu ventila (nepovratni, kontrolni i regulacioni, ekspanzioni, sigurnosni, elektromagnetni, zaustavni...), zatim elektronskih kontrolera, prekidača, senzora i transmitera, filtera i hvatača nečistoća, kao i kompresora i kondenzacijskih jedinica.",
-    link: "https://www.danfoss.com/sr-rs/",
-    color: "bg-[#D5121E]", // Danfoss red
-    logo: "/assets/partners/danfoss.png"
-  },
-  { 
-    id: "alfalaval",
-    name: "Alfa Laval", 
-    role: "Generalni Zastupnik",
-    description: "Kompanija Eko Elektrofrigo je generalni zastupnik i distributer proizvoda kompanije Alfa Laval za teritoriju Republike Srbije. Sa iskustvom od 80 godina u inovacijama prenosa toplote, Alfa Laval je danas kompanija koja svojim proizvodima obezbeđuje sigurnost i maksimalne performanse za bilo koju primenu.",
-    subtext: "U našoj ponudi proizvoda kompanije Alfa Laval se nalaze pločasti izmenjivači toplote. Predstavljaju savršeno dizajnirane jedinice, optimizovane tako da obezbeđuju vrhunske toplotne performanse, a pre svega maksimalnu pouzdanost. Osmišljeni su i konstruisani na način da postižu najveći mogući toplotni učinak, a najmanji mogući ekološki otisak. Primenu pronalaze u najrazličitijim sistemima koji imaju potrebu za izmenjivačima toplote, od komercijalnog i industrijskog hlađenja, procesnih čilera, pa do toplotnih pumpi.",
-    link: "https://www.alfalaval.rs/",
-    color: "bg-[#005494]", // Alfa Laval blue
-    logo: "/assets/partners/alfalaval.png"
-  },
-  { 
-    id: "luve",
-    name: "Alfa Lu-Ve", 
-    role: "Distributer za Srbiju",
-    description: "Kompanija Eko Elektrofrigo je distributer proizvoda kompanije Alfa Lu-Ve za teritoriju Republike Srbije. Višedecenijsko iskustvo u oblasti proizvodnje i distribucije vazdušnih hladnjaka i kondenzatora svrstava kompaniju Alfa Lu-Ve u jednog od vodećih distributera za ovu vrstu proizvoda u Evropi.",
-    subtext: "Proizvodi se odlikuju visokim tehničkim standardima, čiji dizajn je baziran na konkretnim uslovima primene i eksploatacije. Izbor potrebnih hladnjaka vazduha i kondenzatora je moguće izvršiti u širokom dijapazonu ponuđenih modela, čime se osigurava primena najpogodnijeg uređaja za konkretan slučaj. Uređaji su sertifikovani od strane EUROVENTa.",
-    link: "https://alfa.luvegroup.com/",
-    color: "bg-[#008AC9]", // Lu-Ve blue
-    logo: "/assets/partners/luve.png"
-  },
-  { 
-    id: "gvn",
-    name: "Güven Soğutma", 
-    role: "Premium Partner",
-    description: "Güven Soğutma je danas jedan od vodećih brendova na međunarodnom tržištu iz oblasti proizvodnje posuda pod visokim pritiskom i rashladne opreme za industrijski sektor hlađenja. Eko Elektrofrigo u svoje rashladne agregate ugrađuje širok spektar GVN opreme, od resivera, rezervoara ulja, separatora ulja, regulatora nivoa ulja, do filtera i prateće armature. Preko 35 godina iskustva u proizvodnji ove opreme i konstantan rast kompanije garantuju njen najviši kvalitet.",
-    link: "http://www.gvn.com.tr/",
-    color: "bg-[#F97316]", // GVN orange
-    logo: "/assets/partners/gvn.png"
-  },
-  { 
-    id: "isolcell",
-    name: "Isolcell", 
-    role: "Lider u Kontrolisanoj Atmosferi",
-    description: "Posebnu pažnju Eko Elektrofrigo posvećuje projektovanju hladnjača sa kontrolisanom atmosferom. Kako je kod ovakvih sistema kvalitet same opreme presudan za kontrolu atmosfere, Eko Elektrofrigo se odlučio za saradnju sa liderom u oblasti proizvodnje ovakve opreme, kompaniju Isolcell. Kompanija Isolcell predstavlja pionira u ovoj oblasti i proizvođača najkvalitetnije opreme za sisteme sa kontrolisanom atmosferom preko 60 godina.",
-    link: "https://www.isolcell.com/en/",
-    color: "bg-[#E31E24]", // Isolcell red
-    logo: "/assets/partners/isolcell.png"
-  }
-];
+import { useTranslation } from "@/lib/i18n";
+import { useLang } from "@/contexts/LanguageContext";
+import { getCounterpartPath } from "@/lib/route-map";
 
 export default function Partners() {
+  const { t } = useTranslation();
+  const { isEnglish } = useLang();
+  const l = (srHref: string) => isEnglish ? getCounterpartPath(srHref, "en") : srHref;
+
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -77,13 +23,91 @@ export default function Partners() {
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
+  const partners = useMemo(() => [
+    { 
+      id: "bitzer",
+      name: "Bitzer", 
+      role: t("partners.roleDistributor"),
+      description: isEnglish
+        ? "Eko Elektrofrigo is a distributor of Bitzer products for the territory of the Republic of Serbia. For 86 years, the Bitzer Group has made a key contribution with innovative products and services in the field of refrigeration and air conditioning technology. Today, Bitzer is a leading global manufacturer of compressors, recognized for their efficiency, operational reliability, and low life-cycle costs in a wide variety of industrial and commercial refrigeration systems. The quality of Bitzer compressors guarantees stable and reliable operation of the systems they are a key part of."
+        : "Kompanija Eko Elektrofrigo je distributer proizvoda kompanije Bitzer za teritoriju Republike Srbije. Bitzer Group već 86 godina daje ključan doprinos inovativnim proizvodima i uslugama iz oblasti tehnologije hlađenja i klimatizacije. Danas kompanija Bitzer predstavlja vodećeg svetskog proizvođača kompresora, prepoznatljivih po svojoj efikasnosti, operativnoj pouzdanosti i niskim troškovima životog ciklusa u najrazličitijim, kako industrijskim, tako i komercijalnim sistemima hlađenja. Svojim kvalitetom Bitzer kompresori garantuju stabilan i pouzdan rad sistema čiji su ključan deo.",
+      products: isEnglish ? ["Reciprocating compressors", "Screw compressors", "Scroll compressors"] : ["Klipni kompresori", "Vijčani kompresori", "Scroll kompresori"],
+      link: "https://www.bitzer.de/us/en/",
+      color: "bg-[#00965e]",
+      logo: "/assets/partners/bitzer.png"
+    },
+    { 
+      id: "danfoss",
+      name: "Danfoss", 
+      role: t("partners.roleDistributor"),
+      description: isEnglish
+        ? "Eko Elektrofrigo is a distributor of Danfoss products for the territory of the Republic of Serbia. Danfoss is a leading global manufacturer and distributor of automation for the refrigeration and air conditioning industry. The sales assortment of products for industrial refrigeration represents the most complete on the world market. The application of Danfoss components is wide, from installations in commercial refrigeration to large industrial refrigeration systems."
+        : "Kompanija Eko Elektrofrigo je distributer proizvoda kompanije Danfoss za teritoriju Republike Srbije. Danfoss predstavlja vodećeg svetskog proizvođača i distributera automatike za industriju hlađenja i klimatizacije. Prodajni asortiman proizvoda za oblast industrijskog hlađenja predstavlja najkompletniji na svetskom tržištu. Primena Danfoss komponenti je široka, od instalacija u komercijalnom hlađenju, do velikih industrijskih sistema hlađenja.",
+      subtext: isEnglish
+        ? "Danfoss's \"Climate Solutions for Refrigeration\" product range includes a complete and wide palette of valves (non-return, control and regulating, expansion, safety, solenoid, stop...), then electronic controllers, switches, sensors and transmitters, filters and dirt catchers, as well as compressors and condensing units."
+        : "Danfossov proizvodni program ,,Climate Solutions za hlađenje'' obuhvata kompletnu i široku paletu ventila (nepovratni, kontrolni i regulacioni, ekspanzioni, sigurnosni, elektromagnetni, zaustavni...), zatim elektronskih kontrolera, prekidača, senzora i transmitera, filtera i hvatača nečistoća, kao i kompresora i kondenzacijskih jedinica.",
+      link: "https://www.danfoss.com/sr-rs/",
+      color: "bg-[#D5121E]",
+      logo: "/assets/partners/danfoss.png"
+    },
+    { 
+      id: "alfalaval",
+      name: "Alfa Laval", 
+      role: t("partners.roleGeneralRep"),
+      description: isEnglish
+        ? "Eko Elektrofrigo is the general representative and distributor of Alfa Laval products for the territory of the Republic of Serbia. With 80 years of experience in heat transfer innovations, Alfa Laval today is a company whose products ensure safety and maximum performance for any application."
+        : "Kompanija Eko Elektrofrigo je generalni zastupnik i distributer proizvoda kompanije Alfa Laval za teritoriju Republike Srbije. Sa iskustvom od 80 godina u inovacijama prenosa toplote, Alfa Laval je danas kompanija koja svojim proizvodima obezbeđuje sigurnost i maksimalne performanse za bilo koju primenu.",
+      subtext: isEnglish
+        ? "Our range of Alfa Laval products includes plate heat exchangers. They represent perfectly designed units, optimized to provide top thermal performance and above all maximum reliability. They are designed and constructed to achieve the greatest possible thermal effect with the smallest possible ecological footprint. They find application in the most diverse systems that require heat exchangers, from commercial and industrial refrigeration, process chillers, to heat pumps."
+        : "U našoj ponudi proizvoda kompanije Alfa Laval se nalaze pločasti izmenjivači toplote. Predstavljaju savršeno dizajnirane jedinice, optimizovane tako da obezbeđuju vrhunske toplotne performanse, a pre svega maksimalnu pouzdanost. Osmišljeni su i konstruisani na način da postižu najveći mogući toplotni učinak, a najmanji mogući ekološki otisak. Primenu pronalaze u najrazličitijim sistemima koji imaju potrebu za izmenjivačima toplote, od komercijalnog i industrijskog hlađenja, procesnih čilera, pa do toplotnih pumpi.",
+      link: "https://www.alfalaval.rs/",
+      color: "bg-[#005494]",
+      logo: "/assets/partners/alfalaval.png"
+    },
+    { 
+      id: "luve",
+      name: "Alfa Lu-Ve", 
+      role: t("partners.roleDistributor"),
+      description: isEnglish
+        ? "Eko Elektrofrigo is a distributor of Alfa Lu-Ve products for the territory of the Republic of Serbia. Decades of experience in the production and distribution of air coolers and condensers rank Alfa Lu-Ve among the leading distributors for this type of product in Europe."
+        : "Kompanija Eko Elektrofrigo je distributer proizvoda kompanije Alfa Lu-Ve za teritoriju Republike Srbije. Višedecenijsko iskustvo u oblasti proizvodnje i distribucije vazdušnih hladnjaka i kondenzatora svrstava kompaniju Alfa Lu-Ve u jednog od vodećih distributera za ovu vrstu proizvoda u Evropi.",
+      subtext: isEnglish
+        ? "The products are characterized by high technical standards, whose design is based on concrete conditions of application and operation. It is possible to select the required air coolers and condensers in a wide range of offered models, ensuring the application of the most suitable device for a specific case. The devices are certified by EUROVENT."
+        : "Proizvodi se odlikuju visokim tehničkim standardima, čiji dizajn je baziran na konkretnim uslovima primene i eksploatacije. Izbor potrebnih hladnjaka vazduha i kondenzatora je moguće izvršiti u širokom dijapazonu ponuđenih modela, čime se osigurava primena najpogodnijeg uređaja za konkretan slučaj. Uređaji su sertifikovani od strane EUROVENTa.",
+      link: "https://alfa.luvegroup.com/",
+      color: "bg-[#008AC9]",
+      logo: "/assets/partners/luve.png"
+    },
+    { 
+      id: "gvn",
+      name: "Güven Soğutma", 
+      role: t("partners.rolePremium"),
+      description: isEnglish
+        ? "Güven Soğutma is today one of the leading brands in the international market in the production of high-pressure vessels and refrigeration equipment for the industrial refrigeration sector. Eko Elektrofrigo installs a wide range of GVN equipment in its refrigeration aggregates, from receivers, oil reservoirs, oil separators, oil level regulators, to filters and accompanying armature. Over 35 years of experience in the production of this equipment and the company's constant growth guarantee its highest quality."
+        : "Güven Soğutma je danas jedan od vodećih brendova na međunarodnom tržištu iz oblasti proizvodnje posuda pod visokim pritiskom i rashladne opreme za industrijski sektor hlađenja. Eko Elektrofrigo u svoje rashladne agregate ugrađuje širok spektar GVN opreme, od resivera, rezervoara ulja, separatora ulja, regulatora nivoa ulja, do filtera i prateće armature. Preko 35 godina iskustva u proizvodnji ove opreme i konstantan rast kompanije garantuju njen najviši kvalitet.",
+      link: "http://www.gvn.com.tr/",
+      color: "bg-[#F97316]",
+      logo: "/assets/partners/gvn.png"
+    },
+    { 
+      id: "isolcell",
+      name: "Isolcell", 
+      role: t("partners.roleLeader"),
+      description: isEnglish
+        ? "Eko Elektrofrigo pays special attention to the design of cold stores with controlled atmosphere. Since the quality of the equipment itself is crucial for atmosphere control in such systems, Eko Elektrofrigo chose to collaborate with the leader in the production of such equipment, the company Isolcell. Isolcell is a pioneer in this field and a manufacturer of the highest quality equipment for controlled atmosphere systems for over 60 years."
+        : "Posebnu pažnju Eko Elektrofrigo posvećuje projektovanju hladnjača sa kontrolisanom atmosferom. Kako je kod ovakvih sistema kvalitet same opreme presudan za kontrolu atmosfere, Eko Elektrofrigo se odlučio za saradnju sa liderom u oblasti proizvodnje ovakve opreme, kompaniju Isolcell. Kompanija Isolcell predstavlja pionira u ovoj oblasti i proizvođača najkvalitetnije opreme za sisteme sa kontrolisanom atmosferom preko 60 godina.",
+      link: "https://www.isolcell.com/en/",
+      color: "bg-[#E31E24]",
+      logo: "/assets/partners/isolcell.png"
+    }
+  ], [t, isEnglish]);
+
   return (
     <div className="bg-background min-h-screen" ref={containerRef}>
       <Navbar />
       
       {/* Hero */}
       <section className="pt-32 md:pt-48 pb-20 md:pb-32 relative overflow-hidden bg-[#0e1035]">
-        {/* Modern Technical Background */}
         <div className="absolute inset-0 z-0">
           <motion.div style={{ y, opacity }} className="absolute inset-0 w-full h-full">
              <div className="absolute inset-0 bg-[#0e1035]/80 z-10 mix-blend-multiply" />
@@ -91,8 +115,8 @@ export default function Partners() {
              <div className="absolute inset-0 bg-[url('/assets/grid-pattern.svg')] opacity-10 z-10" />
              <img 
               src="/assets/hero-slide-2.webp" 
-               alt="Partners Network"  
-               className="w-full h-full object-cover"
+              alt={isEnglish ? "Partners Network" : "Mreža partnera"}  
+              className="w-full h-full object-cover"
              />
           </motion.div>
         </div>
@@ -109,16 +133,15 @@ export default function Partners() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
               </span>
-              Globalna Mreža
+              {t("partners.badge")}
             </div>
             
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-heading font-bold text-white mb-8 leading-tight tracking-tight">
-              Strateški <br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-300">Partneri</span>
+              {t("partners.title1")} <br/>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-300">{t("partners.title2")}</span>
             </h1>
             <p className="text-xl md:text-2xl text-white/60 max-w-2xl font-light leading-relaxed border-l-4 border-primary/50 pl-6">
-              Povezujemo se samo sa najboljima. Naša snaga leži u saradnji sa globalnim liderima 
-              koji dele našu viziju kvaliteta, inovacija i pouzdanosti.
+              {t("partners.subtitle")}
             </p>
           </motion.div>
         </div>
@@ -149,8 +172,6 @@ export default function Partners() {
       {/* Partners Sections */}
       <div className="flex flex-col">
         {partners.map((partner, index) => {
-          // Force light theme for Alfa Lu-Ve, Isolcell, and Danfoss as requested by user
-          // Otherwise keep alternating pattern
           const isForceLight = partner.id === 'luve' || partner.id === 'isolcell' || partner.id === 'danfoss';
           const isLight = isForceLight ? true : index % 2 === 0;
           
@@ -160,7 +181,6 @@ export default function Partners() {
               key={partner.id} 
               className={`py-24 md:py-32 relative overflow-hidden scroll-mt-32 ${isLight ? 'bg-[#F5F7FA]' : 'bg-[#0e1035]'}`}
             >
-              {/* Soft transition gradient */}
               <div 
                 className={`absolute top-0 left-0 w-full h-32 bg-gradient-to-b pointer-events-none z-10 ${
                   isLight ? 'from-[#0e1035]/5' : 'from-[#F5F7FA]/5'
@@ -168,7 +188,7 @@ export default function Partners() {
               />
 
               <div className="container mx-auto px-6 relative z-10">
-                <PartnerCard partner={partner} index={index} isLight={isLight} />
+                <PartnerCard partner={partner} index={index} isLight={isLight} l={l} />
               </div>
             </section>
           );
@@ -180,10 +200,11 @@ export default function Partners() {
   );
 }
 
-function PartnerCard({ partner, index, isLight }: { partner: typeof partners[0], index: number, isLight: boolean }) {
+function PartnerCard({ partner, index, isLight, l }: { partner: any, index: number, isLight: boolean, l: (href: string) => string }) {
   const [imgError, setImgError] = useState(false);
+  const { isEnglish } = useLang();
+  const { t } = useTranslation();
   
-  // Dynamic classes based on theme
   const textColor = isLight ? "text-[#171A54]" : "text-white";
   const mutedTextColor = isLight ? "text-[#171A54]/70" : "text-white/70";
   const borderColor = isLight ? "border-[#171A54]/10" : "border-white/10";
@@ -221,7 +242,7 @@ function PartnerCard({ partner, index, isLight }: { partner: typeof partners[0],
 
          {partner.products && (
            <div className="flex flex-wrap gap-3 pt-2">
-             {partner.products.map((prod, i) => (
+             {partner.products.map((prod: string, i: number) => (
                <div key={i} className={`flex items-center gap-2 px-4 py-2 rounded-lg ${bgBadge} text-sm font-medium ${isLight ? 'text-[#171A54]' : 'text-white/90'} transition-transform hover:-translate-y-1`}>
                  <div className={`w-1.5 h-1.5 rounded-full ${partner.color}`} />
                  {prod}
@@ -236,7 +257,7 @@ function PartnerCard({ partner, index, isLight }: { partner: typeof partners[0],
               className={`h-12 px-8 rounded-full font-bold text-white shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all duration-300 ${partner.color}`}
            >
              <a href={partner.link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-               Posetite Sajt
+               {t("partners.visitSite")}
                <ExternalLink className="w-4 h-4" />
              </a>
            </Button>
@@ -246,9 +267,9 @@ function PartnerCard({ partner, index, isLight }: { partner: typeof partners[0],
               variant="outline" 
               className={`h-12 px-8 rounded-full border-2 font-bold hover:bg-transparent transition-all duration-300 ${isLight ? 'border-[#171A54]/10 hover:border-[#171A54] text-[#171A54]' : 'border-white/10 hover:border-white text-white'}`}
            >
-             <Link href="/reference" className="flex items-center gap-2">
+             <Link href={l("/reference")} className="flex items-center gap-2">
                <MousePointerClick className="w-4 h-4" />
-               Pogledajte Reference
+               {t("partners.viewReferences")}
              </Link>
            </Button>
          </div>
@@ -257,19 +278,13 @@ function PartnerCard({ partner, index, isLight }: { partner: typeof partners[0],
       {/* Visual Side - Tech Card */}
       <div className="flex-1 w-full">
         <div className={`relative aspect-square md:aspect-video lg:aspect-square w-full rounded-[2rem] overflow-hidden border group ${cardBg}`}>
-           {/* Technical Grid Overlay */}
            <div className="absolute inset-0 bg-[url('/assets/grid-pattern.svg')] opacity-[0.03]" />
-           
-           {/* Background with brand color tint */}
            <div className={`absolute inset-0 ${partner.color} opacity-[0.03] group-hover:opacity-[0.08] transition-all duration-500`} />
            
-           {/* Center Initial/Logo Placeholder */}
            <div className="absolute inset-0 flex items-center justify-center p-12 md:p-20">
               <div className="relative w-full h-full flex items-center justify-center">
-                {/* Glow effect behind logo */}
                 <div className={`absolute inset-0 ${partner.color} blur-[120px] opacity-20 group-hover:opacity-40 transition-opacity duration-700`} />
                 
-                {/* Logo Image */}
                 {!imgError ? (
                   <img 
                     src={partner.logo} 
@@ -285,7 +300,6 @@ function PartnerCard({ partner, index, isLight }: { partner: typeof partners[0],
               </div>
            </div>
 
-           {/* Tech UI Elements */}
            <div className={`absolute top-0 left-0 p-6 font-mono text-xs tracking-widest opacity-40 ${isLight ? 'text-[#171A54]' : 'text-white'}`}>
              PARTNER_ID: {partner.id.toUpperCase()}
            </div>
@@ -296,7 +310,6 @@ function PartnerCard({ partner, index, isLight }: { partner: typeof partners[0],
              <div className={`w-2 h-2 rounded-full ${partner.color} opacity-25`} />
            </div>
 
-           {/* Corner Accents */}
            <svg className={`absolute top-6 right-6 w-6 h-6 opacity-30 ${isLight ? 'text-[#171A54]' : 'text-white'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
              <path d="M5 5h14v14" />
            </svg>
