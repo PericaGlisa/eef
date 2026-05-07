@@ -165,7 +165,7 @@ export default function App() {
     return () => {
       document.body.style.overflow = 'auto';
     };
-  }, [isOpen, messages, sendTranscript]);
+  }, [isOpen]);
 
   const playNotification = () => {
     if (notificationAudio.current) {
@@ -326,7 +326,7 @@ export default function App() {
     setLastSentCount(0);
   };
 
-  const sendTranscript = useCallback(async (currentMessages: Message[]) => {
+  const sendTranscript = async (currentMessages: Message[]) => {
     // Only send if there are new messages since the last send
     if (currentMessages.length <= 1 || currentMessages.length <= lastSentCount || isSendingEmail) {
       console.log('[Chat Transcript] Skipped:', { reason: 'already sent or sending', msgCount: currentMessages.length, lastSentCount, isSendingEmail });
@@ -363,7 +363,7 @@ export default function App() {
     } finally {
       setIsSendingEmail(false);
     }
-  }, [lastSentCount, isSendingEmail]);
+  };
 
   if (!isOpen) {
     return (

@@ -18,6 +18,8 @@ const jsonResponse = (statusCode: number, body: any) => ({
 });
 
 export const handler: Handler = async (event) => {
+  console.log("[chat-transcript] Function triggered");
+  
   if (event.httpMethod === "OPTIONS") {
     return jsonResponse(204, {});
   }
@@ -28,6 +30,7 @@ export const handler: Handler = async (event) => {
 
   try {
     const { messages } = JSON.parse(event.body || "{}");
+    console.log("[chat-transcript] Received messages:", Array.isArray(messages) ? messages.length : "invalid");
     
     if (!Array.isArray(messages) || messages.length === 0) {
       return jsonResponse(400, { error: "Invalid messages" });
@@ -35,12 +38,13 @@ export const handler: Handler = async (event) => {
 
     const apiKey = process.env.RESEND_API_KEY;
     if (!apiKey) {
-      console.error("[chat-transcript] RESEND_API_KEY not configured");
-      return jsonResponse(500, { error: "Email service not configured" });
+      console.error("[chat-transcript] RESEND_API_KEY not configured in Netlify environment variables");
+      return jsonResponse(500, { error: "Email service not configured (API Key missing)" });
     }
 
     const adminEmail = process.env.ADMIN_EMAIL || "office@eef.rs";
     const from = process.env.RESEND_FROM || "noreply@eef.co.rs";
+    console.log("[chat-transcript] Config - To:", adminEmail, "| From:", from);
 
     // Format messages into HTML
     const messagesHtml = messages
@@ -89,6 +93,7 @@ export const handler: Handler = async (event) => {
       </div>
     `;
 
+    console.log("[chat-transcript] Sending request to Resend API...");
     const response = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
@@ -104,14 +109,15 @@ export const handler: Handler = async (event) => {
     });
 
     if (response.ok) {
+      console.log("[chat-transcript] Resend API success");
       return jsonResponse(200, { success: true });
     } else {
       const errorText = await response.text();
       console.error("[chat-transcript] Resend API error:", response.status, errorText);
-      return jsonResponse(500, { error: "Failed to send email" });
+      return jsonResponse(500, { error: "Failed to send email via Resend API", details: errorText });
     }
-  } catch (error) {
-    console.error("[chat-transcript] Error:", error);
-    return jsonResponse(500, { error: "Internal server error" });
+  } catch (error: any) {
+    console.error("[chat-transcript] Critical error:", error);
+    return jsonResponse(500, { error: "Internal server error", message: error?.message });
   }
 };
