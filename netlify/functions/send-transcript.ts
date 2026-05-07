@@ -48,7 +48,12 @@ export const handler: Handler = async (event) => {
     }
 
     const adminEmail = process.env.ADMIN_EMAIL || "office@eef.rs";
-    const from = process.env.RESEND_FROM || "noreply@eef.co.rs";
+    const fromEnv = process.env.RESEND_FROM || "noreply@eef.co.rs";
+    
+    // Ensure from field is correctly formatted and not double-nested
+    // If fromEnv already contains <...>, use it as is, otherwise wrap it
+    const from = fromEnv.includes('<') ? fromEnv : `Eko Elektrofrigo Chat <${fromEnv}>`;
+    
     console.log("[chat-transcript] Config - To:", adminEmail, "| From:", from);
 
     // Format messages into HTML
@@ -106,7 +111,7 @@ export const handler: Handler = async (event) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: `Eko Elektrofrigo Chat <${from}>`,
+        from,
         to: [adminEmail],
         subject: `💬 Chat Transkript - ${new Date().toLocaleDateString("sr-RS")}`,
         html,

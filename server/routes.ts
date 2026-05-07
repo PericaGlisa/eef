@@ -294,7 +294,11 @@ async function sendChatTranscript(messages: ChatMessage[]): Promise<{ ok: boolea
     }
 
     const adminEmail = process.env.ADMIN_EMAIL || "office@eef.rs";
-    const from = process.env.RESEND_FROM || "noreply@eef.co.rs";
+    const fromEnv = process.env.RESEND_FROM || "noreply@eef.co.rs";
+    
+    // Ensure from field is correctly formatted and not double-nested
+    const from = fromEnv.includes('<') ? fromEnv : `Eko Elektrofrigo Chat <${fromEnv}>`;
+    
     console.log("[chat-transcript] Sending to:", adminEmail, "| From:", from, "| Messages:", messages.length);
 
     // Format messages into HTML
@@ -351,7 +355,7 @@ async function sendChatTranscript(messages: ChatMessage[]): Promise<{ ok: boolea
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: `Eko Elektrofrigo Chat <${from}>`,
+        from,
         to: [adminEmail],
         subject: `💬 Chat Transkript - ${new Date().toLocaleDateString("sr-RS")}`,
         html,
