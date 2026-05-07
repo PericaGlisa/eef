@@ -342,24 +342,23 @@ export default function App() {
     console.log('[Chat Transcript] Sending transcript with', currentMessages.length, 'messages...');
     setIsSendingEmail(true);
     try {
-      const endpoint = window.location.hostname === 'localhost' ? '/api/send-transcript' : '/.netlify/functions/send-transcript';
-      const response = await fetch(endpoint, {
+      const response = await fetch('/api/send-transcript', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: currentMessages })
       });
       
+      const responseData = await response.json().catch(() => ({}));
+      
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error('[Chat Transcript] Server returned error:', response.status, errorText);
+        console.error('[Chat Transcript] Server error:', response.status, responseData);
         return;
       }
       
-      const result = await response.json();
-      console.log('[Chat Transcript] Successfully sent!', result);
+      console.log('[Chat Transcript] Successfully sent!', responseData);
       setLastSentCount(currentMessages.length);
     } catch (error) {
-      console.error("[Chat Transcript] Network or fetch error:", error);
+      console.error("[Chat Transcript] Network error:", error);
     } finally {
       setIsSendingEmail(false);
     }

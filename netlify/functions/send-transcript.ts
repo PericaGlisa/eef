@@ -29,7 +29,12 @@ export const handler: Handler = async (event) => {
   }
 
   try {
-    const { messages } = JSON.parse(event.body || "{}");
+    let rawBody = event.body;
+    if (event.isBase64Encoded && rawBody) {
+      rawBody = Buffer.from(rawBody, 'base64').toString();
+    }
+    
+    const { messages } = JSON.parse(rawBody || "{}");
     console.log("[chat-transcript] Received messages:", Array.isArray(messages) ? messages.length : "invalid");
     
     if (!Array.isArray(messages) || messages.length === 0) {
