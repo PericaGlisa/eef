@@ -339,12 +339,16 @@ export default function App() {
       return;
     }
     
-    console.log('[Chat Transcript] Sending transcript with', currentMessages.length, 'messages...');
+    console.log('[Chat Transcript] Initiating send...', { messages: currentMessages.length });
     setIsSendingEmail(true);
     try {
-      const response = await fetch('/api/send-transcript', {
+      // Use absolute URL for Netlify function to be safe
+      const response = await fetch('/.netlify/functions/send-transcript', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
         body: JSON.stringify({ messages: currentMessages })
       });
       

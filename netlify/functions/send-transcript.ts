@@ -104,18 +104,21 @@ export const handler: Handler = async (event) => {
     `;
 
     console.log("[chat-transcript] Sending request to Resend API...");
+    const resendPayload = {
+      from,
+      to: [adminEmail],
+      subject: `💬 Chat Transkript - ${new Date().toLocaleDateString("sr-RS")}`,
+      html,
+    };
+    console.log("[chat-transcript] Resend payload from:", resendPayload.from);
+
     const response = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${apiKey}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        from,
-        to: [adminEmail],
-        subject: `💬 Chat Transkript - ${new Date().toLocaleDateString("sr-RS")}`,
-        html,
-      }),
+      body: JSON.stringify(resendPayload),
     });
 
     if (response.ok) {
