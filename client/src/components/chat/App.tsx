@@ -371,16 +371,45 @@ export default function App() {
   if (!isOpen) {
     return (
       <div className="fixed bottom-0 right-0 md:bottom-6 md:right-6 z-[60] pointer-events-none flex items-end justify-end">
-        <motion.button
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          whileHover={{ scale: 1.1, rotate: 5 }}
-          whileTap={{ scale: 0.9 }}
-          onClick={() => setIsOpen(true)}
-          className="w-[70px] h-[70px] sm:w-[80px] sm:h-[80px] bg-primary text-white rounded-full shadow-[0_0_50px_rgba(27,43,107,0.4)] flex items-center justify-center z-50 pointer-events-auto mb-4 mr-4 md:mb-0 md:mr-0 border-2 border-primary/35"
-        >
-          <MessageSquare size={32} />
-        </motion.button>
+        <div className="relative pointer-events-auto mb-4 mr-4 md:mb-0 md:mr-0">
+          {/* Pulsating background glow */}
+          <motion.div
+            animate={{ 
+              scale: [1, 1.2, 1],
+              opacity: [0.3, 0.6, 0.3] 
+            }}
+            transition={{ 
+              duration: 3, 
+              repeat: Infinity, 
+              ease: "easeInOut" 
+            }}
+            className="absolute inset-0 bg-primary rounded-full blur-xl"
+          />
+
+          {/* Floating Chat Bubble */}
+          <motion.button
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ 
+              scale: 1, 
+              opacity: 1,
+              y: [0, -8, 0] 
+            }}
+            transition={{
+              scale: { duration: 0.5 },
+              opacity: { duration: 0.5 },
+              y: { duration: 4, repeat: Infinity, ease: "easeInOut" }
+            }}
+            whileHover={{ scale: 1.1, rotate: 5 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => setIsOpen(true)}
+            className="relative w-[70px] h-[70px] sm:w-[80px] sm:h-[80px] bg-primary text-white rounded-full shadow-[0_10px_40px_rgba(27,43,107,0.4)] flex items-center justify-center z-50 border-2 border-white/20 overflow-hidden group"
+          >
+            {/* Inner gloss effect */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+            
+            <MessageSquare size={32} />
+          </motion.button>
+        </div>
       </div>
     );
   }
