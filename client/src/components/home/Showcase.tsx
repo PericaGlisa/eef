@@ -96,7 +96,7 @@ export function Showcase() {
               </div>
               
               <Link href={l(`/eko-rashlada/${product.id}`)} className="absolute inset-0 z-30">
-                <span className="sr-only">{t("showcase.viewDetailsAbout")} {product.title}</span>
+                <span className="sr-only">{isEnglish ? "View details about" : "Pogledajte detalje o"} {product.title}</span>
               </Link>
             </motion.div>
           );

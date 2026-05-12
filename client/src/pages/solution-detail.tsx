@@ -1,4 +1,4 @@
-import { useRoute, Link } from "wouter";
+import { useRoute, Link, useLocation } from "wouter";
 import { getSolutionsData } from "@/data/solutions";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, CheckCircle2, Settings, Phone, FileText, ArrowRight } from "lucide-react";
 import NotFound from "@/pages/not-found";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useEffect } from "react";
 import { getSolutionSeoDetails } from "@/data/seo-enhancements";
 import { useLang } from "@/contexts/LanguageContext";
 import { useTranslation } from "@/lib/i18n";
@@ -23,9 +23,14 @@ const EN_SLUG_MAP: Record<string, string> = {
   "thermal-insulation": "termoizolacija",
 };
 
+const SR_SLUG_MAP: Record<string, string> = Object.fromEntries(
+  Object.entries(EN_SLUG_MAP).map(([en, sr]) => [sr, en])
+);
+
 export default function SolutionDetail() {
   const [srMatch, srParams] = useRoute("/eko-rashlada/:slug");
   const [enMatch, enParams] = useRoute("/en/eco-cooling/:slug");
+  const [, setLocation] = useLocation();
   const match = srMatch || enMatch;
   const params = srParams || enParams;
   const containerRef = useRef(null);
@@ -46,8 +51,24 @@ export default function SolutionDetail() {
 
   if (!match || !params) return <NotFound />;
 
-  const solutionId = EN_SLUG_MAP[params.slug] || params.slug;
+  const slug = params.slug;
+  const solutionId = EN_SLUG_MAP[slug] || slug;
   const solution = solutionsData.find((s: { id: string }) => s.id === solutionId);
+
+  // Fallback: If not found, check if it's the other language's slug
+  useEffect(() => {
+    if (!solution) {
+      const otherLangSolutions = getSolutionsData(!isEnglish);
+      const otherId = (isEnglish ? EN_SLUG_MAP[slug] : SR_SLUG_MAP[slug]) || slug;
+      const foundInOther = otherLangSolutions.find((s: { id: string }) => s.id === otherId);
+      
+      if (foundInOther) {
+        const correctSlug = isEnglish ? SR_SLUG_MAP[foundInOther.id] || foundInOther.id : foundInOther.id;
+        const correctPath = isEnglish ? `/en/eco-cooling/${correctSlug}` : `/eko-rashlada/${correctSlug}`;
+        setLocation(correctPath, { replace: true });
+      }
+    }
+  }, [solution, slug, isEnglish, setLocation]);
 
   if (!solution) return <NotFound />;
 
@@ -86,7 +107,7 @@ export default function SolutionDetail() {
         <div className="container mx-auto px-6 relative z-10">
           <Link href={l("/eko-rashlada")}>
             <Button variant="ghost" className="mb-8 text-white/70 hover:text-white hover:bg-white/10 -ml-4 group backdrop-blur-sm border border-transparent hover:border-white/10">
-              <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" /> {isEnglish ? "Back to Solutions" : "Nazad na Rešenja"}
+              <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" /> {t("common.solutionDetail.backToSolutions")}
             </Button>
           </Link>
 
@@ -101,7 +122,7 @@ export default function SolutionDetail() {
                 <Icon className="w-7 h-7" />
               </div>
               <div className="h-px w-20 bg-gradient-to-r from-white/20 to-transparent" />
-              <span className="text-primary font-mono text-sm tracking-widest uppercase">{isEnglish ? "Technical Specification" : "Tehnička Specifikacija"}</span>
+              <span className="text-primary font-mono text-sm tracking-widest uppercase">{t("common.solutionDetail.techSpec")}</span>
             </div>
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-heading font-bold text-white mb-8 leading-tight tracking-tight">
@@ -140,7 +161,7 @@ export default function SolutionDetail() {
                   {/* Image overlay badge */}
                   <div className="absolute bottom-6 right-6 z-20 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl border border-white/50 shadow-lg flex items-center gap-2">
                     <Settings className="w-4 h-4 text-primary" />
-                    <span className="text-xs font-bold text-[#0e1035] uppercase tracking-wider">{isEnglish ? "Industrial Standard" : "Industrijski Standard"}</span>
+                    <span className="text-xs font-bold text-[#0e1035] uppercase tracking-wider">{t("common.solutionDetail.indStandard")}</span>
                   </div>
                 </motion.div>
               )}
@@ -154,12 +175,10 @@ export default function SolutionDetail() {
                 className="bg-white rounded-3xl p-8 md:p-12 shadow-xl shadow-slate-200/50 border border-slate-100"
               >
                 <h2 className="text-3xl font-bold text-[#0e1035] mb-4">
-                  {isEnglish ? "Industrial refrigeration solution: " : "Rešenje industrijskog hlađenja: "}{solution.title}
+                  {t("common.solutionDetail.introTitle")}{solution.title}
                 </h2>
                 <p className="text-slate-600 leading-relaxed mb-8">
-                  {isEnglish
-                    ? "This solution is optimized for industrial refrigeration with a focus on stable process, safe operation, and energy savings in daily operation."
-                    : "Ovo rešenje je optimizovano za industrijsko hlađenje sa fokusom na stabilan proces, bezbedan rad i uštedu energije u svakodnevnoj eksploataciji."}
+                  {t("common.solutionDetail.introText")}
                 </p>
                 <div 
                   className="prose prose-lg max-w-none text-slate-600 
@@ -181,7 +200,7 @@ export default function SolutionDetail() {
 
               {details?.faqs?.length ? (
                 <section className="mt-12 bg-white rounded-3xl p-8 md:p-12 shadow-xl shadow-slate-200/50 border border-slate-100">
-                  <h2 className="text-3xl font-bold text-[#0e1035] mb-6">{isEnglish ? "Frequently Asked Questions" : "Često postavljana pitanja"}</h2>
+                  <h2 className="text-3xl font-bold text-[#0e1035] mb-6">{t("common.solutionDetail.faqTitle")}</h2>
                   <div className="space-y-6">
                     {details.faqs.map((item: { question: string; answer: string }) => (
                       <article key={item.question} className="border-b border-slate-200 pb-5 last:border-b-0 last:pb-0">
@@ -194,18 +213,16 @@ export default function SolutionDetail() {
               ) : null}
 
               <section className="mt-12 bg-[#0e1035] rounded-3xl p-8 md:p-10 border border-white/10">
-                <h2 className="text-2xl font-bold text-white mb-3">{isEnglish ? "Need a quote for this solution?" : "Treba vam ponuda za ovo rešenje?"}</h2>
+                <h2 className="text-2xl font-bold text-white mb-3">{t("common.solutionDetail.quoteTitle")}</h2>
                 <p className="text-white/70 mb-6">
-                  {isEnglish
-                    ? "Our engineering team prepares equipment proposals, technical concepts, and implementation plans according to your facility."
-                    : "Naš inženjerski tim priprema predlog opreme, tehnički koncept i plan implementacije prema vašem objektu."}
+                  {t("common.solutionDetail.quoteText")}
                 </p>
                 <div className="flex flex-wrap gap-3">
                   <Button asChild className="bg-primary hover:bg-primary/90 text-white">
-                    <Link href={l("/kontakt")}>{isEnglish ? "Contact us" : "Kontaktirajte nas"}</Link>
+                    <Link href={l("/kontakt")}>{t("common.solutionDetail.contactUs")}</Link>
                   </Button>
                   <Button asChild variant="outline" className="border-white/20 text-white bg-white/5 hover:bg-white/10">
-                    <Link href={l("/usluge/inzenjering")}>{isEnglish ? "View engineering service" : "Pogledajte uslugu projektovanja"}</Link>
+                    <Link href={l("/usluge/inzenjering")}>{t("common.solutionDetail.viewEngineering")}</Link>
                   </Button>
                 </div>
               </section>
@@ -213,7 +230,7 @@ export default function SolutionDetail() {
               {/* Gallery Section - Only for Rashladne Komore */}
               {params.slug === "rashladne-komore" && (
                 <Gallery 
-                  title={isEnglish ? "Solution Gallery" : "Galerija Rešenja"} 
+                  title={t("common.solutionDetail.galleryTitle")} 
                   images={[
                     "/assets/solutions/rashladne-komore/gallery-1.webp",
                     "/assets/solutions/rashladne-komore/gallery-2.webp",
@@ -231,7 +248,7 @@ export default function SolutionDetail() {
               {/* Gallery Section - Only for Tuneli za Smrzavanje */}
               {params.slug === "tuneli-za-smrzavanje" && (
                 <Gallery 
-                  title={isEnglish ? "Solution Gallery" : "Galerija Rešenja"} 
+                  title={t("common.solutionDetail.galleryTitle")} 
                   images={[
                     "/assets/solutions/tuneli-za-smrzavanje/gallery-1.webp",
                     "/assets/solutions/tuneli-za-smrzavanje/gallery-2.webp",
@@ -245,7 +262,7 @@ export default function SolutionDetail() {
               {/* Gallery Section - Only for ULO Komore */}
               {params.slug === "ulo-komore" && (
                 <Gallery 
-                  title={isEnglish ? "Solution Gallery" : "Galerija Rešenja"} 
+                  title={t("common.solutionDetail.galleryTitle")} 
                   images={[
                     "/assets/solutions/ulo-komore/gallery-1.webp",
                     "/assets/solutions/ulo-komore/gallery-2.webp",
@@ -268,7 +285,7 @@ export default function SolutionDetail() {
               {/* Gallery Section - Only for Rashladni Agregati */}
               {params.slug === "rashladni-agregati" && (
                 <Gallery 
-                  title={isEnglish ? "Solution Gallery" : "Galerija Rešenja"} 
+                  title={t("common.solutionDetail.galleryTitle")} 
                   images={[
                     "/assets/solutions/rashladni-agregati/gallery-1.webp",
                     "/assets/solutions/rashladni-agregati/gallery-2.webp",
@@ -288,7 +305,7 @@ export default function SolutionDetail() {
               {/* Gallery Section - Only for Cileri */}
               {params.slug === "cileri" && (
                 <Gallery 
-                  title={isEnglish ? "Solution Gallery" : "Galerija Rešenja"} 
+                  title={t("common.solutionDetail.galleryTitle")} 
                   images={[
                     "/assets/solutions/cileri/gallery-1.webp",
                     "/assets/solutions/cileri/gallery-2.webp",
@@ -306,7 +323,7 @@ export default function SolutionDetail() {
               {/* Gallery Section - Only for Elektro Ormani */}
               {params.slug === "elektro-ormani" && (
                 <Gallery 
-                  title={isEnglish ? "Solution Gallery" : "Galerija Rešenja"} 
+                  title={t("common.solutionDetail.galleryTitle")} 
                   images={[
                     "/assets/solutions/elektro-ormani/gallery-1.webp",
                     "/assets/solutions/elektro-ormani/gallery-2.webp",
@@ -328,7 +345,7 @@ export default function SolutionDetail() {
               {/* Gallery Section - Only for Termoizolacija */}
               {params.slug === "termoizolacija" && (
                 <Gallery 
-                  title={isEnglish ? "Solution Gallery" : "Galerija Rešenja"} 
+                  title={t("common.solutionDetail.galleryTitle")} 
                   images={[
                     "/assets/solutions/termoizolacija/gallery-1.webp",
                     "/assets/solutions/termoizolacija/gallery-2.webp",
@@ -365,7 +382,7 @@ export default function SolutionDetail() {
                     <div className="p-2 rounded-lg bg-white/10 border border-white/10">
                       <Settings className="w-5 h-5 text-primary" />
                     </div>
-                    {isEnglish ? "Key Features" : "Ključne Karakteristike"}
+                    {t("common.solutionDetail.keyFeatures")}
                   </h3>
                   
                   <div className="space-y-4">
@@ -393,7 +410,7 @@ export default function SolutionDetail() {
                           <ArrowRight className="w-12 h-12 text-white" />
                         </div>
                         
-                        <p className="text-xs text-primary font-mono uppercase tracking-widest mb-2">{isEnglish ? "Next Solution" : "Sledeće Rešenje"}</p>
+                        <p className="text-xs text-primary font-mono uppercase tracking-widest mb-2">{t("common.solutionDetail.nextSolution")}</p>
                         <h4 className="text-lg font-bold text-white mb-1 group-hover:text-primary transition-colors">{nextSolution.title}</h4>
                         <p className="text-white/40 text-sm line-clamp-1">{nextSolution.shortDesc}</p>
                       </div>
@@ -406,18 +423,16 @@ export default function SolutionDetail() {
               <div className="bg-white rounded-3xl p-8 border border-slate-200 shadow-xl shadow-slate-200/50 relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-[40px] group-hover:bg-primary/10 transition-colors" />
                 
-                <h3 className="text-2xl font-bold text-[#0e1035] mb-3 relative z-10">{isEnglish ? "Interested?" : "Zainteresovani?"}</h3>
+                <h3 className="text-2xl font-bold text-[#0e1035] mb-3 relative z-10">{t("common.solutionDetail.needQuote")}</h3>
                 <p className="text-slate-500 mb-8 text-sm leading-relaxed relative z-10">
-                  {isEnglish
-                    ? "Our engineering team is ready to respond to your requirements and offer an optimal solution."
-                    : "Naš tim inženjera je spreman da odgovori na vaše zahteve i ponudi optimalno rešenje."}
+                  {t("common.solutionDetail.quoteDesc")}
                 </p>
                 
                 <div className="grid gap-3 relative z-10">
                   <Button className="w-full bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/25 h-12 text-base" asChild>
                     <Link href={l("/kontakt")}>
                       <FileText className="w-4 h-4 mr-2" />
-                      {isEnglish ? "Request a quote" : "Zatražite ponudu"}
+                      {t("common.serviceDetail.requestQuote")}
                     </Link>
                   </Button>
                   <Button

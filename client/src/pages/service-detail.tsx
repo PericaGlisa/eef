@@ -1,4 +1,4 @@
-import { useRoute, Link } from "wouter";
+import { useRoute, Link, useLocation } from "wouter";
 import { getServicesContent } from "@/data/services-content";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, CheckCircle2, Phone, Mail, Settings, FileText, ArrowRight } from "lucide-react";
 import NotFound from "@/pages/not-found";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useEffect } from "react";
 import { getServiceSeoDetails } from "@/data/seo-enhancements";
 import { useLang } from "@/contexts/LanguageContext";
 import { useTranslation } from "@/lib/i18n";
@@ -22,9 +22,14 @@ const EN_SLUG_MAP: Record<string, string> = {
   safety: "sigurnost",
 };
 
+const SR_SLUG_MAP: Record<string, string> = Object.fromEntries(
+  Object.entries(EN_SLUG_MAP).map(([en, sr]) => [sr, en])
+);
+
 export default function ServiceDetail() {
   const [srMatch, srParams] = useRoute("/usluge/:slug");
   const [enMatch, enParams] = useRoute("/en/services/:slug");
+  const [, setLocation] = useLocation();
   const match = srMatch || enMatch;
   const params = srParams || enParams;
   const containerRef = useRef(null);
@@ -45,8 +50,24 @@ export default function ServiceDetail() {
 
   if (!match || !params) return <NotFound />;
 
-  const serviceId = EN_SLUG_MAP[params.slug] || params.slug;
+  const slug = params.slug;
+  const serviceId = EN_SLUG_MAP[slug] || slug;
   const service = servicesContent.find((s: { id: string }) => s.id === serviceId);
+
+  // Fallback: If not found, check if it's the other language's slug
+  useEffect(() => {
+    if (!service) {
+      const otherLangServices = getServicesContent(!isEnglish);
+      const otherId = (isEnglish ? EN_SLUG_MAP[slug] : SR_SLUG_MAP[slug]) || slug;
+      const foundInOther = otherLangServices.find((s: { id: string }) => s.id === otherId);
+      
+      if (foundInOther) {
+        const correctSlug = isEnglish ? SR_SLUG_MAP[foundInOther.id] || foundInOther.id : foundInOther.id;
+        const correctPath = isEnglish ? `/en/services/${correctSlug}` : `/usluge/${correctSlug}`;
+        setLocation(correctPath, { replace: true });
+      }
+    }
+  }, [service, slug, isEnglish, setLocation]);
 
   if (!service) return <NotFound />;
 
@@ -85,7 +106,7 @@ export default function ServiceDetail() {
         <div className="container mx-auto px-6 relative z-10">
           <Link href={l("/usluge")}>
             <Button variant="ghost" className="mb-8 text-white/70 hover:text-white hover:bg-white/10 -ml-4 group backdrop-blur-sm border border-transparent hover:border-white/10">
-              <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" /> {isEnglish ? "Back to Services" : "Nazad na Usluge"}
+              <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" /> {t("common.serviceDetail.backToServices")}
             </Button>
           </Link>
 
@@ -100,7 +121,7 @@ export default function ServiceDetail() {
                 <Icon className="w-7 h-7" />
               </div>
               <div className="h-px w-20 bg-gradient-to-r from-white/20 to-transparent" />
-              <span className="text-primary font-mono text-sm tracking-widest uppercase">{isEnglish ? "Service Overview" : "Pregled Usluge"}</span>
+              <span className="text-primary font-mono text-sm tracking-widest uppercase">{t("common.serviceDetail.overview")}</span>
             </div>
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-heading font-bold text-white mb-8 leading-tight tracking-tight">
@@ -139,7 +160,7 @@ export default function ServiceDetail() {
                   {/* Image overlay badge */}
                   <div className="absolute bottom-6 right-6 z-20 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl border border-white/50 shadow-lg flex items-center gap-2">
                     <Settings className="w-4 h-4 text-primary" />
-                    <span className="text-xs font-bold text-[#0e1035] uppercase tracking-wider">{isEnglish ? "Professional Service" : "Profesionalna Usluga"}</span>
+                    <span className="text-xs font-bold text-[#0e1035] uppercase tracking-wider">{t("common.serviceDetail.proService")}</span>
                   </div>
                 </motion.div>
               )}
@@ -153,12 +174,10 @@ export default function ServiceDetail() {
                 className="bg-white rounded-3xl p-8 md:p-12 shadow-xl shadow-slate-200/50 border border-slate-100"
               >
                 <h2 className="text-3xl font-bold text-[#0e1035] mb-4">
-                  {isEnglish ? "Industrial refrigeration service: " : "Usluga industrijskog hlađenja: "}{service.title}
+                  {t("common.serviceDetail.introTitle")}{service.title}
                 </h2>
                 <p className="text-slate-600 leading-relaxed mb-8">
-                  {isEnglish
-                    ? "This service is focused on industrial refrigeration and is designed to ensure reliable system operation, energy efficiency, and long-term process stability."
-                    : "Ova usluga je fokusirana na industrijsko hlađenje i projektovana je da obezbedi pouzdan rad sistema, energetsku efikasnost i dugoročnu stabilnost procesa."}
+                  {t("common.serviceDetail.introText")}
                 </p>
                 <div 
                   className="prose prose-lg max-w-none text-slate-600 
@@ -180,7 +199,7 @@ export default function ServiceDetail() {
 
               {details?.faqs?.length ? (
                 <section className="mt-12 bg-white rounded-3xl p-8 md:p-12 shadow-xl shadow-slate-200/50 border border-slate-100">
-                  <h2 className="text-3xl font-bold text-[#0e1035] mb-6">{isEnglish ? "Frequently Asked Questions" : "Često postavljana pitanja"}</h2>
+                  <h2 className="text-3xl font-bold text-[#0e1035] mb-6">{t("common.serviceDetail.faqTitle")}</h2>
                   <div className="space-y-6">
                     {details.faqs.map((item: { question: string; answer: string }) => (
                       <article key={item.question} className="border-b border-slate-200 pb-5 last:border-b-0 last:pb-0">
@@ -194,11 +213,9 @@ export default function ServiceDetail() {
 
               {details?.relatedReferences?.length ? (
                 <section className="mt-12 bg-[#0e1035] rounded-3xl p-8 md:p-10 border border-white/10">
-                  <h2 className="text-2xl font-bold text-white mb-3">{isEnglish ? "Related References" : "Povezane reference"}</h2>
+                  <h2 className="text-2xl font-bold text-white mb-3">{t("common.serviceDetail.referencesTitle")}</h2>
                   <p className="text-white/70 mb-6">
-                    {isEnglish
-                      ? "View projects where this service has been applied in real industrial conditions."
-                      : "Pogledajte projekte u kojima je ova usluga primenjena u realnim industrijskim uslovima."}
+                    {t("common.serviceDetail.referencesText")}
                   </p>
                   <div className="flex flex-wrap gap-3">
                     {details.relatedReferences.map((item: { path: string; label: string }) => (
@@ -213,7 +230,7 @@ export default function ServiceDetail() {
               {/* Gallery Section - Only for Engineering */}
               {params.slug === "inzenjering" && (
                 <Gallery
-                  title={isEnglish ? "Service Gallery" : "Galerija Usluge"}
+                  title={t("common.serviceDetail.galleryTitle")}
                   images={[
                     "/assets/services/engineering/gallery-1.webp",
                     "/assets/services/engineering/gallery-2.webp",
@@ -233,7 +250,7 @@ export default function ServiceDetail() {
               {/* Gallery Section - Only for Execution */}
               {params.slug === "izvodjenje" && (
                 <Gallery
-                  title={isEnglish ? "Service Gallery" : "Galerija Usluge"}
+                  title={t("common.serviceDetail.galleryTitle")}
                   images={[
                     "/assets/services/execution/gallery-1.webp",
                     "/assets/services/execution/gallery-2.webp",
@@ -248,7 +265,7 @@ export default function ServiceDetail() {
               {/* Gallery Section - Only for Maintenance */}
               {params.slug === "servis" && (
                 <Gallery
-                  title={isEnglish ? "Service Gallery" : "Galerija Usluge"}
+                  title={t("common.serviceDetail.galleryTitle")}
                   images={[
                     "/assets/services/maintenance/gallery-1.webp",
                     "/assets/services/maintenance/gallery-2.webp",
@@ -282,7 +299,7 @@ export default function ServiceDetail() {
                     <div className="p-2 rounded-lg bg-white/10 border border-white/10">
                       <CheckCircle2 className="w-5 h-5 text-primary" />
                     </div>
-                    {isEnglish ? "Key Advantages" : "Ključne Prednosti"}
+                    {t("common.serviceDetail.keyAdvantages")}
                   </h3>
 
                   <div className="space-y-4">
@@ -308,7 +325,7 @@ export default function ServiceDetail() {
                           <ArrowRight className="w-12 h-12 text-white" />
                         </div>
 
-                        <p className="text-xs text-primary font-mono uppercase tracking-widest mb-2">{isEnglish ? "Next Service" : "Sledeća Usluga"}</p>
+                        <p className="text-xs text-primary font-mono uppercase tracking-widest mb-2">{t("common.serviceDetail.nextService")}</p>
                         <h4 className="text-lg font-bold text-white mb-1 group-hover:text-primary transition-colors">{nextService.title}</h4>
                         <p className="text-white/40 text-sm line-clamp-1">{nextService.shortDesc}</p>
                       </div>
@@ -321,18 +338,16 @@ export default function ServiceDetail() {
               <div className="bg-white rounded-3xl p-8 border border-slate-200 shadow-xl shadow-slate-200/50 relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-[40px] group-hover:bg-primary/10 transition-colors" />
 
-                <h3 className="text-2xl font-bold text-[#0e1035] mb-3 relative z-10">{isEnglish ? "Need this service?" : "Treba vam ova usluga?"}</h3>
+                <h3 className="text-2xl font-bold text-[#0e1035] mb-3 relative z-10">{t("common.serviceDetail.needService")}</h3>
                 <p className="text-slate-500 mb-8 text-sm leading-relaxed relative z-10">
-                  {isEnglish
-                    ? "Contact our expert team for a free consultation and quote."
-                    : "Kontaktirajte naš stručni tim za besplatnu konsultaciju i ponudu."}
+                  {t("common.serviceDetail.contactText")}
                 </p>
 
                 <div className="grid gap-3 relative z-10">
                   <Button className="w-full bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/25 h-12 text-base" asChild>
                     <Link href={l("/kontakt")}>
                       <FileText className="w-4 h-4 mr-2" />
-                      {isEnglish ? "Request a quote" : "Zatražite ponudu"}
+                      {t("common.serviceDetail.requestQuote")}
                     </Link>
                   </Button>
                   <Button

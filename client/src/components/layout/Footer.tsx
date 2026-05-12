@@ -26,7 +26,7 @@ export function Footer() {
             <Link href={l("/")} className="inline-block group">
               <img 
                 src="/assets/logo.png" 
-                alt="EEF" 
+                alt={isEnglish ? "EEF Logo - Industrial Refrigeration" : "EEF Logo - Industrijska rashlada"} 
                 className="h-14 md:h-20 w-auto brightness-0 invert group-hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] transition-all duration-500" 
               />
             </Link>

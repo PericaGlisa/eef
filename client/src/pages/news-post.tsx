@@ -1,5 +1,5 @@
 import { useRoute, Link, useLocation } from "wouter";
-import { getNewsItems, NewsItem } from "@/data/news";
+import { getNewsItems, NewsItem, formatNewsDate } from "@/data/news";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
@@ -189,6 +189,10 @@ export default function NewsPost() {
               <span className="flex items-center text-white/50 text-sm bg-white/5 px-3 py-1 rounded-full border border-white/10">
                 <Tag className="w-3 h-3 mr-2" />
                 {finalPost.category}
+              </span>
+              <span className="flex items-center text-white/40 text-sm font-mono">
+                <ChevronRight className="w-3 h-3 mr-2" />
+                {formatNewsDate(finalPost.date, isEnglish)}
               </span>
             </div>
 

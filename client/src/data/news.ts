@@ -10,6 +10,26 @@ export interface NewsItem {
   tags?: string[];
 }
 
+export function formatNewsDate(dateStr: string, isEnglish: boolean): string {
+  if (!isEnglish) return dateStr;
+  
+  // Input: "28. JAN 2026"
+  const match = dateStr.match(/(\d{1,2})\.\s*([A-Z]{3})\s*(\d{4})/);
+  if (!match) return dateStr;
+  
+  const day = match[1];
+  const monthRaw = match[2];
+  const year = match[3];
+  
+  const monthMap: Record<string, string> = {
+    JAN: "Jan", FEB: "Feb", MAR: "Mar", APR: "Apr", MAY: "May", JUN: "Jun",
+    JUL: "Jul", AUG: "Aug", SEP: "Sep", OCT: "Oct", NOV: "Nov", DEC: "Dec"
+  };
+  
+  const month = monthMap[monthRaw] || monthRaw;
+  return `${month} ${day}, ${year}`;
+}
+
 const newsItemsSr: NewsItem[] = [
   {
     id: 1,

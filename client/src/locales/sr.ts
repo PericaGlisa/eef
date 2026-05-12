@@ -44,6 +44,39 @@ export const sr = {
     notFoundMessage: "Stranica koju tražite ne postoji ili je premeštena.",
     backToNews: "Nazad na vesti",
     relatedArticles: "Slične objave",
+    serviceDetail: {
+      backToServices: "Nazad na Usluge",
+      overview: "Pregled Usluge",
+      proService: "Profesionalna Usluga",
+      introTitle: "Usluga industrijskog hlađenja: ",
+      introText: "Ova usluga je fokusirana na industrijsko hlađenje i projektovana je da obezbedi pouzdan rad sistema, energetsku efikasnost i dugoročnu stabilnost procesa.",
+      faqTitle: "Često postavljana pitanja",
+      referencesTitle: "Povezane reference",
+      referencesText: "Pogledajte projekte u kojima je ova usluga primenjena u realnim industrijskim uslovima.",
+      galleryTitle: "Galerija Usluge",
+      keyAdvantages: "Ključne Prednosti",
+      nextService: "Sledeća Usluga",
+      needService: "Treba vam ova usluga?",
+      contactText: "Kontaktirajte naš stručni tim za besplatnu konsultaciju i ponudu.",
+      requestQuote: "Zatražite ponudu"
+    },
+    solutionDetail: {
+      backToSolutions: "Nazad na Rešenja",
+      techSpec: "Tehnička Specifikacija",
+      indStandard: "Industrijski Standard",
+      introTitle: "Rešenje industrijskog hlađenja: ",
+      introText: "Ovo rešenje je optimizovano za industrijsko hlađenje sa fokusom na stabilan proces, bezbedan rad i uštedu energije u svakodnevnoj eksploataciji.",
+      faqTitle: "Često postavljana pitanja",
+      quoteTitle: "Treba vam ponuda za ovo rešenje?",
+      quoteText: "Naš inženjerski tim priprema predlog opreme, tehnički koncept i plan implementacije prema vašem objektu.",
+      galleryTitle: "Galerija Rešenja",
+      keyFeatures: "Ključne Karakteristike",
+      nextSolution: "Sledeće Rešenje",
+      needQuote: "Treba vam ponuda za ovo rešenje?",
+      quoteDesc: "Kontaktirajte naš stručni tim za besplatnu konsultaciju i ponudu.",
+      contactUs: "Kontaktirajte nas",
+      viewEngineering: "Pogledajte uslugu projektovanja"
+    }
   },
 
   // Navbar

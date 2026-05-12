@@ -172,7 +172,7 @@ export function Navbar() {
           <Link href={l("/")} className="flex items-center gap-3 group shrink-0">
             <img 
               src="/assets/logo.png" 
-              alt="EEF Logo" 
+              alt={isEnglish ? "Eko Elektrofrigo Logo - Industrial Refrigeration" : "Eko Elektrofrigo Logo - Industrijska rashlada"} 
               className="h-11 sm:h-12 md:h-14 xl:h-16 w-auto object-contain brightness-0 invert group-hover:brightness-100 group-hover:invert-0 transition-all duration-500" 
             />
           </Link>

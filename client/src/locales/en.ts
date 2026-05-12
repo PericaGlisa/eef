@@ -44,6 +44,39 @@ export const en = {
     notFoundMessage: "The page you are looking for does not exist or has been moved.",
     backToNews: "Back to News",
     relatedArticles: "Related Articles",
+    serviceDetail: {
+      backToServices: "Back to Services",
+      overview: "Service Overview",
+      proService: "Professional Service",
+      introTitle: "Industrial refrigeration service: ",
+      introText: "This service is focused on industrial refrigeration and is designed to ensure reliable system operation, energy efficiency, and long-term process stability.",
+      faqTitle: "Frequently Asked Questions",
+      referencesTitle: "Related References",
+      referencesText: "View projects where this service has been applied in real industrial conditions.",
+      galleryTitle: "Service Gallery",
+      keyAdvantages: "Key Advantages",
+      nextService: "Next Service",
+      needService: "Need this service?",
+      contactText: "Contact our expert team for a free consultation and quote.",
+      requestQuote: "Request a quote"
+    },
+    solutionDetail: {
+      backToSolutions: "Back to Solutions",
+      techSpec: "Technical Specification",
+      indStandard: "Industrial Standard",
+      introTitle: "Industrial refrigeration solution: ",
+      introText: "This solution is optimized for industrial refrigeration with a focus on stable process, safe operation, and energy savings in daily operation.",
+      faqTitle: "Frequently Asked Questions",
+      quoteTitle: "Need a quote for this solution?",
+      quoteText: "Our engineering team prepares equipment proposals, technical concepts, and implementation plans according to your facility.",
+      galleryTitle: "Solution Gallery",
+      keyFeatures: "Key Features",
+      nextSolution: "Next Solution",
+      needQuote: "Need a quote for this solution?",
+      quoteDesc: "Contact our expert team for a free consultation and quote.",
+      contactUs: "Contact us",
+      viewEngineering: "View engineering service"
+    }
   },
 
   // Navbar
