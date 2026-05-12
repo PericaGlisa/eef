@@ -172,10 +172,6 @@ export default function Blog() {
                       <span className="px-3 py-1 bg-primary/20 text-primary text-xs font-bold uppercase tracking-wider rounded-full border border-primary/20">
                         {featuredPost.category}
                       </span>
-                      <span className="flex items-center gap-1.5 text-white/40 text-xs font-mono">
-                        <Clock className="w-3 h-3" />
-                        {formatNewsDate(featuredPost.date, isEnglish)}
-                      </span>
                     </div>
                     
                     <h3 className="text-3xl md:text-4xl font-bold text-white mb-6 group-hover:text-primary transition-colors leading-tight">
@@ -231,13 +227,6 @@ export default function Blog() {
                         </div>
                       )}
                       <div className="p-6 flex flex-col flex-grow">
-                        <div className="flex items-center gap-3 mb-3">
-                          <span className="flex items-center gap-1.5 text-white/30 text-[10px] font-mono uppercase tracking-wider">
-                            <Clock className="w-2.5 h-2.5" />
-                            {formatNewsDate(item.date, isEnglish)}
-                          </span>
-                        </div>
-                        
                         <h3 className="text-xl font-bold text-white mb-3 group-hover:text-primary transition-colors line-clamp-2 leading-snug">
                           {item.title}
                         </h3>

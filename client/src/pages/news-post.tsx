@@ -190,10 +190,6 @@ export default function NewsPost() {
                 <Tag className="w-3 h-3 mr-2" />
                 {finalPost.category}
               </span>
-              <span className="flex items-center text-white/40 text-sm font-mono">
-                <ChevronRight className="w-3 h-3 mr-2" />
-                {formatNewsDate(finalPost.date, isEnglish)}
-              </span>
             </div>
 
             <h1 className="text-3xl md:text-5xl font-heading font-bold text-white mb-8 leading-tight">
