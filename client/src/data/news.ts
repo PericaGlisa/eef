@@ -102,11 +102,11 @@ Medijum za hlađenje je etilen glikol, koji se obezbeđuje iz postojećeg sistem
     category: "Događaji",
     title: "Učesnici internacionalnog samita \"EER Summit for Industrial Refrigeration's Distributors 2022\"",
     desc: 'Predstavnici Eko Elektrofrigo d.o.o. bili su učesnici internacionalnog samita "EER Summit for Industrial Refrigeration\'s Distributors 2022", čiji domaćin je bila kompanija Danfoss.',
-    content: `Predstavnici Eko Elektrofrigo d.o.o. bili su učesnici internacionalnog samita "EER Summit for Industrial Refrigeration's Distributors 2022", čiji domaćin je bila kompanija Danfoss. Povodom otvaranja nove fabrike u Poljskoj, kompanija Danfoss organizovala je dvodnevni događaj, koji je obuhvatao predavanja i treninge iz oblasti industrijskog hlađenja, kao i posetu samoj fabrici i obilazak proizvodnje. 
+    content: `Representatives of Eko Elektrofrigo d.o.o. were participants in the international summit "EER Summit for Industrial Refrigeration's Distributors 2022", hosted by Danfoss. On the occasion of the opening of the new factory in Poland, company Danfoss organized a two-day event that included lectures and trainings in the field of industrial refrigeration, as well as a visit to the factory itself and a tour of production. 
     
-    Prvog dana samita govorilo se o novim Danfoss proizvodima, kao i njihovim prednostima i mogućoj primeni. Učesnici su takođe imali priliku da prošire svoje znanje o najčešće primenjivanim sistemima u svetu industrijskog hlađenja. Narednog dana priređena je poseta novootvorenoj Danfoss fabrici, gde se iz prve ruke mogla videti celokupna proizvodnja. 
+    On the first day of the summit, new Danfoss products were discussed, as well as their advantages and possible applications. Participants also had the opportunity to expand their knowledge about the most commonly applied systems in the world of industrial refrigeration. The next day, a visit to the newly opened Danfoss factory was arranged, where the entire production could be seen firsthand. 
     
-    Nakon toga organizovan je i obilazak starog dela proizvodnje, a zatim i radionica, gde su se kroz praktične primere učesnici mogli upoznati sa svim benefitima novih proizvoda kompanije Danfoss. Kruna ovog događaja svakako ostaje razmena dobrih primera iz prakse, iskustava i nova poznanstva, koja uvek donose mogućnost za novim potencijalnim saradnjama i usavršavanjem.`,
+    After that, a tour of the old part of production was organized, followed by a workshop where participants could get acquainted with all the benefits of Danfoss's new products through practical examples. The crown of this event certainly remains the exchange of best practices, experiences, and new acquaintances, which always bring the possibility of new potential collaborations and improvement.`,
     image: "/assets/blog7.webp",
     tags: ["#danfoss", "#summit", "#refrigeration", "#education"]
   },
@@ -128,7 +128,7 @@ Medijum za hlađenje je etilen glikol, koji se obezbeđuje iz postojećeg sistem
 const newsItemsEn: NewsItem[] = [
   {
     id: 1,
-    slug: "svecana-sednica-masinskog-fakulteta",
+    slug: "ceremonial-session-council-faculty-mechanical-engineering",
     date: "28. JAN 2026",
     category: "Events",
     title: "Ceremonial Session of the Council of the Faculty of Mechanical Engineering, University of Belgrade",
@@ -143,7 +143,7 @@ We thank them and look forward to future cooperation!`,
   },
   {
     id: 2,
-    slug: "zavrseni-radovi-zitostok-velika-plana",
+    slug: "completed-works-zitostok-velika-plana",
     date: "25. JAN 2026",
     category: "Projects",
     title: "Completed Works on the New Facility of Investor Žitostok d.o.o. in Velika Plana",
@@ -160,7 +160,7 @@ All compressors are from BITZER, and the automation is from Danfoss. Evaporators
   },
   {
     id: 3,
-    slug: "modifikacija-masine-sortiranje-tresnja-delta-agrar-zajecar",
+    slug: "modification-cherry-sorting-machine-delta-agrar-zajecar",
     date: "01. JUN 2026",
     category: "Modernization",
     title: "Modification of the Cherry Sorting Machine in the Cold Store of Delta Agrar Company in Zaječar",
@@ -175,7 +175,7 @@ The cooling medium is ethylene glycol, which is provided from the existing cooli
   },
   {
     id: 4,
-    slug: "minusna-komora-arhiv-rgz-zemun",
+    slug: "negative-temperature-room-archive-rgz-zemun",
     date: "18. FEB 2026",
     category: "Projects",
     title: "Negative Temperature Room for Archival Materials in the New Building of the Archive of the Republic Geodetic Authority",
@@ -186,7 +186,7 @@ The cooling medium is ethylene glycol, which is provided from the existing cooli
   },
   {
     id: 5,
-    slug: "maf-roda-agrobotic-poljoprivredni-sajam-novi-sad",
+    slug: "maf-roda-agrobotic-agricultural-fair-novi-sad",
     date: "18. FEB 2026",
     category: "Events",
     title: "Together with MAF RODA AGROBOTIC at the 89th International Agricultural Fair in Novi Sad",
@@ -199,7 +199,7 @@ The cooling medium is ethylene glycol, which is provided from the existing cooli
   },
   {
     id: 6,
-    slug: "ralu-logistika-srbija-minusna-komora",
+    slug: "ralu-logistika-srbija-negative-temperature-room",
     date: "18. FEB 2026",
     category: "Projects",
     title: "RALU Logistika Srbija - New Negative Temperature Room",
@@ -212,7 +212,7 @@ The cooling medium is ethylene glycol, which is provided from the existing cooli
   },
   {
     id: 7,
-    slug: "danfoss-eer-summit-industrijsko-hladjenje-2022",
+    slug: "danfoss-eer-summit-industrial-refrigeration-2022",
     date: "18. FEB 2026",
     category: "Events",
     title: 'Participants of the International Summit "EER Summit for Industrial Refrigeration\'s Distributors 2022"',
@@ -227,7 +227,7 @@ The cooling medium is ethylene glycol, which is provided from the existing cooli
   },
   {
     id: 8,
-    slug: "sirogojno-company-isporuka-opreme-bajina-basta",
+    slug: "sirogojno-company-equipment-delivery-bajina-basta",
     date: "18. FEB 2026",
     category: "Projects",
     title: 'Equipment Delivery for "Sirogojno Company" d.o.o. and Start of Execution Works',
