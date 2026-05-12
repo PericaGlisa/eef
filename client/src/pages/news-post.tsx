@@ -1,4 +1,4 @@
-import { useRoute, Link } from "wouter";
+import { useRoute, Link, useLocation } from "wouter";
 import { getNewsItems, NewsItem } from "@/data/news";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -7,7 +7,7 @@ import { ArrowLeft, Tag, Share2, ChevronRight } from "lucide-react";
 import NotFound from "@/pages/not-found";
 import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useEffect } from "react";
 
 import { Gallery } from "@/components/Gallery";
 import { getNewsSeoDetails } from "@/data/seo-enhancements";
@@ -86,6 +86,7 @@ function RelatedPostCard({ post, delay, isEnglish }: { post: NewsItem; delay: nu
 export default function NewsPost() {
   const [srMatch, srParams] = useRoute("/vesti/:slug");
   const [enMatch, enParams] = useRoute("/en/news/:slug");
+  const [, setLocation] = useLocation();
   const match = srMatch || enMatch;
   const params = srParams || enParams;
   const { toast } = useToast();
@@ -99,14 +100,33 @@ export default function NewsPost() {
   if (!match || !params) return <NotFound />;
   
   const slug = params.slug;
-  const post = newsItems.find(item => item.slug === slug);
+  let post = newsItems.find(item => item.slug === slug);
   
-  // Fallback: try to find by ID if slug is a number (for backward compatibility)
+  // Fallback 1: check if the slug belongs to the OTHER language
+  if (!post) {
+    const otherNewsItems = getNewsItems(!isEnglish);
+    const otherPost = otherNewsItems.find(item => item.slug === slug);
+    if (otherPost) {
+      // Found it in the other language! Now find the corresponding one in current language
+      post = newsItems.find(item => item.id === otherPost.id);
+    }
+  }
+  
+  // Fallback 2: try to find by ID if slug is a number (for backward compatibility)
   const postById = !post && !isNaN(Number(slug)) 
     ? newsItems.find(item => item.id === Number(slug)) 
     : null;
   
   const finalPost = post || postById;
+
+  // Effect to redirect to the correct slug if found via fallback
+  useEffect(() => {
+    if (finalPost && finalPost.slug !== slug) {
+      const correctPath = isEnglish ? `/en/news/${finalPost.slug}` : `/vesti/${finalPost.slug}`;
+      setLocation(correctPath, { replace: true });
+    }
+  }, [finalPost, slug, isEnglish, setLocation]);
+
   const newsSeo = finalPost ? newsSeoDetails[finalPost.id] : undefined;
 
   if (!finalPost) return <NotFound />;

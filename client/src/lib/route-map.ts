@@ -47,13 +47,35 @@ export function getCounterpartPath(path: string, targetLang: "sr" | "en"): strin
   if (targetLang === "en") {
     // If already English, return as-is
     if (path.startsWith("/en/")) return path;
-    return srToEn[normalized] || `/en${normalized}`;
+    
+    // Check for exact match first
+    if (srToEn[normalized]) return srToEn[normalized];
+
+    // Check for subpaths (e.g., /vesti/slug -> /en/news/slug)
+    for (const [sr, en] of Object.entries(srToEn)) {
+      if (sr !== "/" && normalized.startsWith(sr + "/")) {
+        return en + normalized.slice(sr.length);
+      }
+    }
+
+    return `/en${normalized}`;
   }
 
   // targetLang === "sr"
   if (path.startsWith("/en")) {
     const withoutPrefix = normalized.replace(/^\/en/, "") || "/";
-    return enToSr[normalized] || withoutPrefix;
+    
+    // Check for exact match first
+    if (enToSr[normalized]) return enToSr[normalized];
+
+    // Check for subpaths (e.g., /en/news/slug -> /vesti/slug)
+    for (const [en, sr] of Object.entries(enToSr)) {
+      if (en !== "/en" && normalized.startsWith(en + "/")) {
+        return sr + normalized.slice(en.length);
+      }
+    }
+
+    return withoutPrefix;
   }
   return path;
 }

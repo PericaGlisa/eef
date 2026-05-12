@@ -79,8 +79,20 @@ export function getSeoMeta(pathname: string): SeoMeta {
       // Handle cases where the map has a trailing slash (like the homepage /en/)
       lookupPath = enToSr[normalizedPath + "/"];
     } else {
-      // Fallback: strip /en prefix
-      lookupPath = normalizedPath.replace(/^\/en/, "") || "/";
+      // Check for subpaths (e.g., /en/news/slug -> /vesti/slug)
+      let foundSubpath = false;
+      for (const [en, sr] of Object.entries(enToSr)) {
+        if (en !== "/en" && normalizedPath.startsWith(en + "/")) {
+          lookupPath = sr + normalizedPath.slice(en.length);
+          foundSubpath = true;
+          break;
+        }
+      }
+      
+      if (!foundSubpath) {
+        // Fallback: strip /en prefix
+        lookupPath = normalizedPath.replace(/^\/en/, "") || "/";
+      }
     }
   }
 
@@ -489,7 +501,17 @@ export function getSeoMeta(pathname: string): SeoMeta {
     const newsSeoDetails = getNewsSeoDetails(isEnglish);
     // Try to find by slug first
     let post = newsItems.find((item: { slug: string }) => item.slug === slug);
-    // Fallback: try to find by ID if slug is a number
+
+    // Fallback 1: check if the slug belongs to the OTHER language
+    if (!post) {
+      const otherNewsItems = getNewsItems(!isEnglish);
+      const otherPost = otherNewsItems.find((item: { slug: string }) => item.slug === slug);
+      if (otherPost) {
+        post = newsItems.find((item: { id: number }) => item.id === otherPost.id);
+      }
+    }
+
+    // Fallback 2: try to find by ID if slug is a number
     if (!post && !isNaN(Number(slug))) {
       post = newsItems.find((item: { id: number }) => item.id === Number(slug));
     }
