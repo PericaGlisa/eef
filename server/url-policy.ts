@@ -35,6 +35,7 @@ const directRedirects = new Map<string, string>([
   ["/documentation/diplomas", "/dokumentacija/diplome"],
   ["/references", "/reference"],
   ["/reference-beograd", "/reference"],
+  ["/reference-novi-sad", "/reference"],
   ["/references/agrounija", "/reference/agrounija"],
   ["/blog", "/vesti"],
   ["/privacy", "/politika-privatnosti"],
