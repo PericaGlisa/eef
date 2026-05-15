@@ -157,6 +157,11 @@
   status = 301
 
 [[redirects]]
+  from = "/en/vesti/completed-works-on-the-new-facility-in-velika-plana"
+  to = "/en/news/completed-works-zitostok-velika-plana"
+  status = 301
+
+[[redirects]]
   from = "/news/*"
   to = "/vesti/:splat"
   status = 301
