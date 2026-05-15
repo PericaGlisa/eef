@@ -102,6 +102,11 @@
   status = 301
 
 [[redirects]]
+  from = "/en/ekorashlada/electrical-cabinets-and-scada"
+  to = "/en/eco-cooling/electrical-cabinets"
+  status = 301
+
+[[redirects]]
   from = "/partners"
   to = "/partneri"
   status = 301
