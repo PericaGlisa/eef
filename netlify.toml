@@ -47,6 +47,11 @@
   status = 301
 
 [[redirects]]
+  from = "/usluge/izvodenje"
+  to = "/usluge/izvodjenje"
+  status = 301
+
+[[redirects]]
   from = "/services/engineering"
   to = "/usluge/inzenjering"
   status = 301
