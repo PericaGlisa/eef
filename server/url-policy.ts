@@ -39,6 +39,7 @@ const directRedirects = new Map<string, string>([
   ["/reference-novi-sad", "/reference"],
   ["/references/agrounija", "/reference/agrounija"],
   ["/blog", "/vesti"],
+  ["/vesti/zajedno-sa-kompanijom-maf-roda-agrobotic-na-89-medunarodnom-poljoprivrednom-sajmu-u-novom-sadu", "/vesti/maf-roda-agrobotic-poljoprivredni-sajam-novi-sad"],
   ["/privacy", "/politika-privatnosti"],
   ["/terms", "/uslovi-koriscenja"],
 ]);

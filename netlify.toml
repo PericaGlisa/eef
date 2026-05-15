@@ -142,6 +142,11 @@
   status = 301
 
 [[redirects]]
+  from = "/vesti/zajedno-sa-kompanijom-maf-roda-agrobotic-na-89-medunarodnom-poljoprivrednom-sajmu-u-novom-sadu"
+  to = "/vesti/maf-roda-agrobotic-poljoprivredni-sajam-novi-sad"
+  status = 301
+
+[[redirects]]
   from = "/news/*"
   to = "/vesti/:splat"
   status = 301
