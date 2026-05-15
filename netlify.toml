@@ -92,6 +92,11 @@
   status = 301
 
 [[redirects]]
+  from = "/en/ekorashlada/thermal-insulation"
+  to = "/en/eco-cooling/thermal-insulation"
+  status = 301
+
+[[redirects]]
   from = "/partners"
   to = "/partneri"
   status = 301
