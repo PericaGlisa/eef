@@ -32,6 +32,7 @@ const directRedirects = new Map<string, string>([
   ["/en/ekorashlada/thermal-insulation", "/en/eco-cooling/thermal-insulation"],
   ["/en/ekorashlada/refrigeration-units", "/en/eco-cooling/cooling-units"],
   ["/en/ekorashlada/electrical-cabinets-and-scada", "/en/eco-cooling/electrical-cabinets"],
+  ["/en/ekorashlada/cooling-systems-for-indirect-cooling-chillers", "/en/eco-cooling/chillers"],
   ["/partners", "/partneri"],
   ["/partneri/bitzer", "/partneri"],
   ["/documentation", "/dokumentacija"],

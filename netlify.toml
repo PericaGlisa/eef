@@ -107,6 +107,11 @@
   status = 301
 
 [[redirects]]
+  from = "/en/ekorashlada/cooling-systems-for-indirect-cooling-chillers"
+  to = "/en/eco-cooling/chillers"
+  status = 301
+
+[[redirects]]
   from = "/partners"
   to = "/partneri"
   status = 301
