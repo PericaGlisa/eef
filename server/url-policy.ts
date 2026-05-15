@@ -26,6 +26,7 @@ const directRedirects = new Map<string, string>([
   ["/about", "/o-nama"],
   ["/contact", "/kontakt"],
   ["/services", "/usluge"],
+  ["/usluge/projektovanje", "/usluge/inzenjering"],
   ["/eco-cooling", "/eko-rashlada"],
   ["/partners", "/partneri"],
   ["/documentation", "/dokumentacija"],
