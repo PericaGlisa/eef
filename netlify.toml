@@ -97,6 +97,11 @@
   status = 301
 
 [[redirects]]
+  from = "/partneri/bitzer"
+  to = "/partneri"
+  status = 301
+
+[[redirects]]
   from = "/references"
   to = "/reference"
   status = 301
