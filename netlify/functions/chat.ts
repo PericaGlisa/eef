@@ -148,8 +148,33 @@ RULES:
 - If outside HVAC/refrigeration → politely refuse
 `;
 
+const SYSTEM_INSTRUCTION_SR_ULTRA = `
+EEF asistent: B2B HVAC, industrijsko hlađenje.
+Kontakt: ${KNOWLEDGE_BASE.CONTACT_INFO.address} | ${KNOWLEDGE_BASE.CONTACT_INFO.phones.map(p => p.number).join(', ')} | ${KNOWLEDGE_BASE.CONTACT_INFO.working_hours}
+Departmani: ${Object.entries(KNOWLEDGE_BASE.DEPARTMENTS).map(([k, d]: [string, any]) => `${d.title}=${d.contact}`).join(' | ')}
+Pravila: bez cena, daj email departmana, fokus na energ.eff+eko (CO2, NH3), kratko odgovore, srpski.
+`;
+
+const SYSTEM_INSTRUCTION_EN_ULTRA = `
+EEF assistant: B2B HVAC, industrial refrigeration.
+Contact: ${KNOWLEDGE_BASE.CONTACT_INFO.address} | ${KNOWLEDGE_BASE.CONTACT_INFO.phones.map(p => p.number).join(', ')} | ${KNOWLEDGE_BASE.CONTACT_INFO.working_hours}
+Depts: ${Object.entries(KNOWLEDGE_BASE.DEPARTMENTS).map(([k, d]: [string, any]) => `${d.title}=${d.contact}`).join(' | ')}
+Rules: no pricing, give dept email, energy eff+eco focus (CO2, NH3), short answers.
+`;
+
 function isCompactModel(modelName: string) {
-  return modelName.startsWith("groq/compound");
+  return modelName.startsWith("groq/compound") || modelName.includes("-mini") || modelName.includes("-20b");
+}
+
+const GROQ_PAYLOAD_CHAR_LIMIT = 22000;
+const GROQ_JSON_SIZE_LIMIT = 27000;
+const CLIENT_MAX_MESSAGES_HARD_LIMIT = 12;
+const JSON_OVERHEAD_FACTOR = 1.35;
+
+function estimateChars(messages: { role: string; content: string }[]) {
+  let total = 0;
+  for (const m of messages) total += (m.content || "").length + (m.role || "").length + 8;
+  return Math.round(total * JSON_OVERHEAD_FACTOR);
 }
 
 function trimHistoryForContext(history: any[], maxPairs = 3) {
@@ -160,10 +185,74 @@ function trimHistoryForContext(history: any[], maxPairs = 3) {
   return trimmed;
 }
 
-function trimMessageContent(msg: any, maxChars = 1500) {
+function trimMessageContent(msg: any, maxChars = 2000, isLastUser = false) {
   if (!msg || typeof msg.content !== "string") return msg;
-  if (msg.content.length <= maxChars) return msg;
-  return { ...msg, content: msg.content.slice(0, maxChars) + "\n... [sadržaj skraćen zbog dužine]" };
+  const limit = isLastUser ? Math.min(maxChars * 2, 8000) : maxChars;
+  if (msg.content.length <= limit) return msg;
+  const note = isLastUser ? "\n... [sadržaj skraćen - dužina poruke prevelika]" : "\n... [sadržaj skraćen zbog dužine]";
+  return { ...msg, content: msg.content.slice(0, limit) + note };
+}
+
+function coercePayloadToLimit(messages: any[], systemCharLen: number, limit: number) {
+  let chars = systemCharLen + estimateChars(messages);
+  if (chars <= limit) return messages;
+
+  let out = [...messages];
+  let pairs = 2;
+  while (out.length > pairs * 2) {
+    out = trimHistoryForContext(out, pairs);
+    chars = systemCharLen + estimateChars(out);
+    if (chars <= limit) break;
+    pairs = Math.max(1, pairs - 1);
+  }
+
+  if (chars > limit) {
+    const lastIdx = out.length - 1;
+    out = out.map((m, i) => trimMessageContent(m, 250, i === lastIdx && m.role === "user"));
+    chars = systemCharLen + estimateChars(out);
+  }
+
+  if (chars > limit) {
+    const sys = out.find(m => m.role === "system");
+    const lastUser = [...out].reverse().find(m => m.role === "user");
+    const parts: any[] = [];
+    if (sys) parts.push({ ...sys, content: (sys.content || "").slice(0, 900) });
+    if (lastUser) parts.push({ ...lastUser, content: (lastUser.content || "").slice(0, 1800) });
+    out = parts;
+  }
+
+  if (estimateChars(out) > limit && out.length > 0) {
+    const last = out[out.length - 1];
+    out = [{ ...last, content: (last.content || "").slice(0, 1500) }];
+  }
+
+  return out;
+}
+
+function finalJsonClip(bodyObj: any, maxBytes: number) {
+  let json = JSON.stringify(bodyObj);
+  if (Buffer.byteLength(json, "utf8") <= maxBytes) return bodyObj;
+  const msgs: any[] = bodyObj.messages || [];
+  const lastUserIdx = [...msgs].reverse().findIndex(m => m.role === "user");
+  const lui = lastUserIdx >= 0 ? msgs.length - 1 - lastUserIdx : -1;
+  for (let pass = 0; pass < 4; pass++) {
+    for (let i = 0; i < msgs.length; i++) {
+      if (!msgs[i] || typeof msgs[i].content !== "string") continue;
+      const isLastUser = i === lui;
+      const cuts = [800, 500, 300, 180];
+      msgs[i] = { ...msgs[i], content: msgs[i].content.slice(0, cuts[Math.min(pass, cuts.length - 1)] * (isLastUser ? 2 : 1)) };
+    }
+    const b = { ...bodyObj, messages: msgs };
+    json = JSON.stringify(b);
+    if (Buffer.byteLength(json, "utf8") <= maxBytes) return b;
+  }
+  const mini = {
+    model: bodyObj.model,
+    max_tokens: bodyObj.max_tokens,
+    temperature: bodyObj.temperature,
+    messages: msgs.length > 0 ? [msgs[msgs.length - 1]] : [],
+  };
+  return mini;
 }
 
 const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
@@ -203,7 +292,7 @@ export async function handler(event: { httpMethod?: string; body?: string | null
   if (event.httpMethod === "GET" && event.path === "/.netlify/functions/chat-diagnostic") {
     return handleDiagnostic();
   }
-  
+
   // Basic origin check (not foolproof, but adds a layer)
   const origin = event.headers?.origin || event.headers?.Origin || '';
   const allowedOrigins = [
@@ -213,13 +302,11 @@ export async function handler(event: { httpMethod?: string; body?: string | null
     'http://localhost:5173',
     'http://localhost:5174',
   ].filter(Boolean);
-  
+
   if (origin && !allowedOrigins.includes(origin)) {
     console.warn(`⚠️ Blocked request from unauthorized origin: ${origin}`);
-    // Still allow it, but log the warning
-    // This is just a soft check, not a security feature
   }
-  
+
   if (event.httpMethod !== "POST") {
     return jsonResponse(405, { message: "Method Not Allowed" });
   }
@@ -239,8 +326,11 @@ export async function handler(event: { httpMethod?: string; body?: string | null
       return jsonResponse(400, { message: "Neispravan format poruka." });
     }
 
-    // Normalize messages: support both old Gemini format (parts) and new OpenAI format (content)
-    const normalized = messages
+    // HARD LIMIT: uzmi samo poslednjih 14 poruka (7 parova) - sprečavamo ogroman payload
+    const recent = messages.length > CLIENT_MAX_MESSAGES_HARD_LIMIT
+      ? messages.slice(-CLIENT_MAX_MESSAGES_HARD_LIMIT)
+      : messages;
+    const normalized = recent
       .map((m: any) => {
         const role = m.role === 'model' ? 'assistant' : m.role;
         const content = m.content || m.parts?.[0]?.text || '';
@@ -265,23 +355,36 @@ export async function handler(event: { httpMethod?: string; body?: string | null
       return jsonResponse(500, { message: isEnglish ? "GROQ_API_KEY is not defined in Netlify Environment variables." : "GROQ_API_KEY nije definisan u Netlify Environment varijablama." });
     }
 
-    console.log("Groq API key loaded.");
-
     let lastModelError: any;
+    let everHit413 = false;
 
-    for (const modelName of MODEL_CANDIDATES) {
+    for (let modelIdx = 0; modelIdx < MODEL_CANDIDATES.length; modelIdx++) {
+      const modelName = MODEL_CANDIDATES[modelIdx];
       for (let attempt = 1; attempt <= RETRY_MAX_ATTEMPTS; attempt++) {
         try {
-          const compact = isCompactModel(modelName);
-          const systemInstruction = isEnglish
-            ? (compact ? SYSTEM_INSTRUCTION_EN_COMPACT : SYSTEM_INSTRUCTION_EN)
-            : (compact ? SYSTEM_INSTRUCTION_SR_COMPACT : SYSTEM_INSTRUCTION_SR);
+          const compactModel = isCompactModel(modelName);
+          const ultra = everHit413;
+          const compact = compactModel || everHit413;
+          let systemInstruction: string;
+          if (ultra) {
+            systemInstruction = isEnglish ? SYSTEM_INSTRUCTION_EN_ULTRA : SYSTEM_INSTRUCTION_SR_ULTRA;
+          } else if (compactModel) {
+            systemInstruction = isEnglish ? SYSTEM_INSTRUCTION_EN_COMPACT : SYSTEM_INSTRUCTION_SR_COMPACT;
+          } else {
+            systemInstruction = isEnglish ? SYSTEM_INSTRUCTION_EN : SYSTEM_INSTRUCTION_SR;
+          }
 
-          const historyFull = trimHistoryForContext(historyRaw, compact ? 3 : 5);
-          const historyTrimmed = historyFull.map(m => trimMessageContent(m, compact ? 1500 : 2500));
+          const pairsDefault = ultra ? 1 : (compactModel ? 2 : 4);
+          const pairsForRound = pairsDefault;
 
-          const lastMessage = (lastMessageRaw && lastMessageRaw.length > (compact ? 3000 : 5000))
-            ? lastMessageRaw.slice(0, compact ? 3000 : 5000) + "\n... [skraćeno]"
+          const historyFull = trimHistoryForContext(historyRaw, pairsForRound);
+          const historyTrimmed = historyFull.map((m) =>
+            trimMessageContent(m, ultra ? 500 : (compactModel ? 900 : 1600), false)
+          );
+
+          const userContentLimit = ultra ? 1500 : (compactModel ? 2000 : 3200);
+          const lastMessage = (lastMessageRaw && lastMessageRaw.length > userContentLimit)
+            ? lastMessageRaw.slice(0, userContentLimit) + "\n... [skraćeno]"
             : lastMessageRaw;
 
           const promptWithUrl = historyTrimmed.length === 0
@@ -290,11 +393,25 @@ export async function handler(event: { httpMethod?: string; body?: string | null
                 : `Na osnovu sajta https://eef.rs/, odgovori na: ${lastMessage}`)
             : lastMessage;
 
-          const groqMessages = [
+          let groqMessages: any[] = [
             { role: "system", content: systemInstruction },
             ...historyTrimmed,
             { role: "user", content: promptWithUrl },
           ];
+
+          groqMessages = coercePayloadToLimit(groqMessages, 0, GROQ_PAYLOAD_CHAR_LIMIT);
+          if (estimateChars(groqMessages) > GROQ_PAYLOAD_CHAR_LIMIT) {
+            const u = groqMessages[groqMessages.length - 1]?.content || "";
+            groqMessages = [{ role: "user", content: u.slice(0, Math.min(4000, u.length)) }];
+          }
+
+          let bodyObj: any = {
+            model: modelName,
+            messages: groqMessages,
+            max_tokens: ultra ? 350 : (compact ? 550 : 800),
+            temperature: 0.7,
+          };
+          bodyObj = finalJsonClip(bodyObj, GROQ_JSON_SIZE_LIMIT);
 
           const controller = new AbortController();
           const timeoutId = setTimeout(() => controller.abort(), MODEL_TIMEOUT_MS);
@@ -305,12 +422,7 @@ export async function handler(event: { httpMethod?: string; body?: string | null
               "Authorization": `Bearer ${apiKey}`,
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-              model: modelName,
-              messages: groqMessages,
-              max_tokens: compact ? 768 : 1024,
-              temperature: 0.7,
-            }),
+            body: JSON.stringify(bodyObj),
             signal: controller.signal,
           });
           clearTimeout(timeoutId);
@@ -330,16 +442,24 @@ export async function handler(event: { httpMethod?: string; body?: string | null
           const message = String(modelError?.message || "").toLowerCase();
           const status = modelError?.status || 0;
           const isNotFound = status === 404 || message.includes("not found") || message.includes("unsupported");
+          const isRequestTooLarge = status === 413 || message.includes("413") || message.includes("request_too_large") || message.includes("too large") || message.includes("entity too large") || message.includes("predugo");
+          if (isRequestTooLarge) everHit413 = true;
+
           const isQuotaExceeded = status === 429 || message.includes("429") || message.includes("quota") || message.includes("resource_exhausted") || message.includes("rate limit");
           const isServiceUnavailable = status === 503 || message.includes("503") || message.includes("unavailable") || message.includes("high demand");
           const isTransientTimeout = modelError?.name === "AbortError" || message.includes("model_timeout") || message.includes("deadline") || message.includes("timed out") || message.includes("etimedout");
+
+          if (isRequestTooLarge) {
+            attempt = RETRY_MAX_ATTEMPTS; // ne retry-uj isti payload
+            break;
+          }
           if ((isQuotaExceeded || isServiceUnavailable || isTransientTimeout) && attempt < RETRY_MAX_ATTEMPTS) {
             const calculatedDelay = RETRY_BASE_MS * Math.pow(2, attempt - 1) + attempt * 150;
             const retryDelayMs = Math.min(RETRY_MAX_DELAY_MS, extractRetryDelayMs(message) ?? calculatedDelay);
             await sleep(retryDelayMs);
             continue;
           }
-          if (!isNotFound && !isQuotaExceeded) {
+          if (!isNotFound && !isQuotaExceeded && !isRequestTooLarge) {
             throw modelError;
           }
           break;
@@ -349,18 +469,25 @@ export async function handler(event: { httpMethod?: string; body?: string | null
 
     throw lastModelError;
   } catch (error: any) {
-    console.error("Groq server error full object:", error);
-    console.error("Groq server error message:", error?.message);
-    const message = String(error?.message || "").toLowerCase();
-    const isQuotaExceeded = message.includes("429") || message.includes("quota") || message.includes("resource_exhausted");
-    const isServiceUnavailable = message.includes("503") || message.includes("unavailable") || message.includes("high demand");
+    console.error("Groq server error:", error?.message || error);
+    const errMsgFull = String(error?.message || "");
+    const lowerMsg = errMsgFull.toLowerCase();
+    const errStatus = Number(error?.status) || 0;
+    const isRequestTooLarge = errStatus === 413 || lowerMsg.includes("413") || lowerMsg.includes("request_too_large") || lowerMsg.includes("too large") || lowerMsg.includes("entity too large") || lowerMsg.includes("predugo");
+    if (isRequestTooLarge) {
+      const msgSR = "Istorija razgovora je predugačka. Molimo obrišite istoriju chata (kanta) i pokušajte ponovo.";
+      const msgEN = "Conversation history is too long. Please clear the chat history (trash) and try again.";
+      return jsonResponse(413, { message: isEnglish ? msgEN : msgSR });
+    }
+    const isQuotaExceeded = lowerMsg.includes("429") || lowerMsg.includes("quota") || lowerMsg.includes("resource_exhausted");
+    const isServiceUnavailable = lowerMsg.includes("503") || lowerMsg.includes("unavailable") || lowerMsg.includes("high demand");
     if (isQuotaExceeded) {
       return jsonResponse(429, { message: isEnglish ? "I currently have too many requests. Please wait a minute and try again." : "Trenutno imam previše upita. Molim vas sačekajte jedan minut pa mi pišite ponovo." });
     }
     if (isServiceUnavailable) {
       return jsonResponse(503, { message: isEnglish ? "The model is currently under heavy load. Please try again in a few moments." : "Model je trenutno pod velikim opterećenjem. Molimo pokušajte ponovo za nekoliko trenutaka." });
     }
-    if (message.includes("model_timeout") || error?.name === "AbortError") {
+    if (lowerMsg.includes("model_timeout") || error?.name === "AbortError") {
       return jsonResponse(504, { message: isEnglish ? "The assistant is responding slower than usual. Please try again in a few moments." : "Asistent trenutno odgovara sporije nego obično. Molimo pokušajte ponovo za nekoliko trenutaka." });
     }
     return jsonResponse(500, { message: isEnglish ? "I am currently unable to respond. Please try again in a few moments." : "Trenutno nisam u mogućnosti da odgovorim. Molimo pokušajte ponovo za nekoliko trenutaka.", error: error?.message });

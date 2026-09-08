@@ -199,11 +199,17 @@ export default function App() {
     setIsLoading(true);
 
     try {
-      const history = messages.map(m => ({
+      // OGRANIČENJE: Ne šalji ceo history (100+ poruka) na server - to izaziva Groq 413 grešku.
+      // UZMI SAMO POSLEDNJIH 10 PORUKA (5 parova user-assistant) + nova poruka
+      const SEND_WINDOW = 10;
+      const recentMessages = messages.length > SEND_WINDOW
+        ? messages.slice(-SEND_WINDOW)
+        : messages;
+      const history = recentMessages.map(m => ({
         role: m.role,
         content: m.text
       }));
-      
+
       history.push({
         role: 'user',
         content: textToSend
