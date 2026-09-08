@@ -121,7 +121,7 @@ FOUNDER: Zlatomir Damnjanović - pioneer of industrial refrigeration in Serbia.
 `;
 
 const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
-const MODEL_CANDIDATES = ["llama-3.3-70b-versatile", "llama-3.1-8b-instant"];
+const MODEL_CANDIDATES = ["groq/compound", "groq/compound-mini", "openai/gpt-oss-20b", "openai/gpt-oss-120b", "qwen/qwen3.6-27b"];
 const MODEL_TIMEOUT_MS = Math.max(12000, Math.min(60000, Number(process.env.GROQ_MODEL_TIMEOUT_MS || 30000)));
 const RETRY_MAX_ATTEMPTS = Math.max(1, Math.min(4, Number(process.env.GROQ_RETRY_MAX_ATTEMPTS || 2)));
 const RETRY_BASE_MS = Math.max(300, Math.min(5000, Number(process.env.GROQ_RETRY_BASE_MS || 900)));
