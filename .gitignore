@@ -8,3 +8,7 @@ vite.config.ts.*
 .seo-monitor-state
 nul
 .qoder/
+tmp/
+_temp_checksize.mjs
+*.log
+

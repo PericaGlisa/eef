@@ -84,20 +84,11 @@ ${KNOWLEDGE_BASE.RESTRICTIONS.MANDATORY_BEHAVIOR.map(b => `- ${b}`).join('\n')}
 LANGUAGE RULES:
 - PRIMARY: English with perfect grammar
 - Use industry-standard HVAC terminology in English
-- Keep technical terms professional and precise
 
 COMMUNICATION TONE:
 - Professional yet WARM and APPROACHABLE (not robotic)
 - Use natural English as if talking to a fellow engineer
 - Be CONCISE but HELPFUL - not overly verbose
-- Use technical terminology where appropriate, but EXPLAIN when needed
-- Avoid dry, bureaucratic style
-
-EXAMPLES OF NATURAL SPEECH:
-✅ "Our refrigeration units use the latest CO2 technology..."
-✅ "I'd recommend a ULO room for long-term fruit storage..."
-❌ "The company offers solutions that encompass the implementation of systems..." (too formal)
-❌ "The system is characterized by a high degree of efficiency..." (robotic)
 
 IMPORTANT:
 - NEVER provide pricing or close deals
@@ -107,6 +98,73 @@ IMPORTANT:
 
 FOUNDER: Zlatomir Damnjanović - pioneer of industrial refrigeration in Serbia.
 `;
+
+const SYSTEM_INSTRUCTION_SR_COMPACT = `
+Ti si asistent kompanije Eko Elektrofrigo (eef.rs), stručnjak za B2B HVAC i industrijsko hlađenje.
+
+OSNOVNO:
+- Kompanija: ${KNOWLEDGE_BASE.COMPANY_PROFILE.name}, osn. ${KNOWLEDGE_BASE.COMPANY_PROFILE.founded}
+- Specijalizacija: ${KNOWLEDGE_BASE.COMPANY_PROFILE.specialization}
+- Adresa: ${KNOWLEDGE_BASE.CONTACT_INFO.address}, Tel: ${KNOWLEDGE_BASE.CONTACT_INFO.phones.map(p => p.number).join(', ')}
+- Radno vreme: ${KNOWLEDGE_BASE.CONTACT_INFO.working_hours}
+- Osnivač: Zlatomir Damnjanović (pionir industrijskog hlađenja u Srbiji)
+
+DEPARTMANI - OBAVEZNO USMERI KONTAKT:
+${Object.entries(KNOWLEDGE_BASE.DEPARTMENTS).map(([key, dept]: [string, any]) => 
+  `- ${dept.title} → ${dept.contact} (${dept.focus})`
+).join('\n')}
+
+PRAVILA:
+- NIKADA ne daj cene, ne sklapaj poslove
+- Za upite: uvek daj E-MAIL odgovarajućeg departmana
+- Naglašavaj: ENERGETSKU EFIKASNOST + EKOLOŠKU ODRŽIVOST (CO2, Amonijak)
+- Teh. preporuke su INFORMATIVNE, finalni projekat radi stručni tim
+- Jezik: SRPSKI (ekavica, LATINICA), profesionalan ali topao
+- Ako tema van HVAC/hlađenja → ljubazno odbij
+- Budi kratak i koristan
+`;
+
+const SYSTEM_INSTRUCTION_EN_COMPACT = `
+Assistant for Eko Elektrofrigo (eef.rs), B2B HVAC and industrial refrigeration expert.
+
+BASICS:
+- Company: ${KNOWLEDGE_BASE.COMPANY_PROFILE.name}, founded ${KNOWLEDGE_BASE.COMPANY_PROFILE.founded}
+- Specialization: ${KNOWLEDGE_BASE.COMPANY_PROFILE.specialization}
+- Address: ${KNOWLEDGE_BASE.CONTACT_INFO.address}, Tel: ${KNOWLEDGE_BASE.CONTACT_INFO.phones.map(p => p.number).join(', ')}
+- Hours: ${KNOWLEDGE_BASE.CONTACT_INFO.working_hours}
+- Founder: Zlatomir Damnjanović (pioneer of industrial refrigeration in Serbia)
+
+DEPARTMENTS - ALWAYS PROVIDE CONTACT:
+${Object.entries(KNOWLEDGE_BASE.DEPARTMENTS).map(([key, dept]: [string, any]) => 
+  `- ${dept.title} → ${dept.contact} (${dept.focus})`
+).join('\n')}
+
+RULES:
+- NEVER give prices or close deals
+- Always provide the CORRECT DEPARTMENT EMAIL for inquiries
+- Emphasize: ENERGY EFFICIENCY + ECOLOGY (CO2, Ammonia)
+- Technical advice is INFORMATIONAL only - expert team does final design
+- Language: Professional yet warm, concise
+- If outside HVAC/refrigeration → politely refuse
+`;
+
+function isCompactModel(modelName: string) {
+  return modelName.startsWith("groq/compound");
+}
+
+function trimHistoryForContext(history: any[], maxPairs = 3) {
+  const maxMsgs = maxPairs * 2;
+  if (history.length <= maxMsgs) return history;
+  const trimmed = history.slice(-maxMsgs);
+  while (trimmed.length > 0 && trimmed[0].role === "assistant") trimmed.shift();
+  return trimmed;
+}
+
+function trimMessageContent(msg: any, maxChars = 1500) {
+  if (!msg || typeof msg.content !== "string") return msg;
+  if (msg.content.length <= maxChars) return msg;
+  return { ...msg, content: msg.content.slice(0, maxChars) + "\n... [sadržaj skraćen zbog dužine]" };
+}
 
 const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
 const MODEL_CANDIDATES = ["groq/compound", "groq/compound-mini", "openai/gpt-oss-20b", "openai/gpt-oss-120b", "qwen/qwen3.6-27b"];
@@ -199,14 +257,8 @@ export async function handler(event: { httpMethod?: string; body?: string | null
       return jsonResponse(200, { text: isEnglish ? "Sorry, an error occurred processing the message." : "Izvinite, došlo je do greške u obradi poruke." });
     }
 
-    const lastMessage = normalized[normalized.length - 1].content;
-    const history = normalized.slice(0, -1);
-
-    const promptWithUrl = history.length === 0 
-      ? (isEnglish
-          ? `Based on the website https://eef.rs/, answer: ${lastMessage}`
-          : `Na osnovu sajta https://eef.rs/, odgovori na: ${lastMessage}`)
-      : lastMessage;
+    const lastMessageRaw = normalized[normalized.length - 1].content;
+    const historyRaw = normalized.slice(0, -1);
 
     const apiKey = process.env.GROQ_API_KEY || '';
     if (!apiKey) {
@@ -215,19 +267,35 @@ export async function handler(event: { httpMethod?: string; body?: string | null
 
     console.log("Groq API key loaded.");
 
-    const systemInstruction = isEnglish ? SYSTEM_INSTRUCTION_EN : SYSTEM_INSTRUCTION_SR;
-
-    const groqMessages = [
-      { role: "system", content: systemInstruction },
-      ...history,
-      { role: "user", content: promptWithUrl },
-    ];
-
     let lastModelError: any;
 
     for (const modelName of MODEL_CANDIDATES) {
       for (let attempt = 1; attempt <= RETRY_MAX_ATTEMPTS; attempt++) {
         try {
+          const compact = isCompactModel(modelName);
+          const systemInstruction = isEnglish
+            ? (compact ? SYSTEM_INSTRUCTION_EN_COMPACT : SYSTEM_INSTRUCTION_EN)
+            : (compact ? SYSTEM_INSTRUCTION_SR_COMPACT : SYSTEM_INSTRUCTION_SR);
+
+          const historyFull = trimHistoryForContext(historyRaw, compact ? 3 : 5);
+          const historyTrimmed = historyFull.map(m => trimMessageContent(m, compact ? 1500 : 2500));
+
+          const lastMessage = (lastMessageRaw && lastMessageRaw.length > (compact ? 3000 : 5000))
+            ? lastMessageRaw.slice(0, compact ? 3000 : 5000) + "\n... [skraćeno]"
+            : lastMessageRaw;
+
+          const promptWithUrl = historyTrimmed.length === 0
+            ? (isEnglish
+                ? `Based on the website https://eef.rs/, answer: ${lastMessage}`
+                : `Na osnovu sajta https://eef.rs/, odgovori na: ${lastMessage}`)
+            : lastMessage;
+
+          const groqMessages = [
+            { role: "system", content: systemInstruction },
+            ...historyTrimmed,
+            { role: "user", content: promptWithUrl },
+          ];
+
           const controller = new AbortController();
           const timeoutId = setTimeout(() => controller.abort(), MODEL_TIMEOUT_MS);
 
@@ -240,7 +308,7 @@ export async function handler(event: { httpMethod?: string; body?: string | null
             body: JSON.stringify({
               model: modelName,
               messages: groqMessages,
-              max_tokens: 1024,
+              max_tokens: compact ? 768 : 1024,
               temperature: 0.7,
             }),
             signal: controller.signal,
