@@ -34,6 +34,12 @@ const recipients: Record<string, string> = {
   career: "office@eef.rs",
   info: "office@eef.rs",
 }
+const ccRecipients: Record<string, string[]> = {
+  project: ["prodaja@eef.rs"],
+  service: [],
+  career: [],
+  info: ["vezmar.bojana@eef.rs"],
+}
 const CONTACT_RETRY_MAX_ATTEMPTS = Math.max(1, Math.min(4, Number(process.env.CONTACT_RETRY_MAX_ATTEMPTS || 3)))
 const CONTACT_RETRY_BASE_MS = Math.max(250, Math.min(4000, Number(process.env.CONTACT_RETRY_BASE_MS || 700)))
 const CONTACT_RETRY_MAX_DELAY_MS = Math.max(700, Math.min(9000, Number(process.env.CONTACT_RETRY_MAX_DELAY_MS || 4500)))
@@ -232,6 +238,7 @@ export async function handler(event: { httpMethod?: string; body?: string | null
 
   const label = topicLabels[data.topic] ?? "Kontakt"
   const to = recipients[data.topic] ?? "office@eef.rs"
+  const cc = ccRecipients[data.topic] ?? []
   const from = process.env.RESEND_FROM || "noreply@eef.co.rs"
   const projectTypeValue =
     data.projectType === "other" ? data.projectTypeOther : data.projectType
@@ -259,7 +266,7 @@ export async function handler(event: { httpMethod?: string; body?: string | null
             ${renderHeaderLogo()}
             <div style="font-size:12px;letter-spacing:0.14em;text-transform:uppercase;opacity:.9;font-weight:700;">Eko Elektrofrigo</div>
             <div style="font-size:24px;font-weight:800;line-height:1.2;margin-top:6px;">Novi lead sa kontakt forme</div>
-            <div style="margin-top:8px;font-size:14px;opacity:.92;">Tema: ${escapeHtml(label)} • Primalac: ${escapeHtml(to)}</div>
+            <div style="margin-top:8px;font-size:14px;opacity:.92;">Tema: ${escapeHtml(label)} • Primalac: ${escapeHtml(to)}${cc.length ? ` • Kopija: ${escapeHtml(cc.join(", "))}` : ""}</div>
           </div>
           <div style="padding:20px 24px;">
             <table style="width:100%;border-collapse:collapse;border-spacing:0;">
@@ -309,12 +316,13 @@ export async function handler(event: { httpMethod?: string; body?: string | null
     </div>
   `
 
-  console.info(`[contact:${requestId}] submit topic=${data.topic} target=${to}`)
+  console.info(`[contact:${requestId}] submit topic=${data.topic} target=${to} cc=${cc.join(",") || "none"}`)
   const adminResponse = await sendResendEmail(
     apiKey,
     {
       from,
       to: [to],
+      ...(cc.length ? { cc } : {}),
       reply_to: data.email,
       subject: `Kontakt - ${label} - ${data.name}`,
       text: adminText,
@@ -330,6 +338,7 @@ export async function handler(event: { httpMethod?: string; body?: string | null
       type: "admin",
       topic: data.topic,
       to,
+      cc,
       from,
       payload: { text: adminText, html: adminHtml, userEmail: data.email, name: data.name },
       error: { status: adminResponse.status, details: adminResponse.details },
