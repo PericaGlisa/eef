@@ -88,16 +88,16 @@ export function WebshopCTA() {
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.3 }}
-                className="flex flex-wrap justify-center lg:justify-start gap-4"
+                className="flex flex-wrap items-center justify-center lg:justify-start gap-6 sm:gap-8 pt-1"
               >
                 {[
                   { icon: Truck, text: t("common.quickDelivery") },
                   { icon: ShieldCheck, text: t("common.warranty") },
                   { icon: Package, text: t("common.largeStock") }
                 ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-2.5 beveled-glass rounded-xl px-4 py-2.5 hover:border-primary/40 transition-colors duration-300">
-                    <item.icon className="w-4 h-4 text-primary shadow-[0_0_8px_rgba(86,170,74,0.6)]" />
-                    <span className="text-xs font-bold text-slate-200 uppercase tracking-wide">{item.text}</span>
+                  <div key={i} className="flex items-center gap-2 text-white/80 hover:text-white transition-colors">
+                    <item.icon className="w-4 h-4 text-primary" />
+                    <span className="text-xs font-semibold tracking-wider uppercase text-slate-200">{item.text}</span>
                   </div>
                 ))}
               </motion.div>
