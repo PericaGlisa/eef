@@ -17,12 +17,15 @@ export function WebshopCTA() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="bg-[#0e1035] rounded-[2.5rem] relative overflow-hidden shadow-2xl shadow-slate-200 border border-[#171A54]"
+          className="bg-gradient-to-br from-[#0c0f38] via-[#141d44] to-[#123023] rounded-[2.5rem] relative overflow-hidden shadow-2xl border border-white/10"
+          style={{
+            boxShadow: "inset 0 1px 0 0 rgba(255,255,255,0.18), 0 30px 60px -15px rgba(14,16,53,0.4)"
+          }}
         >
           {/* Background Effects */}
           <div className="absolute inset-0 bg-[url('/assets/grid-pattern.svg')] opacity-10" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0e1035] via-[#0e1035]/95 to-transparent z-10" />
-          <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/20 blur-[120px] rounded-full pointer-events-none mix-blend-screen" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0c0f38] via-[#141d44]/90 to-transparent z-10" />
+          <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/25 blur-[120px] rounded-full pointer-events-none mix-blend-screen" />
           <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-blue-500/20 blur-[120px] rounded-full pointer-events-none mix-blend-screen" />
           
           {/* Decorative large icon */}
@@ -50,12 +53,9 @@ export function WebshopCTA() {
                 viewport={{ once: true }}
                 className="flex items-center justify-center lg:justify-start gap-2 mb-6"
               >
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10 text-primary text-xs font-mono backdrop-blur-md">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-                  </span>
-                  <span className="tracking-widest uppercase">{t("common.webShop")}</span>
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full shimmer-badge text-primary text-xs font-mono">
+                  <span className="w-2 h-2 rounded-full bg-primary emerald-pulse-gem" />
+                  <span className="tracking-widest uppercase font-bold">{t("common.webShop")}</span>
                 </div>
               </motion.div>
 
@@ -64,10 +64,10 @@ export function WebshopCTA() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.1 }}
-                className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white mb-6 leading-tight"
+                className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white mb-6 leading-tight drop-shadow-md"
               >
                 {t("common.allEquipment")} <br className="hidden md:block" />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-300">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-emerald-300 to-primary">
                   {t("common.oneClick")}
                 </span>
               </motion.h2>
@@ -95,9 +95,9 @@ export function WebshopCTA() {
                   { icon: ShieldCheck, text: t("common.warranty") },
                   { icon: Package, text: t("common.largeStock") }
                 ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-2 bg-white/5 backdrop-blur-sm rounded-lg px-4 py-2 border border-white/10 hover:bg-white/10 transition-colors duration-300">
-                    <item.icon className="w-4 h-4 text-primary" />
-                    <span className="text-xs font-bold text-slate-300 uppercase tracking-wide">{item.text}</span>
+                  <div key={i} className="flex items-center gap-2.5 beveled-glass rounded-xl px-4 py-2.5 hover:border-primary/40 transition-colors duration-300">
+                    <item.icon className="w-4 h-4 text-primary shadow-[0_0_8px_rgba(86,170,74,0.6)]" />
+                    <span className="text-xs font-bold text-slate-200 uppercase tracking-wide">{item.text}</span>
                   </div>
                 ))}
               </motion.div>

@@ -172,10 +172,10 @@ export function Hero() {
             initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md text-primary font-mono text-xs uppercase tracking-widest mb-6 hover:bg-white/10 transition-colors cursor-default shadow-[0_0_20px_rgba(86,170,74,0.1)] group"
+            className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full shimmer-badge text-primary font-mono text-xs uppercase tracking-widest mb-6 cursor-default group"
           >
-            <span className="w-2 h-2 rounded-full bg-primary animate-pulse shadow-[0_0_10px_rgba(86,170,74,0.8)] group-hover:scale-150 transition-transform"></span>
-            {t("hero.badge")}
+            <span className="w-2 h-2 rounded-full bg-primary emerald-pulse-gem"></span>
+            <span className="tracking-[0.2em] font-bold text-emerald-400/90">{t("hero.badge")}</span>
           </motion.div>
 
           <div className="space-y-4 relative">
@@ -188,12 +188,15 @@ export function Hero() {
               transition={{ duration: 0.35 }}
               className="text-5xl sm:text-6xl md:text-[clamp(4.2rem,7.3vw,6.6rem)] lg:text-8xl font-bold text-white leading-[0.88] font-heading tracking-tight drop-shadow-2xl"
             >
-              {t("hero.headline1")} <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-white to-primary/50 relative">
+              <span className="bg-gradient-to-r from-white via-slate-100 to-white/90 bg-clip-text text-transparent">
+                {t("hero.headline1")}
+              </span> <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-emerald-300 to-primary/90 relative inline-block">
                 {t("hero.headline2")}
-                <svg className="absolute -bottom-4 left-0 w-1/2 h-4 text-primary opacity-50" viewBox="0 0 100 10" preserveAspectRatio="none">
-                  <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="2" fill="none" />
+                <svg className="absolute -bottom-4 left-0 w-1/2 h-4 text-primary opacity-60" viewBox="0 0 100 10" preserveAspectRatio="none">
+                  <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="2.5" fill="none" />
                 </svg>
+                <span className="absolute -bottom-3 left-1/2 w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_rgba(86,170,74,0.9)] -translate-x-1/2 hidden sm:inline-block" />
               </span>
             </motion.h1>
 
@@ -201,7 +204,7 @@ export function Hero() {
               initial={false}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.35 }}
-              className="text-xl sm:text-2xl md:text-[clamp(1.35rem,2.2vw,1.9rem)] lg:text-3xl text-white/60 font-light max-w-2xl lg:max-w-3xl border-l-2 border-primary/30 pl-5 lg:pl-6 mt-5 lg:mt-6"
+              className="text-xl sm:text-2xl md:text-[clamp(1.35rem,2.2vw,1.9rem)] lg:text-3xl text-white/70 font-light max-w-2xl lg:max-w-3xl border-l-2 border-primary/40 pl-5 lg:pl-6 mt-5 lg:mt-6"
             >
               {isEnglish ? (
                 <>Design, construction, and maintenance of <span className="text-white font-medium">the most advanced</span> refrigeration systems.</>
@@ -215,9 +218,9 @@ export function Hero() {
             initial={false}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.35 }}
-            className="text-base sm:text-lg text-white/40 font-mono h-[30px] lg:h-[32px] flex items-center gap-3 mt-3 lg:mt-4"
+            className="text-base sm:text-lg text-white/50 font-mono h-[30px] lg:h-[32px] flex items-center gap-3 mt-3 lg:mt-4"
           >
-             <div className="w-1 h-8 bg-primary/50" />
+             <div className="w-1 h-6 bg-gradient-to-b from-primary via-emerald-400 to-transparent rounded-full shadow-[0_0_8px_rgba(86,170,74,0.6)]" />
             <TypewriterText text={t("hero.typewriter")} />
           </motion.div>
 
@@ -230,13 +233,13 @@ export function Hero() {
             <Magnetic>
               <Button 
                 size="lg" 
-                className="relative bg-primary hover:bg-primary/90 text-white px-6 py-3 text-base md:px-8 md:py-5 md:text-base lg:px-9 lg:py-6 lg:text-lg overflow-hidden group border border-white/10 shadow-[0_0_30px_rgba(86,170,74,0.35)] hover:shadow-[0_0_60px_rgba(86,170,74,0.55)] transition-all duration-500 rounded-full"
+                className="relative bg-primary hover:bg-emerald-600 text-white px-6 py-3 text-base md:px-8 md:py-5 md:text-base lg:px-9 lg:py-6 lg:text-lg overflow-hidden group border border-white/20 shadow-[0_0_35px_rgba(86,170,74,0.4)] hover:shadow-[0_0_60px_rgba(86,170,74,0.6)] transition-all duration-500 rounded-full font-bold"
                 onClick={() => import("@/lib/audio").then(m => m.audio.playClick())}
                 asChild
               >
                 <Link href={l("/kontakt")}>
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-                  {t("hero.ctaPrimary")} <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+                  {t("hero.ctaPrimary")} <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1.5 transition-transform" />
                 </Link>
               </Button>
             </Magnetic>
@@ -244,7 +247,7 @@ export function Hero() {
               <Button 
                 size="lg" 
                 variant="ghost" 
-                className="text-white/70 hover:text-white px-6 py-3 text-base md:px-6 md:py-5 md:text-base lg:py-6 lg:text-lg transition-all duration-300 rounded-full"
+                className="beveled-glass text-white/80 hover:text-white hover:border-white/30 px-6 py-3 text-base md:px-6 md:py-5 md:text-base lg:py-6 lg:text-lg transition-all duration-300 rounded-full"
                 onClick={() => import("@/lib/audio").then(m => m.audio.playClick())}
                 asChild
               >
@@ -257,10 +260,16 @@ export function Hero() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: isMobile ? 1.9 : 1.2 }}
-            className="flex flex-wrap items-center gap-3 text-[10px] sm:text-xs uppercase tracking-widest text-white/50"
+            className="flex flex-wrap items-center gap-3 text-[10px] sm:text-xs uppercase tracking-widest text-white/70"
           >
-            <span className="px-3 py-2 rounded-full bg-white/5 border border-white/10">{t("hero.stat1")}</span>
-            <span className="px-3 py-2 rounded-full bg-white/5 border border-white/10">{t("hero.stat2")}</span>
+            <span className="px-4 py-2 rounded-full beveled-glass flex items-center gap-2 hover:border-primary/40 hover:text-white transition-all">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_6px_rgba(86,170,74,0.8)]" />
+              {t("hero.stat1")}
+            </span>
+            <span className="px-4 py-2 rounded-full beveled-glass flex items-center gap-2 hover:border-primary/40 hover:text-white transition-all">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_6px_rgba(86,170,74,0.8)]" />
+              {t("hero.stat2")}
+            </span>
           </motion.div>
           <motion.div
             initial={{ opacity: 0 }}

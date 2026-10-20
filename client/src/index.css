@@ -215,8 +215,73 @@
   text-shadow: 0 0 10px rgba(86, 170, 74, 0.5);
 }
 
+@utility text-glow-lg {
+  text-shadow: 0 0 25px rgba(86, 170, 74, 0.4), 0 0 50px rgba(86, 170, 74, 0.2);
+}
+
 @utility box-glow {
   box-shadow: 0 0 20px rgba(86, 170, 74, 0.2);
+}
+
+@utility box-glow-emerald {
+  box-shadow: 0 10px 40px -10px rgba(86, 170, 74, 0.35);
+}
+
+/* Precision Aesthetic Detail Utilities */
+.beveled-glass {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.2),
+    0 10px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+.shimmer-badge {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25), 0 0 20px rgba(86, 170, 74, 0.12);
+}
+
+.shimmer-badge::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  transform: skewX(-20deg);
+  animation: badge-shimmer 6s infinite ease-in-out;
+  pointer-events: none;
+}
+
+@keyframes badge-shimmer {
+  0%, 80% { left: -100%; }
+  100% { left: 200%; }
+}
+
+.emerald-pulse-gem {
+  position: relative;
+  box-shadow: 0 0 12px rgba(86, 170, 74, 0.9);
+}
+
+.emerald-pulse-gem::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 9999px;
+  background: rgba(86, 170, 74, 0.4);
+  animation: gem-ping 2.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes gem-ping {
+  0% { transform: scale(1); opacity: 0.8; }
+  75%, 100% { transform: scale(2.2); opacity: 0; }
 }
 
 /* Custom Scrollbar - Matching Site Branding (TopBar Green) */

@@ -85,10 +85,10 @@ export function BentoServices() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-[#171A54]/10 text-primary font-mono text-xs uppercase tracking-widest mb-4 backdrop-blur-sm shadow-sm"
+              className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white border border-slate-200/80 text-primary font-mono text-xs uppercase tracking-widest mb-4 shadow-sm"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
-              {t("bento.badge")}
+              <span className="w-2 h-2 rounded-full bg-primary emerald-pulse-gem"></span>
+              <span className="font-bold tracking-wider">{t("bento.badge")}</span>
             </motion.div>
             <h2 className="text-4xl md:text-6xl font-heading font-bold text-[#171A54] max-w-2xl">
               {t("bento.title").split(" ").map((word: string, i: number, arr: string[]) => (

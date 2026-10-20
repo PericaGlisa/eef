@@ -18,12 +18,15 @@ export function SocialProof() {
           {partners.map((partner, index) => (
             <div key={index} className="flex items-center">
               <span
-                className="text-5xl md:text-7xl font-bold font-heading text-transparent transition-all duration-300 cursor-default uppercase tracking-widest hover:text-primary hover:scale-105 transform px-8 md:px-16"
-                style={{ WebkitTextStroke: "1px rgba(255,255,255,0.2)" }}
+                className="text-5xl md:text-7xl font-bold font-heading text-transparent transition-all duration-500 cursor-default uppercase tracking-widest hover:text-white hover:scale-105 transform px-8 md:px-16 select-none"
+                style={{ 
+                  WebkitTextStroke: "1px rgba(255,255,255,0.22)",
+                  textShadow: "0 0 20px rgba(86,170,74,0.1)"
+                }}
               >
                 {partner}
               </span>
-              <span className="text-primary/20 text-3xl md:text-4xl">✦</span>
+              <span className="text-primary/80 text-xl md:text-2xl filter drop-shadow-[0_0_8px_rgba(86,170,74,0.8)]">✦</span>
             </div>
           ))}
         </motion.div>
@@ -37,12 +40,15 @@ export function SocialProof() {
           {partners.map((partner, index) => (
             <div key={`clone-${index}`} className="flex items-center">
               <span
-                className="text-5xl md:text-7xl font-bold font-heading text-transparent transition-all duration-300 cursor-default uppercase tracking-widest hover:text-primary hover:scale-105 transform px-8 md:px-16"
-                style={{ WebkitTextStroke: "1px rgba(255,255,255,0.2)" }}
+                className="text-5xl md:text-7xl font-bold font-heading text-transparent transition-all duration-500 cursor-default uppercase tracking-widest hover:text-white hover:scale-105 transform px-8 md:px-16 select-none"
+                style={{ 
+                  WebkitTextStroke: "1px rgba(255,255,255,0.22)",
+                  textShadow: "0 0 20px rgba(86,170,74,0.1)"
+                }}
               >
                 {partner}
               </span>
-              <span className="text-primary/20 text-3xl md:text-4xl">✦</span>
+              <span className="text-primary/80 text-xl md:text-2xl filter drop-shadow-[0_0_8px_rgba(86,170,74,0.8)]">✦</span>
             </div>
           ))}
         </motion.div>
